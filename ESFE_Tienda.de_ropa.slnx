@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ESFE_Tienda.de_ropa.DAL/ESFE_Tienda.de_ropa.DAL.csproj" />
+  <Project Path="ESFE_Tienda.de_ropa.EN/ESFE_Tienda.de_ropa.EN.csproj" />
+  <Project Path="ESFE_Tienda.de_ropa.LN/ESFE_Tienda.de_ropa.LN.csproj" />
+  <Project Path="ESFE_Tienda.de_ropa.UI/ESFE_Tienda.de_ropa.UI.csproj" />
+</Solution>

@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ESFE_Tienda.de_ropa.DAL\ESFE_Tienda.de_ropa.DAL.csproj" />
+    <ProjectReference Include="..\ESFE_Tienda.de_ropa.EN\ESFE_Tienda.de_ropa.EN.csproj" />
+    <ProjectReference Include="..\ESFE_Tienda.de_ropa.LN\ESFE_Tienda.de_ropa.LN.csproj" />
+  </ItemGroup>
+
+</Project>
