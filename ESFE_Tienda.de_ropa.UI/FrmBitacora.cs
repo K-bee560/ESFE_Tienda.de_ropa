@@ -14,5 +14,10 @@ namespace ESFE_Tienda.de_ropa.UI
         {
             InitializeComponent();
         }
+
+        private void FrmBitacora_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
