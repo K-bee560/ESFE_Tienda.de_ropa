@@ -19,5 +19,10 @@ namespace ESFE_Tienda.de_ropa.UI
         {
 
         }
+
+        private void FrmAjustes_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
