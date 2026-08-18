@@ -10,7 +10,7 @@ namespace ESFE_Tienda.de_ropa.DAL
     {
         public static int Insertar(Clientes entidad)
         {
-            using (IDbConnection conn = DBComun.ObtenerConexion())
+            using (IDbConnection conn = BDComun.ObtenerConexion())
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand("sp_InsertarCliente", conn as SqlConnection))
@@ -34,7 +34,7 @@ namespace ESFE_Tienda.de_ropa.DAL
         public static List<Clientes> ObtenerTodos()
         {
             List<Clientes> lista = new List<Clientes>();
-            using (IDbConnection conn = DBComun.ObtenerConexion())
+            using (IDbConnection conn = BDComun.ObtenerConexion())
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand("sp_ObtenerTodosClientes", conn as SqlConnection))
@@ -66,7 +66,7 @@ namespace ESFE_Tienda.de_ropa.DAL
         public static Clientes ObtenerPorId(int id)
         {
             Clientes cliente = null;
-            using (IDbConnection conn = DBComun.ObtenerConexion())
+            using (IDbConnection conn = BDComun.ObtenerConexion())
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand("sp_ObtenerClientePorId", conn as SqlConnection))

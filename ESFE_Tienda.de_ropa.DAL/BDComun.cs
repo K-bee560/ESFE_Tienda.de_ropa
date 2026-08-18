@@ -11,7 +11,7 @@ using Microsoft.Data.SqlClient;
 
 namespace ESFE_Tienda.de_ropa.DAL
 {
-    public class DBComun
+    public class BDComun
     {
         //public const string _stringCnn = EDWIN\SQLEXPRESS;Initial Catalog=BDDesarrollo;Integrated Security=True";
         public const string _stringCnn = @"Server=DESKTOP-9JI9BTT\MSSQLSERVER01;Database=BDDesarrollo;Integrated Security=True;TrustServerCertificate=True;";

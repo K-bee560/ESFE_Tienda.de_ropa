@@ -10,7 +10,7 @@ namespace ESFE_Tienda.de_ropa.DAL
     {
         public static int Insertar(Estado entidad)
         {
-            using (IDbConnection conn = DBComun.ObtenerConexion())
+            using (IDbConnection conn = BDComun.ObtenerConexion())
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand("sp_InsertarEstado", conn as SqlConnection))
@@ -28,7 +28,7 @@ namespace ESFE_Tienda.de_ropa.DAL
         public static List<Estado> ObtenerTodos()
         {
             List<Estado> lista = new List<Estado>();
-            using (IDbConnection conn = DBComun.ObtenerConexion())
+            using (IDbConnection conn = BDComun.ObtenerConexion())
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand("sp_ObtenerTodosEstados", conn as SqlConnection))
@@ -54,7 +54,7 @@ namespace ESFE_Tienda.de_ropa.DAL
         public static Estado ObtenerPorId(int id)
         {
             Estado estado = null;
-            using (IDbConnection conn = DBComun.ObtenerConexion())
+            using (IDbConnection conn = BDComun.ObtenerConexion())
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand("sp_ObtenerEstadoPorId", conn as SqlConnection))

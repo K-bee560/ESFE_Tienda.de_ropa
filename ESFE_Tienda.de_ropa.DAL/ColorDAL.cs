@@ -10,7 +10,7 @@ namespace ESFE_Tienda.de_ropa.DAL
     {
         public static int Insertar(Color entidad)
         {
-            using (IDbConnection conn = DBComun.ObtenerConexion())
+            using (IDbConnection conn = BDComun.ObtenerConexion())
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand("sp_InsertarColor", conn as SqlConnection))
@@ -28,7 +28,7 @@ namespace ESFE_Tienda.de_ropa.DAL
         public static List<Color> ObtenerTodos()
         {
             List<Color> lista = new List<Color>();
-            using (IDbConnection conn = DBComun.ObtenerConexion())
+            using (IDbConnection conn = BDComun.ObtenerConexion())
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand("sp_ObtenerTodosColores", conn as SqlConnection))
@@ -54,7 +54,7 @@ namespace ESFE_Tienda.de_ropa.DAL
         public static Color ObtenerPorId(int id)
         {
             Color color = null;
-            using (IDbConnection conn = DBComun.ObtenerConexion())
+            using (IDbConnection conn = BDComun.ObtenerConexion())
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand("sp_ObtenerColorPorId", conn as SqlConnection))

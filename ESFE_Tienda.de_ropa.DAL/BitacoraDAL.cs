@@ -11,7 +11,7 @@ namespace ESFE_Tienda.de_ropa.DAL
     {
         public static int Insertar(Bitacora entidad)
         {
-            using (IDbConnection conn = DBComun.ObtenerConexion())
+            using (IDbConnection conn = BDComun.ObtenerConexion())
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand("sp_InsertarBitacora", conn as SqlConnection))
@@ -30,7 +30,7 @@ namespace ESFE_Tienda.de_ropa.DAL
         public static List<Bitacora> ObtenerTodos()
         {
             var lista = new List<Bitacora>();
-            using (IDbConnection conn = DBComun.ObtenerConexion())
+            using (IDbConnection conn = BDComun.ObtenerConexion())
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand("sp_ObtenerTodasBitacoras", conn as SqlConnection))
@@ -59,7 +59,7 @@ namespace ESFE_Tienda.de_ropa.DAL
         public static List<Bitacora> ObtenerPorUsuario(int idUsuario)
         {
             var lista = new List<Bitacora>();
-            using (IDbConnection conn = DBComun.ObtenerConexion())
+            using (IDbConnection conn = BDComun.ObtenerConexion())
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand("sp_ObtenerBitacoraPorUsuario", conn as SqlConnection))
