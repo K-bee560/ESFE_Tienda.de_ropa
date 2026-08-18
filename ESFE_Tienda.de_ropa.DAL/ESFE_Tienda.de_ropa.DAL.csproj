@@ -10,4 +10,8 @@
     <ProjectReference Include="..\ESFE_Tienda.de_ropa.EN\ESFE_Tienda.de_ropa.EN.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.0" />
+  </ItemGroup>
+
 </Project>
