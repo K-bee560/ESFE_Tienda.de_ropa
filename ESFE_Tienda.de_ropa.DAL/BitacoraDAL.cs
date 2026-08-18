@@ -1,4 +1,5 @@
-﻿using ESFE_Tienda.de_ropa.EN;
+﻿using System;
+using ESFE_Tienda.de_ropa.EN;
 using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
@@ -8,45 +9,47 @@ namespace ESFE_Tienda.de_ropa.DAL
     // Implementación de acceso a datos para Bitacora
     public static class BitacoraDAL
     {
-        private static string ConnectionString = "TuCadenaDeConexionAquí";
-
         public static int Insertar(Bitacora entidad)
         {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (IDbConnection conn = DBComun.ObtenerConexion())
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("sp_InsertarBitacora", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
+                using (SqlCommand cmd = new SqlCommand("sp_InsertarBitacora", conn as SqlConnection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@Accion", entidad.Accion);
-                cmd.Parameters.AddWithValue("@Id_Usuario", entidad.Id_Usuario);
-                cmd.Parameters.AddWithValue("@Fecha_y_hora", entidad.Fecha_y_hora);
+                    cmd.Parameters.AddWithValue("@Accion", entidad.Accion);
+                    cmd.Parameters.AddWithValue("@Id_Usuario", entidad.Id_Usuario);
+                    cmd.Parameters.AddWithValue("@Fecha_y_hora", entidad.Fecha_y_hora);
 
-                return cmd.ExecuteNonQuery();
+                    return cmd.ExecuteNonQuery();
+                }
             }
         }
 
         public static List<Bitacora> ObtenerTodos()
         {
             var lista = new List<Bitacora>();
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (IDbConnection conn = DBComun.ObtenerConexion())
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("sp_ObtenerTodasBitacoras", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                using (SqlCommand cmd = new SqlCommand("sp_ObtenerTodasBitacoras", conn as SqlConnection))
                 {
-                    while (reader.Read())
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        var b = new Bitacora
+                        while (reader.Read())
                         {
-                            id_actividad = reader["id_actividad"] != DBNull.Value ? Convert.ToInt32(reader["id_actividad"]) : 0,
-                            Accion = reader["Accion"]?.ToString(),
-                            Id_Usuario = reader["Id_Usuario"] != DBNull.Value ? Convert.ToInt32(reader["Id_Usuario"]) : 0,
-                            Fecha_y_hora = reader["Fecha_y_hora"] != DBNull.Value ? Convert.ToDateTime(reader["Fecha_y_hora"]) : DateTime.MinValue
-                        };
-                        lista.Add(b);
+                            var b = new Bitacora
+                            {
+                                id_actividad = reader["id_actividad"] != DBNull.Value ? Convert.ToInt32(reader["id_actividad"]) : 0,
+                                Accion = reader["Accion"]?.ToString(),
+                                Id_Usuario = reader["Id_Usuario"] != DBNull.Value ? Convert.ToInt32(reader["Id_Usuario"]) : 0,
+                                Fecha_y_hora = reader["Fecha_y_hora"] != DBNull.Value ? Convert.ToDateTime(reader["Fecha_y_hora"]) : DateTime.MinValue
+                            };
+                            lista.Add(b);
+                        }
                     }
                 }
             }
@@ -56,25 +59,27 @@ namespace ESFE_Tienda.de_ropa.DAL
         public static List<Bitacora> ObtenerPorUsuario(int idUsuario)
         {
             var lista = new List<Bitacora>();
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (IDbConnection conn = DBComun.ObtenerConexion())
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("sp_ObtenerBitacoraPorUsuario", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Id_Usuario", idUsuario);
-
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                using (SqlCommand cmd = new SqlCommand("sp_ObtenerBitacoraPorUsuario", conn as SqlConnection))
                 {
-                    while (reader.Read())
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Id_Usuario", idUsuario);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        var b = new Bitacora
+                        while (reader.Read())
                         {
-                            id_actividad = reader["id_actividad"] != DBNull.Value ? Convert.ToInt32(reader["id_actividad"]) : 0,
-                            Accion = reader["Accion"]?.ToString(),
-                            Id_Usuario = reader["Id_Usuario"] != DBNull.Value ? Convert.ToInt32(reader["Id_Usuario"]) : 0,
-                            Fecha_y_hora = reader["Fecha_y_hora"] != DBNull.Value ? Convert.ToDateTime(reader["Fecha_y_hora"]) : DateTime.MinValue
-                        };
-                        lista.Add(b);
+                            var b = new Bitacora
+                            {
+                                id_actividad = reader["id_actividad"] != DBNull.Value ? Convert.ToInt32(reader["id_actividad"]) : 0,
+                                Accion = reader["Accion"]?.ToString(),
+                                Id_Usuario = reader["Id_Usuario"] != DBNull.Value ? Convert.ToInt32(reader["Id_Usuario"]) : 0,
+                                Fecha_y_hora = reader["Fecha_y_hora"] != DBNull.Value ? Convert.ToDateTime(reader["Fecha_y_hora"]) : DateTime.MinValue
+                            };
+                            lista.Add(b);
+                        }
                     }
                 }
             }

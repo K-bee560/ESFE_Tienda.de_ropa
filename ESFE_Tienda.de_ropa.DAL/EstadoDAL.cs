@@ -8,40 +8,44 @@ namespace ESFE_Tienda.de_ropa.DAL
 {
     public class EstadoDAL
     {
-        private static string ConnectionString = "TuCadenaDeConexionAquí";
-
         public static int Insertar(Estado entidad)
         {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (IDbConnection conn = DBComun.ObtenerConexion())
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("sp_InsertarEstado", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
+                using (SqlCommand cmd = new SqlCommand("sp_InsertarEstado", conn as SqlConnection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                // Ajusta los parámetros según las propiedades de tu entidad Estado
-                cmd.Parameters.AddWithValue("@Nombre", entidad.EstadoNombre);
+                    // Ajusta los parámetros según las propiedades de tu entidad Estado
+                    cmd.Parameters.AddWithValue("@Nombre", entidad.EstadoNombre ?? (object)DBNull.Value);
 
-                return cmd.ExecuteNonQuery();
+                    return cmd.ExecuteNonQuery();
+                }
             }
         }
 
         public static List<Estado> ObtenerTodos()
         {
             List<Estado> lista = new List<Estado>();
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (IDbConnection conn = DBComun.ObtenerConexion())
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("sp_ObtenerTodosEstados", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
+                using (SqlCommand cmd = new SqlCommand("sp_ObtenerTodosEstados", conn as SqlConnection))
                 {
-                    Estado estado = new Estado();
-                    estado.id_estado = Convert.ToInt32(reader["Id"]);
-                    estado.EstadoNombre = reader["Nombre"].ToString();
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                    lista.Add(estado);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Estado estado = new Estado();
+                            estado.id_estado = reader["Id"] != DBNull.Value ? Convert.ToInt32(reader["Id"]) : 0;
+                            estado.EstadoNombre = reader["Nombre"]?.ToString();
+
+                            lista.Add(estado);
+                        }
+                    }
                 }
             }
             return lista;
@@ -50,19 +54,23 @@ namespace ESFE_Tienda.de_ropa.DAL
         public static Estado ObtenerPorId(int id)
         {
             Estado estado = null;
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (IDbConnection conn = DBComun.ObtenerConexion())
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("sp_ObtenerEstadoPorId", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Id", id);
-
-                SqlDataReader reader = cmd.ExecuteReader();
-                if (reader.Read())
+                using (SqlCommand cmd = new SqlCommand("sp_ObtenerEstadoPorId", conn as SqlConnection))
                 {
-                    estado = new Estado();
-                    estado.id_estado = Convert.ToInt32(reader["Id"]);
-                    estado.EstadoNombre = reader["Nombre"].ToString();
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Id", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            estado = new Estado();
+                            estado.id_estado = reader["Id"] != DBNull.Value ? Convert.ToInt32(reader["Id"]) : 0;
+                            estado.EstadoNombre = reader["Nombre"]?.ToString();
+                        }
+                    }
                 }
             }
             return estado;
