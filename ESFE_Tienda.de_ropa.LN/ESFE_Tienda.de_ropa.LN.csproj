@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ESFE_Tienda.de_ropa.DAL\ESFE_Tienda.de_ropa.DAL.csproj" />
     <ProjectReference Include="..\ESFE_Tienda.de_ropa.EN\ESFE_Tienda.de_ropa.EN.csproj" />
   </ItemGroup>
