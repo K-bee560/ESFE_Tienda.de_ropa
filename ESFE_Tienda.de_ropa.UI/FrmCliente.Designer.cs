@@ -63,11 +63,12 @@
             // 
             label1.AutoSize = true;
             label1.BackColor = Color.Yellow;
-            label1.Location = new Point(29, 18);
+            label1.Location = new Point(32, 94);
             label1.Name = "label1";
             label1.Size = new Size(49, 15);
             label1.TabIndex = 1;
             label1.Text = "Clientes";
+            label1.Click += label1_Click_1;
             // 
             // textBox1
             // 
@@ -237,7 +238,7 @@
             // 
             label11.AutoSize = true;
             label11.BackColor = Color.Yellow;
-            label11.Location = new Point(674, 18);
+            label11.Location = new Point(670, 79);
             label11.Name = "label11";
             label11.Size = new Size(75, 15);
             label11.TabIndex = 21;
@@ -246,7 +247,7 @@
             // linkLabel1
             // 
             linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(12, 103);
+            linkLabel1.Location = new Point(29, 18);
             linkLabel1.Name = "linkLabel1";
             linkLabel1.Size = new Size(612, 15);
             linkLabel1.TabIndex = 22;
@@ -256,7 +257,7 @@
             // button2
             // 
             button2.BackColor = Color.Yellow;
-            button2.Location = new Point(475, 140);
+            button2.Location = new Point(577, 53);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 23;
@@ -304,7 +305,7 @@
             // 
             label13.AutoSize = true;
             label13.BackColor = Color.Yellow;
-            label13.Location = new Point(725, 44);
+            label13.Location = new Point(741, 109);
             label13.Name = "label13";
             label13.Size = new Size(60, 15);
             label13.TabIndex = 28;
@@ -314,7 +315,7 @@
             // 
             label14.AutoSize = true;
             label14.BackColor = Color.Yellow;
-            label14.Location = new Point(610, 44);
+            label14.Location = new Point(600, 109);
             label14.Name = "label14";
             label14.Size = new Size(83, 15);
             label14.TabIndex = 29;
