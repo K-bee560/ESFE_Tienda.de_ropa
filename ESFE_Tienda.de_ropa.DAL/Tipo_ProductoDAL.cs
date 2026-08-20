@@ -8,40 +8,27 @@ namespace ESFE_Tienda.de_ropa.DAL
 {
     public class Tipo_ProductoDAL
     {
-        private static string ConnectionString = "TuCadenaDeConexionAquí";
-
         public static int Insertar(Tipo_Producto entidad)
         {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            var p = new SqlParameter[]
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("sp_InsertarTipoProducto", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.AddWithValue("@Tipo_de_producto", entidad.Tipo_de_producto);
-
-                return cmd.ExecuteNonQuery();
-            }
+                new SqlParameter("@Tipo_de_producto", entidad.Tipo_de_producto ?? (object)DBNull.Value)
+            };
+            return BDComun.ExecuteNonQuery("sp_InsertarTipoProducto", p);
         }
 
         public static List<Tipo_Producto> ObtenerTodos()
         {
-            List<Tipo_Producto> lista = new List<Tipo_Producto>();
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            var lista = new List<Tipo_Producto>();
+            DataTable dt = BDComun.ExecuteDataTable("sp_ObtenerTodosTipoProductos");
+            foreach (DataRow row in dt.Rows)
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("sp_ObtenerTodosTipoProductos", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
+                var tp = new Tipo_Producto
                 {
-                    Tipo_Producto tp = new Tipo_Producto();
-                    tp.id_Tipo_Producto = Convert.ToInt32(reader["id_Tipo_Producto"]);
-                    tp.Tipo_de_producto = reader["Tipo_de_producto"].ToString();
-
-                    lista.Add(tp);
-                }
+                    id_Tipo_Producto = row["id_Tipo_Producto"] != DBNull.Value ? Convert.ToInt32(row["id_Tipo_Producto"]) : 0,
+                    Tipo_de_producto = row["Tipo_de_producto"] != DBNull.Value ? row["Tipo_de_producto"].ToString() : null
+                };
+                lista.Add(tp);
             }
             return lista;
         }
@@ -49,50 +36,34 @@ namespace ESFE_Tienda.de_ropa.DAL
         public static Tipo_Producto ObtenerPorId(int id)
         {
             Tipo_Producto tp = null;
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            var p = new SqlParameter[] { new SqlParameter("@id_Tipo_Producto", id) };
+            DataTable dt = BDComun.ExecuteDataTable("sp_ObtenerTipoProductoPorId", p);
+            if (dt.Rows.Count > 0)
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("sp_ObtenerTipoProductoPorId", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id_Tipo_Producto", id);
-
-                SqlDataReader reader = cmd.ExecuteReader();
-                if (reader.Read())
+                var row = dt.Rows[0];
+                tp = new Tipo_Producto
                 {
-                    tp = new Tipo_Producto();
-                    tp.id_Tipo_Producto = Convert.ToInt32(reader["id_Tipo_Producto"]);
-                    tp.Tipo_de_producto = reader["Tipo_de_producto"].ToString();
-                }
+                    id_Tipo_Producto = row["id_Tipo_Producto"] != DBNull.Value ? Convert.ToInt32(row["id_Tipo_Producto"]) : 0,
+                    Tipo_de_producto = row["Tipo_de_producto"] != DBNull.Value ? row["Tipo_de_producto"].ToString() : null
+                };
             }
             return tp;
         }
 
         public static int Actualizar(Tipo_Producto entidad)
         {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            var p = new SqlParameter[]
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("sp_ActualizarTipoProducto", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.AddWithValue("@id_Tipo_Producto", entidad.id_Tipo_Producto);
-                cmd.Parameters.AddWithValue("@Tipo_de_producto", entidad.Tipo_de_producto);
-
-                return cmd.ExecuteNonQuery();
-            }
+                new SqlParameter("@id_Tipo_Producto", entidad.id_Tipo_Producto),
+                new SqlParameter("@Tipo_de_producto", entidad.Tipo_de_producto ?? (object)DBNull.Value)
+            };
+            return BDComun.ExecuteNonQuery("sp_ActualizarTipoProducto", p);
         }
 
         public static int Eliminar(int id)
         {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("sp_EliminarTipoProducto", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id_Tipo_Producto", id);
-
-                return cmd.ExecuteNonQuery();
-            }
+            var p = new SqlParameter[] { new SqlParameter("@id_Tipo_Producto", id) };
+            return BDComun.ExecuteNonQuery("sp_EliminarTipoProducto", p);
         }
     }
 }
