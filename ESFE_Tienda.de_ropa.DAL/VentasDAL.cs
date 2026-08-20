@@ -10,32 +10,41 @@ namespace ESFE_Tienda.de_ropa.DAL
     {
         public static int Insertar(Ventas entidad)
         {
-            var p = new SqlParameter[]
+            using (IDbConnection conn = BDComun.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_InsertarVenta", conn as SqlConnection))
             {
-                new SqlParameter("@Codigo_de_Venta", entidad.Codigo_de_Venta ?? (object)DBNull.Value),
-                new SqlParameter("@Fecha_y_hora", entidad.Fecha_y_hora),
-                new SqlParameter("@Cantidad_de_prod", entidad.Cantidad_de_prod),
-                new SqlParameter("@id_Tipo_Produc", entidad.id_Tipo_Produc),
-                new SqlParameter("@id_cliente", entidad.id_cliente)
-            };
-            return BDComun.ExecuteNonQuery("sp_InsertarVenta", p);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Codigo_de_Venta", entidad.Codigo_de_Venta ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@Fecha_y_hora", entidad.Fecha_y_hora);
+                cmd.Parameters.AddWithValue("@Cantidad_de_prod", entidad.Cantidad_de_prod);
+                cmd.Parameters.AddWithValue("@id_Tipo_Produc", entidad.id_Tipo_Produc);
+                cmd.Parameters.AddWithValue("@id_cliente", entidad.id_cliente);
+                return cmd.ExecuteNonQuery();
+            }
         }
 
         public static List<Ventas> ObtenerTodos()
         {
             var lista = new List<Ventas>();
-            DataTable dt = BDComun.ExecuteDataTable("sp_ObtenerTodasVentas");
-            foreach (DataRow row in dt.Rows)
+            using (IDbConnection conn = BDComun.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerTodasVentas", conn as SqlConnection))
             {
-                var v = new Ventas
+                cmd.CommandType = CommandType.StoredProcedure;
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    Codigo_de_Venta = row["Codigo_de_Venta"] != DBNull.Value ? row["Codigo_de_Venta"].ToString() : null,
-                    Fecha_y_hora = row["Fecha_y_hora"] != DBNull.Value ? Convert.ToDateTime(row["Fecha_y_hora"]) : DateTime.MinValue,
-                    Cantidad_de_prod = row["Cantidad_de_prod"] != DBNull.Value ? Convert.ToInt32(row["Cantidad_de_prod"]) : 0,
-                    id_Tipo_Produc = row["id_Tipo_Produc"] != DBNull.Value ? Convert.ToInt32(row["id_Tipo_Produc"]) : 0,
-                    id_cliente = row["id_cliente"] != DBNull.Value ? Convert.ToInt32(row["id_cliente"]) : 0
-                };
-                lista.Add(v);
+                    while (reader.Read())
+                    {
+                        var v = new Ventas
+                        {
+                            Codigo_de_Venta = reader["Codigo_de_Venta"] != DBNull.Value ? reader["Codigo_de_Venta"].ToString() : null,
+                            Fecha_y_hora = reader["Fecha_y_hora"] != DBNull.Value ? Convert.ToDateTime(reader["Fecha_y_hora"]) : DateTime.MinValue,
+                            Cantidad_de_prod = reader["Cantidad_de_prod"] != DBNull.Value ? Convert.ToInt32(reader["Cantidad_de_prod"]) : 0,
+                            id_Tipo_Produc = reader["id_Tipo_Produc"] != DBNull.Value ? Convert.ToInt32(reader["id_Tipo_Produc"]) : 0,
+                            id_cliente = reader["id_cliente"] != DBNull.Value ? Convert.ToInt32(reader["id_cliente"]) : 0
+                        };
+                        lista.Add(v);
+                    }
+                }
             }
             return lista;
         }
@@ -43,40 +52,53 @@ namespace ESFE_Tienda.de_ropa.DAL
         public static Ventas ObtenerPorCodigo(string codigo)
         {
             Ventas v = null;
-            var p = new SqlParameter[] { new SqlParameter("@Codigo_de_Venta", codigo ?? (object)DBNull.Value) };
-            DataTable dt = BDComun.ExecuteDataTable("sp_ObtenerVentaPorCodigo", p);
-            if (dt.Rows.Count > 0)
+            using (IDbConnection conn = BDComun.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerVentaPorCodigo", conn as SqlConnection))
             {
-                var row = dt.Rows[0];
-                v = new Ventas
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Codigo_de_Venta", codigo ?? (object)DBNull.Value);
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    Codigo_de_Venta = row["Codigo_de_Venta"] != DBNull.Value ? row["Codigo_de_Venta"].ToString() : null,
-                    Fecha_y_hora = row["Fecha_y_hora"] != DBNull.Value ? Convert.ToDateTime(row["Fecha_y_hora"]) : DateTime.MinValue,
-                    Cantidad_de_prod = row["Cantidad_de_prod"] != DBNull.Value ? Convert.ToInt32(row["Cantidad_de_prod"]) : 0,
-                    id_Tipo_Produc = row["id_Tipo_Produc"] != DBNull.Value ? Convert.ToInt32(row["id_Tipo_Produc"]) : 0,
-                    id_cliente = row["id_cliente"] != DBNull.Value ? Convert.ToInt32(row["id_cliente"]) : 0
-                };
+                    if (reader.Read())
+                    {
+                        v = new Ventas
+                        {
+                            Codigo_de_Venta = reader["Codigo_de_Venta"] != DBNull.Value ? reader["Codigo_de_Venta"].ToString() : null,
+                            Fecha_y_hora = reader["Fecha_y_hora"] != DBNull.Value ? Convert.ToDateTime(reader["Fecha_y_hora"]) : DateTime.MinValue,
+                            Cantidad_de_prod = reader["Cantidad_de_prod"] != DBNull.Value ? Convert.ToInt32(reader["Cantidad_de_prod"]) : 0,
+                            id_Tipo_Produc = reader["id_Tipo_Produc"] != DBNull.Value ? Convert.ToInt32(reader["id_Tipo_Produc"]) : 0,
+                            id_cliente = reader["id_cliente"] != DBNull.Value ? Convert.ToInt32(reader["id_cliente"]) : 0
+                        };
+                    }
+                }
             }
             return v;
         }
 
         public static int Actualizar(Ventas entidad)
         {
-            var p = new SqlParameter[]
+            using (IDbConnection conn = BDComun.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_ActualizarVenta", conn as SqlConnection))
             {
-                new SqlParameter("@Codigo_de_Venta", entidad.Codigo_de_Venta ?? (object)DBNull.Value),
-                new SqlParameter("@Fecha_y_hora", entidad.Fecha_y_hora),
-                new SqlParameter("@Cantidad_de_prod", entidad.Cantidad_de_prod),
-                new SqlParameter("@id_Tipo_Produc", entidad.id_Tipo_Produc),
-                new SqlParameter("@id_cliente", entidad.id_cliente)
-            };
-            return BDComun.ExecuteNonQuery("sp_ActualizarVenta", p);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Codigo_de_Venta", entidad.Codigo_de_Venta ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@Fecha_y_hora", entidad.Fecha_y_hora);
+                cmd.Parameters.AddWithValue("@Cantidad_de_prod", entidad.Cantidad_de_prod);
+                cmd.Parameters.AddWithValue("@id_Tipo_Produc", entidad.id_Tipo_Produc);
+                cmd.Parameters.AddWithValue("@id_cliente", entidad.id_cliente);
+                return cmd.ExecuteNonQuery();
+            }
         }
 
         public static int Eliminar(string codigo)
         {
-            var p = new SqlParameter[] { new SqlParameter("@Codigo_de_Venta", codigo ?? (object)DBNull.Value) };
-            return BDComun.ExecuteNonQuery("sp_EliminarVenta", p);
+            using (IDbConnection conn = BDComun.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_EliminarVenta", conn as SqlConnection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Codigo_de_Venta", codigo ?? (object)DBNull.Value);
+                return cmd.ExecuteNonQuery();
+            }
         }
     }
 }

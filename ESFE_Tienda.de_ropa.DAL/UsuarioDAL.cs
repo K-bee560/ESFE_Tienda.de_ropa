@@ -10,25 +10,34 @@ namespace ESFE_Tienda.de_ropa.DAL
     {
         public static int Insertar(Usuario entidad)
         {
-            var p = new SqlParameter[]
+            using (IDbConnection conn = BDComun.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_InsertarUsuario", conn as SqlConnection))
             {
-                new SqlParameter("@UsuarioNombre", entidad.UsuarioNombre ?? (object)DBNull.Value)
-            };
-            return BDComun.ExecuteNonQuery("sp_InsertarUsuario", p);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@UsuarioNombre", entidad.UsuarioNombre ?? (object)DBNull.Value);
+                return cmd.ExecuteNonQuery();
+            }
         }
 
         public static List<Usuario> ObtenerTodos()
         {
             var lista = new List<Usuario>();
-            DataTable dt = BDComun.ExecuteDataTable("sp_ObtenerTodosUsuarios");
-            foreach (DataRow row in dt.Rows)
+            using (IDbConnection conn = BDComun.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerTodosUsuarios", conn as SqlConnection))
             {
-                var u = new Usuario
+                cmd.CommandType = CommandType.StoredProcedure;
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    Id_Usuario = row["Id_Usuario"] != DBNull.Value ? Convert.ToInt32(row["Id_Usuario"]) : 0,
-                    UsuarioNombre = row["UsuarioNombre"] != DBNull.Value ? row["UsuarioNombre"].ToString() : null
-                };
-                lista.Add(u);
+                    while (reader.Read())
+                    {
+                        var u = new Usuario
+                        {
+                            Id_Usuario = reader["Id_Usuario"] != DBNull.Value ? Convert.ToInt32(reader["Id_Usuario"]) : 0,
+                            UsuarioNombre = reader["UsuarioNombre"] != DBNull.Value ? reader["UsuarioNombre"].ToString() : null
+                        };
+                        lista.Add(u);
+                    }
+                }
             }
             return lista;
         }
@@ -36,34 +45,47 @@ namespace ESFE_Tienda.de_ropa.DAL
         public static Usuario ObtenerPorId(int id)
         {
             Usuario u = null;
-            var p = new SqlParameter[] { new SqlParameter("@Id_Usuario", id) };
-            DataTable dt = BDComun.ExecuteDataTable("sp_ObtenerUsuarioPorId", p);
-            if (dt.Rows.Count > 0)
+            using (IDbConnection conn = BDComun.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerUsuarioPorId", conn as SqlConnection))
             {
-                var row = dt.Rows[0];
-                u = new Usuario
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Id_Usuario", id);
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    Id_Usuario = row["Id_Usuario"] != DBNull.Value ? Convert.ToInt32(row["Id_Usuario"]) : 0,
-                    UsuarioNombre = row["UsuarioNombre"] != DBNull.Value ? row["UsuarioNombre"].ToString() : null
-                };
+                    if (reader.Read())
+                    {
+                        u = new Usuario
+                        {
+                            Id_Usuario = reader["Id_Usuario"] != DBNull.Value ? Convert.ToInt32(reader["Id_Usuario"]) : 0,
+                            UsuarioNombre = reader["UsuarioNombre"] != DBNull.Value ? reader["UsuarioNombre"].ToString() : null
+                        };
+                    }
+                }
             }
             return u;
         }
 
         public static int Actualizar(Usuario entidad)
         {
-            var p = new SqlParameter[]
+            using (IDbConnection conn = BDComun.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_ActualizarUsuario", conn as SqlConnection))
             {
-                new SqlParameter("@Id_Usuario", entidad.Id_Usuario),
-                new SqlParameter("@UsuarioNombre", entidad.UsuarioNombre ?? (object)DBNull.Value)
-            };
-            return BDComun.ExecuteNonQuery("sp_ActualizarUsuario", p);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Id_Usuario", entidad.Id_Usuario);
+                cmd.Parameters.AddWithValue("@UsuarioNombre", entidad.UsuarioNombre ?? (object)DBNull.Value);
+                return cmd.ExecuteNonQuery();
+            }
         }
 
         public static int Eliminar(int id)
         {
-            var p = new SqlParameter[] { new SqlParameter("@Id_Usuario", id) };
-            return BDComun.ExecuteNonQuery("sp_EliminarUsuario", p);
+            using (IDbConnection conn = BDComun.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_EliminarUsuario", conn as SqlConnection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Id_Usuario", id);
+                return cmd.ExecuteNonQuery();
+            }
         }
     }
 }

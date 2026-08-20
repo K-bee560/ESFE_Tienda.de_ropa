@@ -10,11 +10,13 @@ namespace ESFE_Tienda.de_ropa.DAL
     {
         public static int Insertar(Tela entidad)
         {
-            var p = new SqlParameter[]
+            using (IDbConnection conn = BDComun.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand("sp_InsertarTela", conn as SqlConnection))
             {
-                new SqlParameter("@Tipo_de_tela", entidad.Tipo_de_tela ?? (object)DBNull.Value)
-            };
-            return BDComun.ExecuteNonQuery("sp_InsertarTela", p);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Tipo_de_tela", entidad.Tipo_de_tela ?? (object)DBNull.Value);
+                return cmd.ExecuteNonQuery();
+            }
         }
 
         public static List<Tela> ObtenerTodos()
