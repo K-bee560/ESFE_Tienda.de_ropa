@@ -48,7 +48,8 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.ForeColor = SystemColors.ControlText;
+            label1.BackColor = Color.Yellow;
+            label1.ForeColor = SystemColors.ActiveCaptionText;
             label1.Location = new Point(12, 9);
             label1.Name = "label1";
             label1.Size = new Size(50, 15);
@@ -58,6 +59,8 @@
             // label2
             // 
             label2.AutoSize = true;
+            label2.BackColor = Color.Yellow;
+            label2.ForeColor = SystemColors.ActiveCaptionText;
             label2.Location = new Point(6, 68);
             label2.Name = "label2";
             label2.Size = new Size(56, 15);
@@ -73,8 +76,8 @@
             // 
             // button1
             // 
-            button1.BackColor = Color.Black;
-            button1.ForeColor = SystemColors.MenuHighlight;
+            button1.BackColor = Color.Yellow;
+            button1.ForeColor = SystemColors.InactiveCaptionText;
             button1.Location = new Point(270, 54);
             button1.Name = "button1";
             button1.Size = new Size(75, 42);
@@ -85,6 +88,7 @@
             // label3
             // 
             label3.AutoSize = true;
+            label3.BackColor = Color.Yellow;
             label3.ForeColor = SystemColors.ActiveCaptionText;
             label3.Location = new Point(12, 155);
             label3.Name = "label3";
@@ -102,11 +106,14 @@
             // label4
             // 
             label4.AutoSize = true;
+            label4.BackColor = Color.Yellow;
+            label4.ForeColor = SystemColors.ActiveCaptionText;
             label4.Location = new Point(7, 214);
             label4.Name = "label4";
             label4.Size = new Size(55, 15);
             label4.TabIndex = 6;
             label4.Text = "Acciones";
+            label4.Click += label4_Click;
             // 
             // textBox3
             // 
@@ -118,6 +125,8 @@
             // label5
             // 
             label5.AutoSize = true;
+            label5.BackColor = Color.Yellow;
+            label5.ForeColor = SystemColors.ActiveCaptionText;
             label5.Location = new Point(6, 266);
             label5.Name = "label5";
             label5.Size = new Size(61, 15);
@@ -134,6 +143,8 @@
             // label6
             // 
             label6.AutoSize = true;
+            label6.BackColor = Color.Yellow;
+            label6.ForeColor = SystemColors.ActiveCaptionText;
             label6.Location = new Point(6, 316);
             label6.Name = "label6";
             label6.Size = new Size(76, 15);
@@ -149,7 +160,7 @@
             // 
             // button2
             // 
-            button2.BackColor = Color.DarkOrange;
+            button2.BackColor = Color.Yellow;
             button2.Location = new Point(448, 330);
             button2.Name = "button2";
             button2.Size = new Size(124, 45);
@@ -159,8 +170,8 @@
             // 
             // button3
             // 
-            button3.BackColor = Color.Silver;
-            button3.ForeColor = Color.FromArgb(0, 0, 192);
+            button3.BackColor = Color.Yellow;
+            button3.ForeColor = Color.Black;
             button3.Location = new Point(578, 327);
             button3.Name = "button3";
             button3.Size = new Size(178, 51);
@@ -170,8 +181,8 @@
             // 
             // button4
             // 
-            button4.BackColor = SystemColors.Desktop;
-            button4.ForeColor = SystemColors.ButtonFace;
+            button4.BackColor = Color.Yellow;
+            button4.ForeColor = SystemColors.ActiveCaptionText;
             button4.Location = new Point(493, 384);
             button4.Name = "button4";
             button4.Size = new Size(160, 54);
@@ -183,6 +194,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(64, 0, 64);
             ClientSize = new Size(800, 450);
             Controls.Add(button4);
             Controls.Add(button3);
