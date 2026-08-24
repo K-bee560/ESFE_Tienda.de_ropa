@@ -14,5 +14,10 @@ namespace ESFE_Tienda.de_ropa.UI
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
