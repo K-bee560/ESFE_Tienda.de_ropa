@@ -1,110 +1,124 @@
-﻿using System;
-using ESFE_Tienda.de_ropa.EN;
-using System.Collections.Generic;
+﻿
+using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using ESFE_Tienda.de_ropa.EN;
 
 namespace ESFE_Tienda.de_ropa.DAL
 {
-    // Implementación de acceso a datos para Bitacora
-    public static class BitacoraDAL
+    public class BitacoraDAL
     {
-        public static int Insertar(Bitacora entidad)
+        private string conexion = "TU_CADENA_DE_CONEXION";
+
+        // AGREGAR REGISTRO
+        public bool Agregar(BitacoraEN bitacora)
         {
-            using (IDbConnection conn = BDComun.ObtenerConexion())
+            using (SqlConnection cn = new SqlConnection(conexion))
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand("sp_InsertarBitacora", conn as SqlConnection))
+                string sql = @"INSERT INTO Bitacora
+                               (IDActividad, Accion, IDUsuario, FechaHora)
+                               VALUES
+                               (@IDActividad, @Accion, @IDUsuario, @FechaHora)";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@IDActividad", bitacora.IDActividad);
+                    cmd.Parameters.AddWithValue("@Accion", bitacora.Accion);
+                    cmd.Parameters.AddWithValue("@IDUsuario", bitacora.IDUsuario);
+                    cmd.Parameters.AddWithValue("@FechaHora", bitacora.FechaHora);
 
-                    cmd.Parameters.AddWithValue("@Accion", entidad.Accion);
-                    cmd.Parameters.AddWithValue("@Id_Usuario", entidad.Id_Usuario);
-                    cmd.Parameters.AddWithValue("@Fecha_y_hora", entidad.Fecha_y_hora);
+                    cn.Open();
 
-                    return cmd.ExecuteNonQuery();
+                    return cmd.ExecuteNonQuery() > 0;
                 }
             }
         }
 
-        public static List<Bitacora> ObtenerTodos()
+        // BUSCAR REGISTRO
+        public BitacoraEN Buscar(int idActividad)
         {
-            var lista = new List<Bitacora>();
-            using (IDbConnection conn = BDComun.ObtenerConexion())
-            {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand("sp_ObtenerTodasBitacoras", conn as SqlConnection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
+            BitacoraEN bitacora = null;
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+            using (SqlConnection cn = new SqlConnection(conexion))
+            {
+                string sql = @"SELECT IDActividad,
+                                      Accion,
+                                      IDUsuario,
+                                      FechaHora
+                               FROM Bitacora
+                               WHERE IDActividad = @IDActividad";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn))
+                {
+                    cmd.Parameters.AddWithValue("@IDActividad", idActividad);
+
+                    cn.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        while (reader.Read())
+                        if (dr.Read())
                         {
-                            var b = new Bitacora
-                            {
-                                id_actividad = reader["id_actividad"] != DBNull.Value ? Convert.ToInt32(reader["id_actividad"]) : 0,
-                                Accion = reader["Accion"]?.ToString(),
-                                Id_Usuario = reader["Id_Usuario"] != DBNull.Value ? Convert.ToInt32(reader["Id_Usuario"]) : 0,
-                                Fecha_y_hora = reader["Fecha_y_hora"] != DBNull.Value ? Convert.ToDateTime(reader["Fecha_y_hora"]) : DateTime.MinValue
-                            };
-                            lista.Add(b);
+                            bitacora = new BitacoraEN();
+
+                            bitacora.IDActividad =
+                                Convert.ToInt32(dr["IDActividad"]);
+
+                            bitacora.Accion =
+                                dr["Accion"].ToString();
+
+                            bitacora.IDUsuario =
+                                Convert.ToInt32(dr["IDUsuario"]);
+
+                            bitacora.FechaHora =
+                                Convert.ToDateTime(dr["FechaHora"]);
                         }
                     }
                 }
             }
-            return lista;
+
+            return bitacora;
         }
 
-        public static List<Bitacora> ObtenerPorUsuario(int idUsuario)
+        // LISTAR REGISTROS
+        public DataTable ObtenerTodos()
         {
-            var lista = new List<Bitacora>();
-            using (IDbConnection conn = BDComun.ObtenerConexion())
-            {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand("sp_ObtenerBitacoraPorUsuario", conn as SqlConnection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@Id_Usuario", idUsuario);
+            DataTable tabla = new DataTable();
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            var b = new Bitacora
-                            {
-                                id_actividad = reader["id_actividad"] != DBNull.Value ? Convert.ToInt32(reader["id_actividad"]) : 0,
-                                Accion = reader["Accion"]?.ToString(),
-                                Id_Usuario = reader["Id_Usuario"] != DBNull.Value ? Convert.ToInt32(reader["Id_Usuario"]) : 0,
-                                Fecha_y_hora = reader["Fecha_y_hora"] != DBNull.Value ? Convert.ToDateTime(reader["Fecha_y_hora"]) : DateTime.MinValue
-                            };
-                            lista.Add(b);
-                        }
-                    }
+            using (SqlConnection cn = new SqlConnection(conexion))
+            {
+                string sql = @"SELECT IDActividad,
+                                      Accion,
+                                      IDUsuario,
+                                      FechaHora
+                               FROM Bitacora
+                               ORDER BY FechaHora DESC";
+
+                using (SqlDataAdapter da = new SqlDataAdapter(sql, cn))
+                {
+                    da.Fill(tabla);
                 }
             }
-            return lista;
-        }
-    }
-}
 
-namespace ESFE_Tienda.de_ropa.LN
-{
-    public class BitacoraLN
-    {
-        public int Insertar(Bitacora entidad)
-        {
-            return ESFE_Tienda.de_ropa.DAL.BitacoraDAL.Insertar(entidad);
+            return tabla;
         }
 
-        public List<Bitacora> ObtenerTodos()
+        // ELIMINAR REGISTRO
+        public bool Eliminar(int idActividad)
         {
-            return ESFE_Tienda.de_ropa.DAL.BitacoraDAL.ObtenerTodos();
-        }
+            using (SqlConnection cn = new SqlConnection(conexion))
+            {
+                string sql = @"DELETE FROM Bitacora
+                               WHERE IDActividad = @IDActividad";
 
-        public List<Bitacora> ObtenerPorUsuario(int idUsuario)
-        {
-            return ESFE_Tienda.de_ropa.DAL.BitacoraDAL.ObtenerPorUsuario(idUsuario);
+                using (SqlCommand cmd = new SqlCommand(sql, cn))
+                {
+                    cmd.Parameters.AddWithValue("@IDActividad", idActividad);
+
+                    cn.Open();
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
         }
     }
 }

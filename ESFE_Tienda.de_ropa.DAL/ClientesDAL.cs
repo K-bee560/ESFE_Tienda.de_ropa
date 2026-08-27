@@ -1,97 +1,101 @@
-﻿using ESFE_Tienda.de_ropa.EN;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
 
 namespace ESFE_Tienda.de_ropa.DAL
 {
-    public class ClientesDAL
+    public class ClienteDAL
     {
-        public static int Insertar(Clientes entidad)
+        // =====================================================
+        // AGREGAR CLIENTE
+        // =====================================================
+
+        public bool AgregarCliente(
+            string nombre,
+            string dui,
+            string telefono,
+            string correo,
+            int idRol,
+            int idPermiso,
+            int idEstado)
         {
-            using (IDbConnection conn = BDComun.ObtenerConexion())
+            try
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand("sp_InsertarCliente", conn as SqlConnection))
+                SqlParameter[] parametros =
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    new SqlParameter("@Nombre", nombre),
+                    new SqlParameter("@DUI", dui),
+                    new SqlParameter("@Telefono", telefono),
+                    new SqlParameter("@Correo", correo),
+                    new SqlParameter("@IDRol", idRol),
+                    new SqlParameter("@IDPermiso", idPermiso),
+                    new SqlParameter("@IDEstado", idEstado)
+                };
 
-                    // Ajusta los parámetros según las propiedades de tu clase Clientes
-                    cmd.Parameters.AddWithValue("@Nombre", entidad.Nombre ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@DUI", entidad.DUI ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Telefono", entidad.Telefono ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Correo", entidad.Correo ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@id_rol", entidad.id_rol);
-                    cmd.Parameters.AddWithValue("@id_permiso", entidad.id_permiso);
-                    cmd.Parameters.AddWithValue("@id_estado", entidad.id_estado);
+                int resultado = BDComun.ExecuteNonQuery(
+                    "sp_AgregarCliente",
+                    parametros
+                );
 
-                    return cmd.ExecuteNonQuery();
-                }
+                return resultado > 0;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
-        public static List<Clientes> ObtenerTodos()
+
+        // =====================================================
+        // BUSCAR CLIENTE
+        // =====================================================
+
+        public DataTable BuscarCliente(string busqueda)
         {
-            List<Clientes> lista = new List<Clientes>();
-            using (IDbConnection conn = BDComun.ObtenerConexion())
-            {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand("sp_ObtenerTodosClientes", conn as SqlConnection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
+            SqlParameter parametro =
+                new SqlParameter("@Busqueda", busqueda);
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Clientes cliente = new Clientes();
-                            cliente.id_cliente = reader["id_cliente"] != DBNull.Value ? Convert.ToInt32(reader["id_cliente"]) : 0;
-                            cliente.Nombre = reader["Nombre"]?.ToString();
-                            cliente.DUI = reader["DUI"]?.ToString();
-                            cliente.Telefono = reader["Telefono"]?.ToString();
-                            cliente.Correo = reader["Correo"]?.ToString();
-                            cliente.id_rol = reader["id_rol"] != DBNull.Value ? Convert.ToInt32(reader["id_rol"]) : 0;
-                            cliente.id_permiso = reader["id_permiso"] != DBNull.Value ? Convert.ToInt32(reader["id_permiso"]) : 0;
-                            cliente.id_estado = reader["id_estado"] != DBNull.Value ? Convert.ToInt32(reader["id_estado"]) : 0;
-
-                            lista.Add(cliente);
-                        }
-                    }
-                }
-            }
-            return lista;
+            return BDComun.ExecuteDataTable(
+                "sp_BuscarCliente",
+                parametro
+            );
         }
 
-        public static Clientes ObtenerPorId(int id)
-        {
-            Clientes cliente = null;
-            using (IDbConnection conn = BDComun.ObtenerConexion())
-            {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand("sp_ObtenerClientePorId", conn as SqlConnection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@id_cliente", id);
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            cliente = new Clientes();
-                            cliente.id_cliente = reader["id_cliente"] != DBNull.Value ? Convert.ToInt32(reader["id_cliente"]) : 0;
-                            cliente.Nombre = reader["Nombre"]?.ToString();
-                            cliente.DUI = reader["DUI"]?.ToString();
-                            cliente.Telefono = reader["Telefono"]?.ToString();
-                            cliente.Correo = reader["Correo"]?.ToString();
-                            cliente.id_rol = reader["id_rol"] != DBNull.Value ? Convert.ToInt32(reader["id_rol"]) : 0;
-                            cliente.id_permiso = reader["id_permiso"] != DBNull.Value ? Convert.ToInt32(reader["id_permiso"]) : 0;
-                            cliente.id_estado = reader["id_estado"] != DBNull.Value ? Convert.ToInt32(reader["id_estado"]) : 0;
-                        }
-                    }
-                }
+        // =====================================================
+        // MOSTRAR CLIENTES
+        // =====================================================
+
+        public DataTable MostrarClientes()
+        {
+            return BDComun.ExecuteDataTable(
+                "sp_MostrarClientes"
+            );
+        }
+
+
+        // =====================================================
+        // ELIMINAR CLIENTE
+        // =====================================================
+
+        public bool EliminarCliente(string busqueda)
+        {
+            try
+            {
+                SqlParameter parametro =
+                    new SqlParameter("@Busqueda", busqueda);
+
+                int resultado = BDComun.ExecuteNonQuery(
+                    "sp_EliminarCliente",
+                    parametro
+                );
+
+                return resultado > 0;
             }
-            return cliente;
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

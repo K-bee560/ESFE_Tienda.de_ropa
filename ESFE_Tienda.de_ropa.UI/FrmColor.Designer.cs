@@ -10,22 +10,18 @@
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
             {
                 components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             button1 = new Button();
@@ -40,136 +36,171 @@
             button2 = new Button();
             button3 = new Button();
             textBox4 = new TextBox();
+
             SuspendLayout();
-            // 
-            // button1
-            // 
-            button1.BackColor = Color.Yellow;
-            button1.Location = new Point(32, 127);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 0;
-            button1.Text = "Limpiar";
-            button1.UseVisualStyleBackColor = false;
-            // 
-            // label1
-            // 
+
+            // =====================================================
+            // FORMULARIO
+            // =====================================================
+
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(245, 245, 245);
+            ClientSize = new Size(850, 500);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            StartPosition = FormStartPosition.CenterScreen;
+            Name = "FrmColor";
+            Text = "Gestión de Colores";
+
+            // =====================================================
+            // TITULO
+            // =====================================================
+
             label1.AutoSize = true;
-            label1.BackColor = Color.Yellow;
-            label1.Location = new Point(32, 23);
+            label1.Font = new Font("Segoe UI", 22F, FontStyle.Bold);
+            label1.ForeColor = Color.FromArgb(45, 45, 45);
+            label1.Location = new Point(35, 25);
             label1.Name = "label1";
-            label1.Size = new Size(36, 15);
+            label1.Size = new Size(87, 41);
             label1.TabIndex = 1;
             label1.Text = "Color";
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(252, 69);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 2;
-            // 
-            // label2
-            // 
+
+            // =====================================================
+            // BUSCAR COLOR
+            // =====================================================
+
             label2.AutoSize = true;
-            label2.BackColor = Color.Yellow;
-            label2.Location = new Point(32, 77);
+            label2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            label2.ForeColor = Color.FromArgb(70, 70, 70);
+            label2.Location = new Point(35, 90);
             label2.Name = "label2";
-            label2.Size = new Size(161, 15);
+            label2.Size = new Size(195, 19);
             label2.TabIndex = 3;
-            label2.Text = "Buscar color por nombre o id";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.BackColor = Color.Yellow;
-            label3.Location = new Point(32, 196);
-            label3.Name = "label3";
-            label3.Size = new Size(48, 15);
-            label3.TabIndex = 4;
-            label3.Text = "ID color";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.BackColor = Color.Yellow;
-            label4.Location = new Point(32, 267);
-            label4.Name = "label4";
-            label4.Size = new Size(36, 15);
-            label4.TabIndex = 5;
-            label4.Text = "Color";
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.BackColor = Color.Yellow;
-            label5.Location = new Point(32, 340);
-            label5.Name = "label5";
-            label5.Size = new Size(249, 15);
-            label5.TabIndex = 6;
-            label5.Text = "Eliminar color por nombre o ID Administrador";
-            // 
-            // textBox2
-            // 
-            textBox2.Location = new Point(152, 188);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(100, 23);
-            textBox2.TabIndex = 7;
-            // 
-            // textBox3
-            // 
-            textBox3.Location = new Point(152, 264);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(100, 23);
-            textBox3.TabIndex = 8;
-            // 
-            // button2
-            // 
-            button2.BackColor = Color.Yellow;
-            button2.Location = new Point(422, 68);
+            label2.Text = "Buscar color por nombre o ID";
+
+            textBox1.Font = new Font("Segoe UI", 10F);
+            textBox1.Location = new Point(250, 86);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(220, 25);
+            textBox1.TabIndex = 2;
+
+            button2.BackColor = Color.FromArgb(52, 152, 219);
+            button2.FlatAppearance.BorderSize = 0;
+            button2.FlatStyle = FlatStyle.Flat;
+            button2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            button2.ForeColor = Color.White;
+            button2.Location = new Point(490, 84);
             button2.Name = "button2";
-            button2.Size = new Size(112, 23);
+            button2.Size = new Size(120, 30);
             button2.TabIndex = 9;
             button2.Text = "Buscar color";
             button2.UseVisualStyleBackColor = false;
-            // 
-            // button3
-            // 
-            button3.BackColor = Color.Yellow;
-            button3.Location = new Point(600, 336);
+            button2.Click += button2_Click;
+
+            // =====================================================
+            // DATOS DEL COLOR
+            // =====================================================
+
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label3.ForeColor = Color.FromArgb(70, 70, 70);
+            label3.Location = new Point(35, 165);
+            label3.Name = "label3";
+            label3.Size = new Size(51, 15);
+            label3.TabIndex = 4;
+            label3.Text = "ID Color";
+
+            textBox2.Font = new Font("Segoe UI", 10F);
+            textBox2.Location = new Point(125, 160);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(220, 25);
+            textBox2.TabIndex = 7;
+
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label4.ForeColor = Color.FromArgb(70, 70, 70);
+            label4.Location = new Point(35, 210);
+            label4.Name = "label4";
+            label4.Size = new Size(39, 15);
+            label4.TabIndex = 5;
+            label4.Text = "Color";
+
+            textBox3.Font = new Font("Segoe UI", 10F);
+            textBox3.Location = new Point(125, 205);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(220, 25);
+            textBox3.TabIndex = 8;
+
+            // =====================================================
+            // LIMPIAR
+            // =====================================================
+
+            button1.BackColor = Color.FromArgb(149, 165, 166);
+            button1.FlatAppearance.BorderSize = 0;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            button1.ForeColor = Color.White;
+            button1.Location = new Point(125, 250);
+            button1.Name = "button1";
+            button1.Size = new Size(100, 30);
+            button1.TabIndex = 0;
+            button1.Text = "Limpiar";
+            button1.UseVisualStyleBackColor = false;
+
+            // =====================================================
+            // ELIMINAR COLOR
+            // =====================================================
+
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            label5.ForeColor = Color.FromArgb(70, 70, 70);
+            label5.Location = new Point(410, 165);
+            label5.Name = "label5";
+            label5.Size = new Size(274, 19);
+            label5.TabIndex = 6;
+            label5.Text = "Eliminar color por nombre o ID";
+
+            textBox4.Font = new Font("Segoe UI", 10F);
+            textBox4.Location = new Point(410, 200);
+            textBox4.Name = "textBox4";
+            textBox4.Size = new Size(250, 25);
+            textBox4.TabIndex = 11;
+
+            button3.BackColor = Color.FromArgb(231, 76, 60);
+            button3.FlatAppearance.BorderSize = 0;
+            button3.FlatStyle = FlatStyle.Flat;
+            button3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            button3.ForeColor = Color.White;
+            button3.Location = new Point(410, 245);
             button3.Name = "button3";
-            button3.Size = new Size(131, 23);
+            button3.Size = new Size(130, 32);
             button3.TabIndex = 10;
             button3.Text = "Eliminar color";
             button3.UseVisualStyleBackColor = false;
-            // 
-            // textBox4
-            // 
-            textBox4.Location = new Point(321, 332);
-            textBox4.Name = "textBox4";
-            textBox4.Size = new Size(244, 23);
-            textBox4.TabIndex = 11;
-            // 
-            // FrmColor
-            // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(64, 0, 64);
-            ClientSize = new Size(800, 450);
-            Controls.Add(textBox4);
-            Controls.Add(button3);
-            Controls.Add(button2);
-            Controls.Add(textBox3);
-            Controls.Add(textBox2);
-            Controls.Add(label5);
-            Controls.Add(label4);
-            Controls.Add(label3);
+
+            // =====================================================
+            // CONTROLES
+            // =====================================================
+
+            Controls.Add(label1);
+
             Controls.Add(label2);
             Controls.Add(textBox1);
-            Controls.Add(label1);
+            Controls.Add(button2);
+
+            Controls.Add(label3);
+            Controls.Add(textBox2);
+
+            Controls.Add(label4);
+            Controls.Add(textBox3);
+
             Controls.Add(button1);
-            Name = "FrmColor";
-            Text = "FrmColor";
+
+            Controls.Add(label5);
+            Controls.Add(textBox4);
+            Controls.Add(button3);
+
             ResumeLayout(false);
             PerformLayout();
         }

@@ -1,79 +1,74 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using ESFE_Tienda.de_ropa.EN;
 
 namespace ESFE_Tienda.de_ropa.DAL
 {
     public class ColorDAL
     {
-        public static int Insertar(Color entidad)
+        // =====================================================
+        // AGREGAR COLOR
+        // =====================================================
+
+        public bool AgregarColor(string nombre)
         {
-            using (IDbConnection conn = BDComun.ObtenerConexion())
+            try
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand("sp_InsertarColor", conn as SqlConnection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter parametro =
+                    new SqlParameter("@Nombre", nombre);
 
-                    // Ajusta los parámetros según las propiedades de tu entidad Color
-                    cmd.Parameters.AddWithValue("@Nombre", entidad.ColorNombre ?? (object)DBNull.Value);
+                int resultado = BDComun.ExecuteNonQuery(
+                    "sp_AgregarColor",
+                    parametro
+                );
 
-                    return cmd.ExecuteNonQuery();
-                }
+                return resultado > 0;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
-        public static List<Color> ObtenerTodos()
+
+        // =====================================================
+        // BUSCAR COLOR
+        // =====================================================
+
+        public DataTable BuscarColor(string busqueda)
         {
-            List<Color> lista = new List<Color>();
-            using (IDbConnection conn = BDComun.ObtenerConexion())
-            {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand("sp_ObtenerTodosColores", conn as SqlConnection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
+            SqlParameter parametro =
+                new SqlParameter("@Busqueda", busqueda);
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Color color = new Color();
-                            color.Id_Color = reader["Id"] != DBNull.Value ? Convert.ToInt32(reader["Id"]) : 0;
-                            color.ColorNombre = reader["Nombre"]?.ToString();
-
-                            lista.Add(color);
-                        }
-                    }
-                }
-            }
-            return lista;
+            return BDComun.ExecuteDataTable(
+                "sp_BuscarColor",
+                parametro
+            );
         }
 
-        public static Color ObtenerPorId(int id)
-        {
-            Color color = null;
-            using (IDbConnection conn = BDComun.ObtenerConexion())
-            {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand("sp_ObtenerColorPorId", conn as SqlConnection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@Id", id);
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            color = new Color();
-                            color.Id_Color = reader["Id"] != DBNull.Value ? Convert.ToInt32(reader["Id"]) : 0;
-                            color.ColorNombre = reader["Nombre"]?.ToString();
-                        }
-                    }
-                }
+        // =====================================================
+        // ELIMINAR COLOR
+        // =====================================================
+
+        public bool EliminarColor(string busqueda)
+        {
+            try
+            {
+                SqlParameter parametro =
+                    new SqlParameter("@Busqueda", busqueda);
+
+                int resultado = BDComun.ExecuteNonQuery(
+                    "sp_EliminarColor",
+                    parametro
+                );
+
+                return resultado > 0;
             }
-            return color;
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

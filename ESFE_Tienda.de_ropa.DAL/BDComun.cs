@@ -14,7 +14,7 @@ namespace ESFE_Tienda.de_ropa.DAL
     public class BDComun
     {
         //public const string _stringCnn = EDWIN\SQLEXPRESS;Initial Catalog=BDDesarrollo;Integrated Security=True";
-        public const string _stringCnn = @"Server=DESKTOP-9JI9BTT\MSSQLSERVER01;Database=BDDesarrollo;Integrated Security=True;TrustServerCertificate=True;";
+        public const string _stringCnn = @"Server=M20-CIII;Database=ESFE_TiendaRopa;Integrated Security=True;TrustServerCertificate=True;";
 
 
         /// <summary>
