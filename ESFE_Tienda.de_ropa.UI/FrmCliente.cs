@@ -257,5 +257,10 @@ namespace ESFE_Tienda.de_ropa.UI
         private void label1_Click_1(object sender, EventArgs e)
         {
         }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
