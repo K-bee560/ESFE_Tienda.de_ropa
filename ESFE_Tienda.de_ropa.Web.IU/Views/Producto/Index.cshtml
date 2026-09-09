@@ -9,13 +9,13 @@
             <h2 class="fw-bold text-primary">👔 Catálogo de Productos</h2>
             <p class="text-muted">Administración y maquetación de productos de la tienda de ropa</p>
         </div>
-        <button class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#modalProducto">
+        <button class="btn btn-success fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalProducto">
             + Nuevo Producto
         </button>
     </div>
 
     <!-- Tabla Maquetada con Bootstrap -->
-    <div class="card shadow-sm">
+    <div class="card shadow-sm mb-5">
         <div class="card-body p-0">
             <table class="table table-hover table-striped align-middle mb-0">
                 <thead class="table-dark">
@@ -36,8 +36,8 @@
                         <td>$25.00</td>
                         <td><span class="badge bg-success">15 dispon.</span></td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-outline-warning me-1">Editar</button>
-                            <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                            <button class="btn btn-sm btn-warning text-white fw-bold me-1" onclick="editar('Camisa Casual Slim Fit')">Editar</button>
+                            <button class="btn btn-sm btn-danger fw-bold" onclick="eliminar('Camisa Casual Slim Fit')">Eliminar</button>
                         </td>
                     </tr>
                     <tr>
@@ -47,8 +47,8 @@
                         <td>$38.50</td>
                         <td><span class="badge bg-success">8 dispon.</span></td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-outline-warning me-1">Editar</button>
-                            <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                            <button class="btn btn-sm btn-warning text-white fw-bold me-1" onclick="editar('Jeans Mezclilla Azul')">Editar</button>
+                            <button class="btn btn-sm btn-danger fw-bold" onclick="eliminar('Jeans Mezclilla Azul')">Eliminar</button>
                         </td>
                     </tr>
                     <tr>
@@ -58,8 +58,8 @@
                         <td>$75.00</td>
                         <td><span class="badge bg-warning text-dark">2 dispon.</span></td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-outline-warning me-1">Editar</button>
-                            <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                            <button class="btn btn-sm btn-warning text-white fw-bold me-1" onclick="editar('Chaqueta de Cuero Negra')">Editar</button>
+                            <button class="btn btn-sm btn-danger fw-bold" onclick="eliminar('Chaqueta de Cuero Negra')">Eliminar</button>
                         </td>
                     </tr>
                 </tbody>
@@ -68,40 +68,32 @@
     </div>
 </div>
 
-<!-- Modal / Formulario para Agregar Producto -->
-<div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
+<!-- Modal / Formulario para Agregar Producto (Oculto por defecto) -->
+<div class="modal fade" id="modalProducto" tabindex="-1" aria-labelledby="modalProductoLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title fw-bold">Registrar Nuevo Producto</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title fw-bold" id="modalProductoLabel">Registrar Nuevo Producto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
-                        <label class="form-label font-weight-bold">Nombre del Producto</label>
+                        <label class="form-label fw-bold">Nombre del Producto</label>
                         <input type="text" class="form-control" placeholder="Ej: Vestido Elegante">
                     </div>
                     <div class="row">
                         <div class="col-6 mb-3">
-                            <label class="form-label">Precio ($)</label>
+                            <label class="form-label fw-bold">Precio ($)</label>
                             <input type="number" step="0.01" class="form-control" placeholder="0.00">
                         </div>
                         <div class="col-6 mb-3">
-                            <label class="form-label">Cantidad Stock</label>
+                            <label class="form-label fw-bold">Cantidad Stock</label>
                             <input type="number" class="form-control" placeholder="0">
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Guardar Producto</button>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary">Guardar Producto</button>
