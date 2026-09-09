@@ -1,52 +1,57 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ESFE_Tienda.de_ropa.Web.IU</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - Tienda de Ropa</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ESFE_Tienda.de_ropa.Web.IU.styles.css" asp-append-version="true" />
+    <style>
+            body {
+                background-color: #121212 !important;
+                color: #f8f9fa;
+            }
+            footer {
+                background-color: #1a0307;
+                border-top: 1px solid #4a0815 !important;
+            }
+    </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-dark border-bottom border-secondary shadow" style="background-color: #4a0815;">
             <div class="container-fluid">
-                <a class="navbar-brand text-warning fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
-                    🛍️ Tienda de Ropa
-                </a>
+                <a class="navbar-brand fw-bold text-warning" asp-area="" asp-controller="Home" asp-action="Index">🛍️ Tienda de Ropa</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">Inicio</a>
+                            <a class="nav-link text-white fw-semibold" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Producto" asp-action="Index">Productos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Home" asp-action="Privacy">Privacidad</a>
+                            <a class="nav-link text-white fw-semibold" asp-controller="Producto" asp-action="Index">Productos</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <div class="container flex-grow-1">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer text-center py-3 text-secondary mt-auto">
         <div class="container">
-            &copy; 2026 - ESFE_Tienda.de_ropa.Web.IU - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2026 - ESFE Tienda de Ropa - <span style="color: #d1345b;">Diseño ASP.NET MVC & Bootstrap</span>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/jquery/dist/jquery.min.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
