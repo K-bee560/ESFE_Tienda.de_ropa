@@ -1,8 +1,98 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Página Principal";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Estilos personalizados para el tema Vino & Negro -->
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #4a0815 0%, #1a0307 100%);
+        border: 1px solid #610c1d;
+        border-radius: 15px;
+        padding: 50px 30px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    }
+
+    .btn-vino {
+        background-color: #800e24;
+        color: #ffffff;
+        border: none;
+        padding: 12px 28px;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-vino:hover {
+        background-color: #a0122d;
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(160, 18, 45, 0.4);
+    }
+
+    .card-dark-custom {
+        background-color: #1e1e1e;
+        border: 1px solid #333333;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .card-dark-custom:hover {
+        transform: translateY(-5px);
+        border-color: #800e24;
+    }
+
+    .icon-box {
+        font-size: 2.5rem;
+        color: #d1345b;
+    }
+</style>
+
+<div class="container mt-4">
+    <!-- Banner Principal -->
+    <div class="hero-section text-center text-white mb-5">
+        <h1 class="display-4 fw-bold mb-3">
+            Bienvenido a <span style="color: #d1345b;">Tienda de Ropa</span>
+        </h1>
+        <p class="lead text-light mx-auto mb-4" style="max-width: 600px;">
+            Sistema de gestión de inventario y catálogo para ropa masculina, femenina y accesorios.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a asp-controller="Producto" asp-action="Index" class="btn btn-vino">
+                👔 Ver Catálogo de Productos
+            </a>
+        </div>
+    </div>
+
+    <!-- Tarjetas Informativas -->
+    <div class="row text-center mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card card-dark-custom h-100 p-4 shadow">
+                <div class="card-body">
+                    <div class="icon-box mb-3">🛍️</div>
+                    <h5 class="card-title fw-bold text-white mb-2">Colección Exclusiva</h5>
+                    <p class="card-text text-secondary">Diseños modernos organizados por categorías y prendas disponibles.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card card-dark-custom h-100 p-4 shadow">
+                <div class="card-body">
+                    <div class="icon-box mb-3">⚡</div>
+                    <h5 class="card-title fw-bold text-white mb-2">Gestión de Stock</h5>
+                    <p class="card-text text-secondary">Modulo de administración de inventarios, precios y tallas.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card card-dark-custom h-100 p-4 shadow">
+                <div class="card-body">
+                    <div class="icon-box mb-3">🔥</div>
+                    <h5 class="card-title fw-bold text-white mb-2">Promociones</h5>
+                    <p class="card-text text-secondary">Control de ofertas de temporada y prendas de nuevo ingreso.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
