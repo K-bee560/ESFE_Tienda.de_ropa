@@ -2,64 +2,121 @@
     ViewData["Title"] = "Gestión de Productos";
 }
 
+<!-- Estilos personalizados para el tema Vino & Negro -->
+<style>
+    body {
+        background-color: #121212;
+        color: #f8f9fa;
+    }
+
+    .bg-vino {
+        background-color: #610c1d !important;
+    }
+
+    .btn-vino {
+        background-color: #800e24;
+        color: #ffffff;
+        border: none;
+    }
+
+    .btn-vino:hover {
+        background-color: #a0122d;
+        color: #ffffff;
+    }
+
+    .card-dark-custom {
+        background-color: #1e1e1e;
+        border: 1px solid #333333;
+    }
+
+    .table-vino-header {
+        background-color: #4a0815 !important;
+        color: #ffffff !important;
+    }
+
+    .modal-dark-custom {
+        background-color: #1e1e1e;
+        color: #ffffff;
+        border: 1px solid #4a0815;
+    }
+
+    .form-control-dark {
+        background-color: #2b2b2b;
+        border: 1px solid #444444;
+        color: #ffffff;
+    }
+
+    .form-control-dark:focus {
+        background-color: #333333;
+        color: #ffffff;
+        border-color: #800e24;
+        box-shadow: 0 0 0 0.25rem rgba(128, 14, 36, 0.4);
+    }
+
+    .badge-vino {
+        background-color: #800e24;
+        color: #ffffff;
+    }
+</style>
+
 <div class="container mt-4">
     <!-- Encabezado con Botón -->
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary">
         <div>
-            <h2 class="fw-bold text-primary">👔 Catálogo de Productos</h2>
-            <p class="text-muted">Administración y maquetación de productos de la tienda de ropa</p>
+            <h2 class="fw-bold" style="color: #d1345b;">👔 Catálogo de Productos</h2>
+            <p class="text-secondary mb-0">Gestión de inventario para la tienda de ropa</p>
         </div>
-        <button type="button" class="btn btn-success fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalProducto">
+        <button type="button" class="btn btn-vino fw-bold shadow-sm px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalProducto">
             + Nuevo Producto
         </button>
     </div>
 
-    <!-- Tabla Maquetada con Bootstrap -->
-    <div class="card shadow-sm mb-5">
+    <!-- Tabla Maquetada con Estilo Oscuro y Vino -->
+    <div class="card card-dark-custom shadow-lg mb-5">
         <div class="card-body p-0">
-            <table class="table table-hover table-striped align-middle mb-0" id="tablaProductos">
-                <thead class="table-dark">
-                    <tr>
-                        <th>#</th>
-                        <th>Producto</th>
-                        <th>Categoría</th>
-                        <th>Precio</th>
-                        <th>Stock</th>
-                        <th class="text-center">Acciones</th>
+            <table class="table table-dark table-hover align-middle mb-0" id="tablaProductos">
+                <thead>
+                    <tr class="table-vino-header">
+                        <th class="py-3">#</th>
+                        <th class="py-3">Producto</th>
+                        <th class="py-3">Categoría</th>
+                        <th class="py-3">Precio</th>
+                        <th class="py-3">Stock</th>
+                        <th class="py-3 text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>1</td>
+                        <td class="fw-bold text-secondary">1</td>
                         <td><strong>Camisa Casual Slim Fit</strong></td>
-                        <td><span class="badge bg-info text-dark">Ropa Masculina</span></td>
-                        <td>$25.00</td>
+                        <td><span class="badge badge-vino">Ropa Masculina</span></td>
+                        <td class="text-warning">$25.00</td>
                         <td><span class="badge bg-success">15 dispon.</span></td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-sm btn-warning text-white fw-bold me-1" onclick="editar('Camisa Casual Slim Fit')">Editar</button>
-                            <button type="button" class="btn btn-sm btn-danger fw-bold" onclick="eliminar(this, 'Camisa Casual Slim Fit')">Eliminar</button>
+                            <button type="button" class="btn btn-sm btn-outline-warning fw-bold me-1" onclick="editar('Camisa Casual Slim Fit')">Editar</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger fw-bold" onclick="eliminar(this, 'Camisa Casual Slim Fit')">Eliminar</button>
                         </td>
                     </tr>
                     <tr>
-                        <td>2</td>
+                        <td class="fw-bold text-secondary">2</td>
                         <td><strong>Jeans Mezclilla Azul</strong></td>
-                        <td><span class="badge bg-info text-dark">Pantalones</span></td>
-                        <td>$38.50</td>
+                        <td><span class="badge badge-vino">Pantalones</span></td>
+                        <td class="text-warning">$38.50</td>
                         <td><span class="badge bg-success">8 dispon.</span></td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-sm btn-warning text-white fw-bold me-1" onclick="editar('Jeans Mezclilla Azul')">Editar</button>
-                            <button type="button" class="btn btn-sm btn-danger fw-bold" onclick="eliminar(this, 'Jeans Mezclilla Azul')">Eliminar</button>
+                            <button type="button" class="btn btn-sm btn-outline-warning fw-bold me-1" onclick="editar('Jeans Mezclilla Azul')">Editar</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger fw-bold" onclick="eliminar(this, 'Jeans Mezclilla Azul')">Eliminar</button>
                         </td>
                     </tr>
                     <tr>
-                        <td>3</td>
+                        <td class="fw-bold text-secondary">3</td>
                         <td><strong>Chaqueta de Cuero Negra</strong></td>
-                        <td><span class="badge bg-info text-dark">Abrigos</span></td>
-                        <td>$75.00</td>
+                        <td><span class="badge badge-vino">Abrigos</span></td>
+                        <td class="text-warning">$75.00</td>
                         <td><span class="badge bg-warning text-dark">2 dispon.</span></td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-sm btn-warning text-white fw-bold me-1" onclick="editar('Chaqueta de Cuero Negra')">Editar</button>
-                            <button type="button" class="btn btn-sm btn-danger fw-bold" onclick="eliminar(this, 'Chaqueta de Cuero Negra')">Eliminar</button>
+                            <button type="button" class="btn btn-sm btn-outline-warning fw-bold me-1" onclick="editar('Chaqueta de Cuero Negra')">Editar</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger fw-bold" onclick="eliminar(this, 'Chaqueta de Cuero Negra')">Eliminar</button>
                         </td>
                     </tr>
                 </tbody>
@@ -71,8 +128,8 @@
 <!-- Modal / Formulario para Agregar Producto -->
 <div class="modal fade" id="modalProducto" tabindex="-1" aria-labelledby="modalProductoLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
+        <div class="modal-content modal-dark-custom">
+            <div class="modal-header bg-vino text-white">
                 <h5 class="modal-title fw-bold" id="modalProductoLabel">Registrar Nuevo Producto</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -80,23 +137,23 @@
                 <form id="formNuevoProducto">
                     <div class="mb-3">
                         <label class="form-label fw-bold">Nombre del Producto</label>
-                        <input type="text" id="nombreProducto" class="form-control" placeholder="Ej: Vestido Elegante" required>
+                        <input type="text" id="nombreProducto" class="form-control form-control-dark" placeholder="Ej: Vestido Elegante" required>
                     </div>
                     <div class="row">
                         <div class="col-6 mb-3">
                             <label class="form-label fw-bold">Precio ($)</label>
-                            <input type="number" step="0.01" id="precioProducto" class="form-control" placeholder="0.00" required>
+                            <input type="number" step="0.01" id="precioProducto" class="form-control form-control-dark" placeholder="0.00" required>
                         </div>
                         <div class="col-6 mb-3">
                             <label class="form-label fw-bold">Cantidad Stock</label>
-                            <input type="number" id="stockProducto" class="form-control" placeholder="0" required>
+                            <input type="number" id="stockProducto" class="form-control form-control-dark" placeholder="0" required>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarProducto()">Guardar Producto</button>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-vino fw-bold" onclick="guardarProducto()">Guardar Producto</button>
             </div>
         </div>
     </div>
@@ -117,27 +174,25 @@
                 return;
             }
 
-            // Insertar la nueva fila en la tabla
+            // Insertar producto en la tabla
             const tbody = document.querySelector('#tablaProductos tbody');
             const nuevaFila = `
                 <tr>
-                    <td>${contadorID++}</td>
+                    <td class="fw-bold text-secondary">${contadorID++}</td>
                     <td><strong>${nombre}</strong></td>
-                    <td><span class="badge bg-info text-dark">Nuevo Ingreso</span></td>
-                    <td>$${parseFloat(precio).toFixed(2)}</td>
+                    <td><span class="badge badge-vino">Nuevo Ingreso</span></td>
+                    <td class="text-warning">$${parseFloat(precio).toFixed(2)}</td>
                     <td><span class="badge bg-success">${stock} dispon.</span></td>
                     <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-warning text-white fw-bold me-1" onclick="editar('${nombre}')">Editar</button>
-                        <button type="button" class="btn btn-sm btn-danger fw-bold" onclick="eliminar(this, '${nombre}')">Eliminar</button>
+                        <button type="button" class="btn btn-sm btn-outline-warning fw-bold me-1" onclick="editar('${nombre}')">Editar</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger fw-bold" onclick="eliminar(this, '${nombre}')">Eliminar</button>
                     </td>
                 </tr>
             `;
             tbody.innerHTML += nuevaFila;
 
-            // Resetear el formulario
+            // Limpiar formulario y cerrar modal
             document.getElementById('formNuevoProducto').reset();
-
-            // Cerrar el modal
             const modalElement = document.getElementById('modalProducto');
             const modalInstance = bootstrap.Modal.getInstance(modalElement);
             modalInstance.hide();
@@ -151,7 +206,6 @@
 
         function eliminar(boton, nombre) {
             if(confirm('¿Estás seguro de eliminar ' + nombre + '?')) {
-                // Elimina la fila visualmente
                 const fila = boton.closest('tr');
                 fila.remove();
                 alert('Producto eliminado correctamente.');
