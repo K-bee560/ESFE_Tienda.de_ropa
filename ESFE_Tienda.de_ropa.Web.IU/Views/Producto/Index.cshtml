@@ -165,9 +165,13 @@
         let contadorID = 4;
 
         function guardarProducto() {
-            const nombre = document.getElementById('nombreProducto').value;
-            const precio = document.getElementById('precioProducto').value;
-            const stock = document.getElementById('stockProducto').value;
+            const nombreInput = document.getElementById('nombreProducto');
+            const precioInput = document.getElementById('precioProducto');
+            const stockInput = document.getElementById('stockProducto');
+
+            const nombre = nombreInput.value.trim();
+            const precio = precioInput.value;
+            const stock = stockInput.value;
 
             if (!nombre || !precio || !stock) {
                 alert('Por favor completa todos los campos.');
@@ -176,28 +180,33 @@
 
             // Insertar producto en la tabla
             const tbody = document.querySelector('#tablaProductos tbody');
-            const nuevaFila = `
-                <tr>
-                    <td class="fw-bold text-secondary">${contadorID++}</td>
-                    <td><strong>${nombre}</strong></td>
-                    <td><span class="badge badge-vino">Nuevo Ingreso</span></td>
-                    <td class="text-warning">$${parseFloat(precio).toFixed(2)}</td>
-                    <td><span class="badge bg-success">${stock} dispon.</span></td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-outline-warning fw-bold me-1" onclick="editar('${nombre}')">Editar</button>
-                        <button type="button" class="btn btn-sm btn-outline-danger fw-bold" onclick="eliminar(this, '${nombre}')">Eliminar</button>
-                    </td>
-                </tr>
+            const nuevaFila = document.createElement('tr');
+            nuevaFila.innerHTML = `
+                <td class="fw-bold text-secondary">${contadorID++}</td>
+                <td><strong>${nombre}</strong></td>
+                <td><span class="badge badge-vino">Nuevo Ingreso</span></td>
+                <td class="text-warning">$${parseFloat(precio).toFixed(2)}</td>
+                <td><span class="badge bg-success">${stock} dispon.</span></td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-sm btn-outline-warning fw-bold me-1" onclick="editar('${nombre}')">Editar</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger fw-bold" onclick="eliminar(this, '${nombre}')">Eliminar</button>
+                </td>
             `;
-            tbody.innerHTML += nuevaFila;
+            tbody.appendChild(nuevaFila);
 
-            // Limpiar formulario y cerrar modal
+            // Limpiar formulario
             document.getElementById('formNuevoProducto').reset();
-            const modalElement = document.getElementById('modalProducto');
-            const modalInstance = bootstrap.Modal.getInstance(modalElement);
-            modalInstance.hide();
 
-            alert('¡Producto "' + nombre + '" guardado exitosamente!');
+            // Cerrar el modal y remover la sombra oscura
+            const modalEl = document.getElementById('modalProducto');
+            const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+            modal.hide();
+
+            // Limpieza manual de backdrop sobrante por si acaso
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.paddingRight = '';
+            document.body.style.overflow = '';
         }
 
         function editar(nombre) {
@@ -205,10 +214,8 @@
         }
 
         function eliminar(boton, nombre) {
-            if(confirm('¿Estás seguro de eliminar ' + nombre + '?')) {
-                const fila = boton.closest('tr');
-                fila.remove();
-                alert('Producto eliminado correctamente.');
+            if (confirm('¿Estás seguro de eliminar ' + nombre + '?')) {
+                boton.closest('tr').remove();
             }
         }
     </script>
