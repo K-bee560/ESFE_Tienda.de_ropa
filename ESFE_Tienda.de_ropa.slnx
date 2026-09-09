@@ -3,4 +3,5 @@
   <Project Path="ESFE_Tienda.de_ropa.EN/ESFE_Tienda.de_ropa.EN.csproj" />
   <Project Path="ESFE_Tienda.de_ropa.LN/ESFE_Tienda.de_ropa.LN.csproj" />
   <Project Path="ESFE_Tienda.de_ropa.UI/ESFE_Tienda.de_ropa.UI.csproj" />
+  <Project Path="ESFE_Tienda.de_ropa.Web.IU/ESFE_Tienda.de_ropa.Web.IU.csproj" Id="efe4bf6f-16e8-4639-8248-6172b0902adf" />
 </Solution>
