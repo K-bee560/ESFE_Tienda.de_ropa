@@ -2,7 +2,6 @@
     ViewData["Title"] = "Página Principal";
 }
 
-<!-- Estilos personalizados para el tema Vino & Negro -->
 <style>
     .hero-section {
         background: linear-gradient(135deg, #4a0815 0%, #1a0307 100%);
@@ -24,12 +23,12 @@
         display: inline-block;
     }
 
-    .btn-vino:hover {
-        background-color: #a0122d;
-        color: #ffffff;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(160, 18, 45, 0.4);
-    }
+        .btn-vino:hover {
+            background-color: #a0122d;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(160, 18, 45, 0.4);
+        }
 
     .card-dark-custom {
         background-color: #1e1e1e;
@@ -38,11 +37,11 @@
         cursor: pointer;
     }
 
-    .card-dark-custom:hover {
-        transform: translateY(-5px);
-        border-color: #800e24;
-        box-shadow: 0 8px 20px rgba(128, 14, 36, 0.3) !important;
-    }
+        .card-dark-custom:hover {
+            transform: translateY(-5px);
+            border-color: #800e24;
+            box-shadow: 0 8px 20px rgba(128, 14, 36, 0.3) !important;
+        }
 
     .icon-box {
         font-size: 2.5rem;
@@ -54,10 +53,10 @@
     <!-- Banner Principal -->
     <div class="hero-section text-center text-white mb-5">
         <h1 class="display-4 fw-bold mb-3">
-            Bienvenido a <span style="color: #d1345b;">Tienda de Ropa</span>
+            Bienvenido a <span style="color: #d1345b;">Claret Style</span>
         </h1>
         <p class="lead text-light mx-auto mb-4" style="max-width: 600px;">
-            Sistema de gestión de inventario y catálogo para ropa masculina, femenina y accesorios.
+            Sistema de gestión de inventario y catálogo exclusivo para ropa urbana, formal y accesorios.
         </p>
         <div class="d-flex justify-content-center gap-3">
             <a asp-controller="Producto" asp-action="Index" class="btn btn-vino">
@@ -66,7 +65,7 @@
         </div>
     </div>
 
-    <!-- Secciones de Acceso Rápido Funcionales (Clicleables) -->
+    <!-- Secciones de Acceso Rápido Clicleables -->
     <div class="row text-center mb-5">
         <div class="col-md-4 mb-4">
             <a asp-controller="Producto" asp-action="Index" class="text-decoration-none">

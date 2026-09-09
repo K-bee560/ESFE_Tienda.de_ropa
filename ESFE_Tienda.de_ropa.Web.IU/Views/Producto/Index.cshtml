@@ -2,7 +2,6 @@
     ViewData["Title"] = "Gestión de Productos";
 }
 
-<!-- Estilos personalizados para el tema Vino & Negro -->
 <style>
     body {
         background-color: #121212;
@@ -60,18 +59,18 @@
 </style>
 
 <div class="container mt-4">
-    <!-- Encabezado con Botón -->
+    <!-- Encabezado -->
     <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary">
         <div>
-            <h2 class="fw-bold" style="color: #d1345b;">👔 Catálogo de Productos</h2>
-            <p class="text-secondary mb-0">Gestión de inventario para la tienda de ropa</p>
+            <h2 class="fw-bold" style="color: #d1345b;">👔 Catálogo Claret Style</h2>
+            <p class="text-secondary mb-0">Gestión de inventario y prendas de la tienda</p>
         </div>
         <button type="button" class="btn btn-vino fw-bold shadow-sm px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalProducto">
             + Nuevo Producto
         </button>
     </div>
 
-    <!-- Tabla Maquetada con Estilo Oscuro y Vino -->
+    <!-- Tabla de Productos -->
     <div class="card card-dark-custom shadow-lg mb-5">
         <div class="card-body p-0">
             <table class="table table-dark table-hover align-middle mb-0" id="tablaProductos">
@@ -125,7 +124,7 @@
     </div>
 </div>
 
-<!-- Modal / Formulario para Agregar Producto -->
+<!-- Modal Registrar Producto -->
 <div class="modal fade" id="modalProducto" tabindex="-1" aria-labelledby="modalProductoLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal-dark-custom">
@@ -178,7 +177,6 @@
                 return;
             }
 
-            // Insertar producto en la tabla
             const tbody = document.querySelector('#tablaProductos tbody');
             const nuevaFila = document.createElement('tr');
             nuevaFila.innerHTML = `
@@ -194,15 +192,12 @@
             `;
             tbody.appendChild(nuevaFila);
 
-            // Limpiar formulario
             document.getElementById('formNuevoProducto').reset();
 
-            // Cerrar el modal y remover la sombra oscura
             const modalEl = document.getElementById('modalProducto');
             const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
             modal.hide();
 
-            // Limpieza manual de backdrop sobrante por si acaso
             document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
             document.body.classList.remove('modal-open');
             document.body.style.paddingRight = '';
