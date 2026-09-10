@@ -1,0 +1,108 @@
+﻿body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.card {
+    background-color: #1a1a1a;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+}
+
+h1 {
+    color: #ffffff;
+    font-size: 1.6rem;
+    margin-bottom: 5px;
+}
+
+p {
+    color: #aaa;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+    .input-group label {
+        display: block;
+        font-size: 0.85rem;
+        color: #bbb;
+        margin-bottom: 5px;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #444;
+        background-color: #262626;
+        color: #fff;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #800e24;
+        }
+
+button {
+    width: 100%;
+    background-color: #800e24;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+}
+
+    button:hover {
+        background-color: #a0122d;
+    }
+
+.resultado-box {
+    margin-top: 25px;
+    padding: 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+    .resultado-box.hidden {
+        display: none;
+    }
+
+.excelente {
+    background-color: rgba(40, 167, 69, 0.2);
+    border: 1px solid #28a745;
+    color: #2ecc71;
+}
+
+.aprobado {
+    background-color: rgba(255, 193, 7, 0.2);
+    border: 1px solid #ffc107;
+    color: #f1c40f;
+}
+
+.reforzar {
+    background-color: rgba(128, 14, 36, 0.3);
+    border: 1px solid #800e24;
+    color: #ff6b81;
+}
