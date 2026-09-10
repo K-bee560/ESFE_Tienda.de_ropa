@@ -2,7 +2,7 @@
     ViewData["Title"] = "Catálogo y Gestión Claret Style";
 }
 
-<!-- CDN de Chart.js y jsPDF -->
+<!-- CDN de Chart.js y jsPDF para Gráficos y PDF -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -207,6 +207,30 @@
     </div>
 </div>
 
+<!-- MODAL SEGURIDAD: LOGIN ADMIN -->
+<div class="modal fade" id="modalPasswordAdmin" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content card-dark-custom text-center p-3">
+            <div class="modal-header border-0 pb-0 justify-content-center">
+                <h5 class="modal-title fw-bold text-warning">🔒 Acceso Restringido</h5>
+            </div>
+            <div class="modal-body">
+                <p class="text-secondary small mb-3">Ingresa la clave de administrador para acceder al panel de ventas y stock.</p>
+                <div class="mb-3">
+                    <input type="password" id="inputAdminPin" class="form-control form-control-dark text-center fw-bold fs-5" placeholder="••••" maxlength="10">
+                </div>
+                <div id="alertPasswordError" class="alert alert-danger p-2 small d-none" role="alert">
+                    ❌ Clave incorrecta
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-light btn-sm" onclick="cancelarAccesoAdmin()">Cancelar</button>
+                <button type="button" class="btn btn-vino btn-sm fw-bold" onclick="validarPinAdmin()">Ingresar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL ADMINISTRADOR: AÑADIR PRODUCTO -->
 <div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -231,7 +255,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Color</label>
-                        <input type="text" id="prodColor" class="form-control form-control-dark" placeholder="Ej: Vinotinto, Negro, Azul">
+                        <input type="text" id="prodColor" class="form-control form-control-dark" placeholder="Ej: Vinotinto, Negro">
                     </div>
                 </div>
                 <div class="row">
@@ -267,6 +291,7 @@
 
 <script>
     let rolActual = 'CLIENTE';
+    const ADMIN_PIN = "1234"; // 🔑 CAMBIA AQUÍ TU CONTRASEÑA DE VENDEDOR
 
     let productos = [
         { id: 1, nombre: "Camisa Slim Vinotinto", categoria: "Masculino", precio: 35.00, stock: 12, color: "Vinotinto", tallas: ["S", "M", "L"], img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300" },
@@ -285,8 +310,48 @@
         registrarKardex("Sistema", "Inicio del sistema de catálogo", 0);
     });
 
+    // SISTEMA DE SEGURIDAD Y CAMBIO DE ROL
     function cambiarRol(nuevoRol) {
+        if (nuevoRol === 'ADMIN' && rolActual !== 'ADMIN') {
+            document.getElementById("inputAdminPin").value = "";
+            document.getElementById("alertPasswordError").classList.add("d-none");
+
+            const modalAuth = new bootstrap.Modal(document.getElementById('modalPasswordAdmin'));
+            modalAuth.show();
+            return;
+        }
+
+        aplicarCambioRol(nuevoRol);
+    }
+
+    function validarPinAdmin() {
+        const pinIngresado = document.getElementById("inputAdminPin").value;
+
+        if (pinIngresado === ADMIN_PIN) {
+            const modalEl = document.getElementById('modalPasswordAdmin');
+            const modalInstance = bootstrap.Modal.getInstance(modalEl);
+            if (modalInstance) modalInstance.hide();
+
+            aplicarCambioRol('ADMIN');
+        } else {
+            document.getElementById("alertPasswordError").classList.remove("d-none");
+            document.getElementById("inputAdminPin").value = "";
+            document.getElementById("inputAdminPin").focus();
+        }
+    }
+
+    function cancelarAccesoAdmin() {
+        const modalEl = document.getElementById('modalPasswordAdmin');
+        const modalInstance = bootstrap.Modal.getInstance(modalEl);
+        if (modalInstance) modalInstance.hide();
+
+        document.getElementById('btnRolCliente').classList.add('active', 'btn-outline-light');
+        document.getElementById('btnRolAdmin').classList.remove('active');
+    }
+
+    function aplicarCambioRol(nuevoRol) {
         rolActual = nuevoRol;
+
         if (nuevoRol === 'CLIENTE') {
             document.getElementById('btnRolCliente').classList.add('active', 'btn-outline-light');
             document.getElementById('btnRolAdmin').classList.remove('active');
@@ -313,15 +378,13 @@
         renderAdminTabla();
     }
 
-    // 1. VISTA CLIENTE: TARJETAS CON TALLAS Y COLOR
+    // 1. TARJETAS CLIENTE
     function renderClienteTarjetas(lista = productos) {
         const contenedor = document.getElementById("contenedorTarjetasCliente");
         contenedor.innerHTML = "";
 
         lista.forEach(p => {
             const agotar = p.stock === 0 ? '<span class="badge bg-danger">Agotado</span>' : `<span class="badge bg-success">${p.stock} dispon.</span>`;
-
-            // Opciones de tallas para el select del cliente
             const opcionesTallas = p.tallas.map(t => `<option value="${t}">${t}</option>`).join('');
 
             contenedor.innerHTML += `
@@ -357,7 +420,7 @@
         });
     }
 
-    // 2. VISTA ADMIN: TABLA CON TALLAS Y COLOR
+    // 2. TABLA VENDEDOR / ADMIN
     function renderAdminTabla(lista = productos) {
         const tbody = document.getElementById("tablaProductosAdmin");
         tbody.innerHTML = "";
@@ -383,7 +446,6 @@
         });
     }
 
-    // AÑADIR NUEVO PRODUCTO CON TALLAS Y COLOR
     function guardarProducto() {
         const nombre = document.getElementById("prodNombre").value;
         const categoria = document.getElementById("prodCategoria").value;
@@ -399,13 +461,12 @@
         }
 
         const tallas = tallasInput.split(',').map(t => t.trim().toUpperCase());
-
         const nuevo = { id: Date.now(), nombre, categoria, precio, stock, color, tallas, img };
         productos.push(nuevo);
 
         renderTodo();
         if (rolActual === 'ADMIN') renderCharts();
-        registrarKardex("Ingreso", `Nuevo producto registrado: ${nombre} (${color}) (+${stock} uds)`, precio * stock);
+        registrarKardex("Ingreso", `Nuevo producto: ${nombre} (${color}) (+${stock} uds)`, precio * stock);
 
         document.getElementById("prodNombre").value = "";
         document.getElementById("prodColor").value = "";
@@ -424,7 +485,6 @@
         }
     }
 
-    // CARRITO Y CHECKOUT CON TALLA Y COLOR
     function toggleCart() {
         document.getElementById("cartDrawer").classList.toggle("active");
     }
@@ -439,7 +499,6 @@
         const selectTalla = document.getElementById(`selectTalla-${p.id}`);
         const tallaSeleccionada = selectTalla ? selectTalla.value : p.tallas[0];
 
-        // Se busca en el carrito por ID y Talla
         const item = carrito.find(x => x.id === id && x.tallaSeleccionada === tallaSeleccionada);
 
         if (item) {
@@ -506,7 +565,6 @@
         const total = subtotal * 1.13;
 
         registrarKardex("Venta", `Pedido completado (${carrito.length} ítems)`, total);
-
         generarFacturaPDF(total);
 
         carrito = [];
