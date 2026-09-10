@@ -14,14 +14,14 @@
                 <a class="navbar-brand text-white fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
                     🛍️ Claret Style
                 </a>
-                
+
                 <div class="d-flex align-items-center gap-3">
-                    <!-- Rutas con controladores para no perder la sesión -->
+                    <!-- Rutas con controladores -->
                     <a class="text-white text-decoration-none px-2" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                     <a class="text-white text-decoration-none px-2" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a>
-                    
-                    <!-- Partial del Login para mantener la autenticación -->
-                    <partial name="_LoginPartial" />
+
+                    <!-- Usuario fijo en la barra sin depender de un archivo parcial -->
+                    <span class="text-white fw-bold ms-2">🔴 Admin Claret</span>
                 </div>
             </div>
         </nav>
@@ -36,4 +36,3 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
