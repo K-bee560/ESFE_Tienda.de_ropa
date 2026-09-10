@@ -253,7 +253,6 @@
 </div>
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let contadorID = 4;
 
@@ -311,13 +310,25 @@
             contadorID++;
             document.getElementById('totalProductos').innerText = contadorID - 1;
 
-            // Limpiar y cerrar modal
+            // Limpiar y cerrar modal limpiando el DOM
             document.getElementById('formNuevoProducto').reset();
+
             const modalEl = document.getElementById('modalProducto');
-            const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-            modal.hide();
-            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-            document.body.classList.remove('modal-open');
+            const instance = bootstrap.Modal.getInstance(modalEl);
+            if (instance) {
+                instance.hide();
+            } else {
+                const newModal = new bootstrap.Modal(modalEl);
+                newModal.hide();
+            }
+
+            // Forzar limpieza completa de overlays y scroll
+            setTimeout(() => {
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style.overflow = 'auto';
+                document.body.style.paddingRight = '0px';
+            }, 300);
         }
 
         function filtrarProductos() {
