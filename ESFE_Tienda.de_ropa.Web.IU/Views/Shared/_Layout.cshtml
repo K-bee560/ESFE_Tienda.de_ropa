@@ -4,60 +4,53 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Claret Style</title>
-    <!-- Carga de Bootstrap y estilos de la tienda -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/style.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ESFE_Tienda_de_ropa.Web.UI.styles.css" asp-append-version="true" />
 </head>
-<body style="background-color: #121212; color: #fff;">
-
-    <!-- BARRA DE NAVEGACIÓN PRINCIPAL -->
+<body class="bg-dark text-light">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background-color: #800e24; padding: 12px 25px;">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3" style="background-color: #800e24;">
             <div class="container-fluid">
-                <!-- Logo de la tienda -->
-                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-white fs-4" asp-controller="Home" asp-action="Index">
+                <a class="navbar-brand text-white fw-bold d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="Index">
                     🛍️ Claret Style
                 </a>
-
-                <!-- Botón Responsive -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
-                <!-- Menú de enlaces -->
-                <div class="collapse navbar-collapse id=" navbarContent"">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-4">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-white fw-semibold fs-6 px-3" asp-controller="Home" asp-action="Index">Inicio</a>
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white fw-semibold fs-6 px-3" asp-controller="Producto" asp-action="Index">Productos</a>
+                            <a class="nav-link text-white" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a>
                         </li>
                     </ul>
 
-                    <!-- Perfil de usuario -->
-                    <div class="d-flex align-items-center gap-2">
-                        <div class="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center fw-bold" style="width: 35px; height: 35px; font-size: 0.85rem;">
+                    <!-- Usuario Admin Claret con el estilo original de tu app -->
+                    <div class="d-flex align-items-center text-white">
+                        <div class="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center me-2 fw-bold" style="width: 32px; height: 32px; font-size: 0.8rem;">
                             AD
                         </div>
-                        <span class="text-white fw-semibold me-2">Admin Claret</span>
+                        <span>Admin Claret</span>
                     </div>
                 </div>
             </div>
         </nav>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <div class="container my-4">
+    <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
-   
