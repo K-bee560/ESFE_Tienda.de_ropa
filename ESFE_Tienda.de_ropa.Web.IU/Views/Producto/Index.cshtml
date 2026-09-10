@@ -1,81 +1,135 @@
 ﻿@{
-    ViewData["Title"] = "Gestión de Productos";
+    ViewData["Title"] = "Catálogo y Gestión";
 }
 
 <style>
-    body {
-        background-color: #121212;
-        color: #f8f9fa;
-    }
-
-    .bg-vino {
-        background-color: #610c1d !important;
-    }
-
-    .btn-vino {
-        background-color: #800e24;
-        color: #ffffff;
-        border: none;
-    }
-
-    .btn-vino:hover {
-        background-color: #a0122d;
-        color: #ffffff;
-    }
-
-    .card-dark-custom {
-        background-color: #1e1e1e;
-        border: 1px solid #333333;
-    }
-
-    .table-vino-header {
-        background-color: #4a0815 !important;
-        color: #ffffff !important;
-    }
-
-    .modal-dark-custom {
-        background-color: #1e1e1e;
-        color: #ffffff;
-        border: 1px solid #4a0815;
-    }
-
-    .form-control-dark {
-        background-color: #2b2b2b;
-        border: 1px solid #444444;
-        color: #ffffff;
-    }
-
-    .form-control-dark:focus {
-        background-color: #333333;
-        color: #ffffff;
-        border-color: #800e24;
-        box-shadow: 0 0 0 0.25rem rgba(128, 14, 36, 0.4);
-    }
-
-    .badge-vino {
-        background-color: #800e24;
-        color: #ffffff;
-    }
+    .bg-vino { background-color: #610c1d !important; }
+    .btn-vino { background-color: #800e24; color: #ffffff; border: none; }
+    .btn-vino:hover { background-color: #a0122d; color: #ffffff; }
+    .card-dark-custom { background-color: #1e1e1e; border: 1px solid #333333; }
+    .form-control-dark { background-color: #2b2b2b; border: 1px solid #444444; color: #ffffff; }
+    .form-control-dark:focus { background-color: #333333; color: #ffffff; border-color: #800e24; box-shadow: 0 0 0 0.25rem rgba(128, 14, 36, 0.4); }
+    .badge-vino { background-color: #800e24; color: #ffffff; }
+    .stat-card { border-left: 4px solid #800e24; }
+    .product-card { transition: transform 0.3s ease, border-color 0.3s ease; }
+    .product-card:hover { transform: translateY(-5px); border-color: #800e24; }
 </style>
 
 <div class="container mt-4">
     <!-- Encabezado -->
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary">
         <div>
-            <h2 class="fw-bold" style="color: #d1345b;">👔 Catálogo Claret Style</h2>
-            <p class="text-secondary mb-0">Gestión de inventario y prendas de la tienda</p>
+            <h2 class="fw-bold" style="color: #d1345b;">👔 Panel de Productos Claret Style</h2>
+            <p class="text-secondary mb-0">Control de inventario y exhibición de catálogo</p>
         </div>
         <button type="button" class="btn btn-vino fw-bold shadow-sm px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalProducto">
             + Nuevo Producto
         </button>
     </div>
 
-    <!-- Tabla de Productos -->
+    <!-- 1. DETALLE 1: MÁTRICAS / INDICADORES -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card card-dark-custom stat-card p-3 shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="text-secondary fw-semibold">Total Productos</small>
+                        <h3 class="fw-bold text-white mb-0" id="totalProductos">3</h3>
+                    </div>
+                    <span class="fs-1">📦</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card card-dark-custom stat-card p-3 shadow-sm" style="border-left-color: #ffc107;">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="text-secondary fw-semibold">Bajo Stock (< 5)</small>
+                        <h3 class="fw-bold text-warning mb-0">1</h3>
+                    </div>
+                    <span class="fs-1">⚠️</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-dark-custom stat-card p-3 shadow-sm" style="border-left-color: #198754;">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="text-secondary fw-semibold">Categorías Activas</small>
+                        <h3 class="fw-bold text-success mb-0">3</h3>
+                    </div>
+                    <span class="fs-1">🏷️</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. DETALLE 2: BARRA DE BÚSQUEDA Y FILTROS -->
+    <div class="card card-dark-custom p-3 mb-4 shadow-sm">
+        <div class="row g-3 align-items-center">
+            <div class="col-md-6">
+                <input type="text" id="inputBuscar" class="form-control form-control-dark" placeholder="🔍 Buscar por nombre de prenda..." onkeyup="filtrarProductos()">
+            </div>
+            <div class="col-md-6 d-flex gap-2 justify-content-md-end">
+                <button class="btn btn-outline-light btn-sm fw-semibold" onclick="filtrarCategoria('Todas')">Todas</button>
+                <button class="btn btn-outline-light btn-sm fw-semibold" onclick="filtrarCategoria('Masculina')">Masculina</button>
+                <button class="btn btn-outline-light btn-sm fw-semibold" onclick="filtrarCategoria('Pantalones')">Pantalones</button>
+                <button class="btn btn-outline-light btn-sm fw-semibold" onclick="filtrarCategoria('Abrigos')">Abrigos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. DETALLE 3: CATÁLOGO VISUAL DE PRODUCTOS -->
+    <h4 class="fw-bold text-white mb-3">🛍️ Showcase de Colección</h4>
+    <div class="row mb-5" id="contenedorTarjetas">
+        <div class="col-md-4 mb-4 tarjeta-item" data-nombre="camisa casual slim fit" data-categoria="Masculina">
+            <div class="card card-dark-custom product-card h-100 shadow">
+                <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500&q=80" class="card-img-top" alt="Camisa" style="height: 220px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge badge-vino mb-2">Ropa Masculina</span>
+                    <h5 class="card-title fw-bold text-white">Camisa Casual Slim Fit</h5>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="fs-5 fw-bold text-warning">$25.00</span>
+                        <span class="badge bg-success">15 dispon.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4 tarjeta-item" data-nombre="jeans mezclilla azul" data-categoria="Pantalones">
+            <div class="card card-dark-custom product-card h-100 shadow">
+                <img src="https://images.unsplash.com/photo-1542272604-780c36856d62?w=500&q=80" class="card-img-top" alt="Jeans" style="height: 220px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge badge-vino mb-2">Pantalones</span>
+                    <h5 class="card-title fw-bold text-white">Jeans Mezclilla Azul</h5>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="fs-5 fw-bold text-warning">$38.50</span>
+                        <span class="badge bg-success">8 dispon.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4 tarjeta-item" data-nombre="chaqueta de cuero negra" data-categoria="Abrigos">
+            <div class="card card-dark-custom product-card h-100 shadow">
+                <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&q=80" class="card-img-top" alt="Chaqueta" style="height: 220px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge badge-vino mb-2">Abrigos</span>
+                    <h5 class="card-title fw-bold text-white">Chaqueta de Cuero Negra</h5>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="fs-5 fw-bold text-warning">$75.00</span>
+                        <span class="badge bg-warning text-dark">2 dispon.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla Administrativa Original -->
+    <h4 class="fw-bold text-white mb-3">⚙️ Vista de Administración (Tabla)</h4>
     <div class="card card-dark-custom shadow-lg mb-5">
         <div class="card-body p-0">
             <table class="table table-dark table-hover align-middle mb-0" id="tablaProductos">
                 <thead>
-                    <tr class="table-vino-header">
+                    <tr style="background-color: #4a0815 !important;">
                         <th class="py-3">#</th>
                         <th class="py-3">Producto</th>
                         <th class="py-3">Categoría</th>
@@ -85,7 +139,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr class="fila-producto" data-nombre="camisa casual slim fit" data-categoria="Masculina">
                         <td class="fw-bold text-secondary">1</td>
                         <td><strong>Camisa Casual Slim Fit</strong></td>
                         <td><span class="badge badge-vino">Ropa Masculina</span></td>
@@ -96,7 +150,7 @@
                             <button type="button" class="btn btn-sm btn-outline-danger fw-bold" onclick="eliminar(this, 'Camisa Casual Slim Fit')">Eliminar</button>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="fila-producto" data-nombre="jeans mezclilla azul" data-categoria="Pantalones">
                         <td class="fw-bold text-secondary">2</td>
                         <td><strong>Jeans Mezclilla Azul</strong></td>
                         <td><span class="badge badge-vino">Pantalones</span></td>
@@ -107,7 +161,7 @@
                             <button type="button" class="btn btn-sm btn-outline-danger fw-bold" onclick="eliminar(this, 'Jeans Mezclilla Azul')">Eliminar</button>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="fila-producto" data-nombre="chaqueta de cuero negra" data-categoria="Abrigos">
                         <td class="fw-bold text-secondary">3</td>
                         <td><strong>Chaqueta de Cuero Negra</strong></td>
                         <td><span class="badge badge-vino">Abrigos</span></td>
@@ -125,18 +179,18 @@
 </div>
 
 <!-- Modal Registrar Producto -->
-<div class="modal fade" id="modalProducto" tabindex="-1" aria-labelledby="modalProductoLabel" aria-hidden="true">
+<div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content modal-dark-custom">
+        <div class="modal-content card-dark-custom">
             <div class="modal-header bg-vino text-white">
-                <h5 class="modal-title fw-bold" id="modalProductoLabel">Registrar Nuevo Producto</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title fw-bold">Registrar Nuevo Producto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="formNuevoProducto">
                     <div class="mb-3">
                         <label class="form-label fw-bold">Nombre del Producto</label>
-                        <input type="text" id="nombreProducto" class="form-control form-control-dark" placeholder="Ej: Vestido Elegante" required>
+                        <input type="text" id="nombreProducto" class="form-control form-control-dark" placeholder="Ej: Polo Clásico Vino" required>
                     </div>
                     <div class="row">
                         <div class="col-6 mb-3">
@@ -164,23 +218,23 @@
         let contadorID = 4;
 
         function guardarProducto() {
-            const nombreInput = document.getElementById('nombreProducto');
-            const precioInput = document.getElementById('precioProducto');
-            const stockInput = document.getElementById('stockProducto');
-
-            const nombre = nombreInput.value.trim();
-            const precio = precioInput.value;
-            const stock = stockInput.value;
+            const nombre = document.getElementById('nombreProducto').value.trim();
+            const precio = document.getElementById('precioProducto').value;
+            const stock = document.getElementById('stockProducto').value;
 
             if (!nombre || !precio || !stock) {
                 alert('Por favor completa todos los campos.');
                 return;
             }
 
+            // Agregar a la tabla
             const tbody = document.querySelector('#tablaProductos tbody');
             const nuevaFila = document.createElement('tr');
+            nuevaFila.className = 'fila-producto';
+            nuevaFila.setAttribute('data-nombre', nombre.toLowerCase());
+            nuevaFila.setAttribute('data-categoria', 'Nuevo Ingreso');
             nuevaFila.innerHTML = `
-                <td class="fw-bold text-secondary">${contadorID++}</td>
+                <td class="fw-bold text-secondary">${contadorID}</td>
                 <td><strong>${nombre}</strong></td>
                 <td><span class="badge badge-vino">Nuevo Ingreso</span></td>
                 <td class="text-warning">$${parseFloat(precio).toFixed(2)}</td>
@@ -192,24 +246,74 @@
             `;
             tbody.appendChild(nuevaFila);
 
-            document.getElementById('formNuevoProducto').reset();
+            // Agregar tarjeta visual
+            const contenedor = document.getElementById('contenedorTarjetas');
+            const nuevaTarjeta = document.createElement('div');
+            nuevaTarjeta.className = 'col-md-4 mb-4 tarjeta-item';
+            nuevaTarjeta.setAttribute('data-nombre', nombre.toLowerCase());
+            nuevaTarjeta.setAttribute('data-categoria', 'Nuevo Ingreso');
+            nuevaTarjeta.innerHTML = `
+                <div class="card card-dark-custom product-card h-100 shadow">
+                    <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500&q=80" class="card-img-top" alt="Producto" style="height: 220px; object-fit: cover;">
+                    <div class="card-body">
+                        <span class="badge badge-vino mb-2">Nuevo Ingreso</span>
+                        <h5 class="card-title fw-bold text-white">${nombre}</h5>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <span class="fs-5 fw-bold text-warning">$${parseFloat(precio).toFixed(2)}</span>
+                            <span class="badge bg-success">${stock} dispon.</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            contenedor.appendChild(nuevaTarjeta);
 
+            // Actualizar contador
+            contadorID++;
+            document.getElementById('totalProductos').innerText = contadorID - 1;
+
+            // Limpiar y cerrar modal
+            document.getElementById('formNuevoProducto').reset();
             const modalEl = document.getElementById('modalProducto');
             const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
             modal.hide();
-
             document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
             document.body.classList.remove('modal-open');
-            document.body.style.paddingRight = '';
-            document.body.style.overflow = '';
         }
 
-        function editar(nombre) {
-            alert('Editar producto: ' + nombre);
+        function filtrarProductos() {
+            const texto = document.getElementById('inputBuscar').value.toLowerCase();
+            const tarjetas = document.querySelectorAll('.tarjeta-item');
+            const filas = document.querySelectorAll('.fila-producto');
+
+            tarjetas.forEach(t => {
+                const nombre = t.getAttribute('data-nombre');
+                t.style.display = nombre.includes(texto) ? 'block' : 'none';
+            });
+
+            filas.forEach(f => {
+                const nombre = f.getAttribute('data-nombre');
+                f.style.display = nombre.includes(texto) ? '' : 'none';
+            });
         }
 
+        function filtrarCategoria(cat) {
+            const tarjetas = document.querySelectorAll('.tarjeta-item');
+            const filas = document.querySelectorAll('.fila-producto');
+
+            tarjetas.forEach(t => {
+                const categoria = t.getAttribute('data-categoria');
+                t.style.display = (cat === 'Todas' || categoria === cat) ? 'block' : 'none';
+            });
+
+            filas.forEach(f => {
+                const categoria = f.getAttribute('data-categoria');
+                f.style.display = (cat === 'Todas' || categoria === cat) ? '' : 'none';
+            });
+        }
+
+        function editar(nombre) { alert('Editar: ' + nombre); }
         function eliminar(boton, nombre) {
-            if (confirm('¿Estás seguro de eliminar ' + nombre + '?')) {
+            if (confirm('¿Eliminar ' + nombre + '?')) {
                 boton.closest('tr').remove();
             }
         }
