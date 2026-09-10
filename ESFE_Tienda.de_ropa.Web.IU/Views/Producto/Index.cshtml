@@ -13,15 +13,18 @@
         border-radius: 12px;
         color: #fff;
     }
+
     .btn-vino {
         background-color: #800e24;
         color: #fff;
         border: none;
     }
-    .btn-vino:hover {
-        background-color: #a0122d;
-        color: #fff;
-    }
+
+        .btn-vino:hover {
+            background-color: #a0122d;
+            color: #fff;
+        }
+
     .cart-drawer {
         position: fixed;
         top: 0;
@@ -34,22 +37,26 @@
         transition: right 0.3s ease-in-out;
         box-shadow: -5px 0 15px rgba(0,0,0,0.5);
     }
-    .cart-drawer.active {
-        right: 0;
-    }
+
+        .cart-drawer.active {
+            right: 0;
+        }
+
     .badge-cart {
         position: absolute;
         top: -5px;
         right: -5px;
         background-color: #800e24;
     }
+
     .product-card {
         transition: transform 0.2s ease, border-color 0.2s ease;
     }
-    .product-card:hover {
-        transform: translateY(-4px);
-        border-color: #800e24;
-    }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            border-color: #800e24;
+        }
 </style>
 
 <div class="container-fluid py-3">
@@ -108,7 +115,7 @@
         </div>
     </div>
 
-    <!-- MÓDULO CLIENTE: SHOWCASE DE COLECCIÓN (CATÁLOGOCARD VISTA DEDICADA) -->
+    <!-- MÓDULO CLIENTE: SHOWCASE DE COLECCIÓN -->
     <div class="solo-cliente mb-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="fw-bold text-white mb-0">🔥 Colección Destacada</h4>
@@ -135,6 +142,8 @@
                         <th>Imagen</th>
                         <th>Producto</th>
                         <th>Categoría</th>
+                        <th>Tallas</th>
+                        <th>Color</th>
                         <th>Precio</th>
                         <th>Stock</th>
                         <th class="text-center">Acciones</th>
@@ -174,7 +183,7 @@
         <h5 class="fw-bold mb-0" id="tituloCarrito">🛒 Tu Carrito de Compras</h5>
         <button class="btn-close btn-close-white" onclick="toggleCart()"></button>
     </div>
-    
+
     <div class="flex-grow-1 overflow-auto py-3" id="cartItemsContainer">
         <!-- Ítems del carrito -->
     </div>
@@ -220,6 +229,16 @@
                             <option value="Accesorios">Accesorios</option>
                         </select>
                     </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Color</label>
+                        <input type="text" id="prodColor" class="form-control form-control-dark" placeholder="Ej: Vinotinto, Negro, Azul">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tallas Disponibles</label>
+                        <input type="text" id="prodTallas" class="form-control form-control-dark" placeholder="Ej: S, M, L, XL">
+                    </div>
                     <div class="col-md-3 mb-3">
                         <label class="form-label">Precio ($)</label>
                         <input type="number" id="prodPrecio" class="form-control form-control-dark" value="25.00" step="0.01">
@@ -247,13 +266,13 @@
 </div>
 
 <script>
-    let rolActual = 'CLIENTE'; // ROL POR DEFECTO: CLIENTE
+    let rolActual = 'CLIENTE';
 
     let productos = [
-        { id: 1, nombre: "Camisa Slim Vinotinto", categoria: "Masculino", precio: 35.00, stock: 12, img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300" },
-        { id: 2, nombre: "Vestido Gala Claret", categoria: "Femenino", precio: 89.99, stock: 4, img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300" },
-        { id: 3, nombre: "Jeans Mezclilla Oscura", categoria: "Masculino", precio: 45.50, stock: 20, img: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=300" },
-        { id: 4, nombre: "Chaqueta Cuero Premium", categoria: "Accesorios", precio: 120.00, stock: 3, img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300" }
+        { id: 1, nombre: "Camisa Slim Vinotinto", categoria: "Masculino", precio: 35.00, stock: 12, color: "Vinotinto", tallas: ["S", "M", "L"], img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300" },
+        { id: 2, nombre: "Vestido Gala Claret", categoria: "Femenino", precio: 89.99, stock: 4, color: "Negro", tallas: ["S", "M"], img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300" },
+        { id: 3, nombre: "Jeans Mezclilla Oscura", categoria: "Masculino", precio: 45.50, stock: 20, color: "Azul Oscuro", tallas: ["30", "32", "34"], img: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=300" },
+        { id: 4, nombre: "Chaqueta Cuero Premium", categoria: "Accesorios", precio: 120.00, stock: 3, color: "Marrón", tallas: ["M", "L", "XL"], img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300" }
     ];
 
     let carrito = [];
@@ -266,13 +285,12 @@
         registrarKardex("Sistema", "Inicio del sistema de catálogo", 0);
     });
 
-    // SISTEMA DE CAMBIO DE ROL
     function cambiarRol(nuevoRol) {
         rolActual = nuevoRol;
         if (nuevoRol === 'CLIENTE') {
             document.getElementById('btnRolCliente').classList.add('active', 'btn-outline-light');
             document.getElementById('btnRolAdmin').classList.remove('active');
-            
+
             document.querySelectorAll('.solo-admin').forEach(el => el.classList.add('d-none'));
             document.querySelectorAll('.solo-cliente').forEach(el => el.classList.remove('d-none'));
             document.getElementById('tituloCarrito').innerText = "🛒 Tu Carrito de Compras";
@@ -295,24 +313,38 @@
         renderAdminTabla();
     }
 
-    // 1. VISTA CLIENTE: TARJETAS
+    // 1. VISTA CLIENTE: TARJETAS CON TALLAS Y COLOR
     function renderClienteTarjetas(lista = productos) {
         const contenedor = document.getElementById("contenedorTarjetasCliente");
         contenedor.innerHTML = "";
 
         lista.forEach(p => {
             const agotar = p.stock === 0 ? '<span class="badge bg-danger">Agotado</span>' : `<span class="badge bg-success">${p.stock} dispon.</span>`;
+
+            // Opciones de tallas para el select del cliente
+            const opcionesTallas = p.tallas.map(t => `<option value="${t}">${t}</option>`).join('');
+
             contenedor.innerHTML += `
                 <div class="col-md-3">
                     <div class="card card-dark-custom product-card h-100 shadow">
                         <img src="${p.img}" class="card-img-top" style="height: 200px; object-fit: cover; border-top-left-radius: 12px; border-top-right-radius: 12px;">
                         <div class="card-body d-flex flex-column justify-content-between">
                             <div>
-                                <span class="badge bg-secondary mb-2">${p.categoria}</span>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="badge bg-secondary">${p.categoria}</span>
+                                    <small class="text-secondary">🎨 ${p.color}</small>
+                                </div>
                                 <h5 class="fw-bold text-white mb-1">${p.nombre}</h5>
                                 <div class="d-flex justify-content-between align-items-center my-2">
                                     <span class="fs-5 fw-bold text-warning">$${p.precio.toFixed(2)}</span>
                                     ${agotar}
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label text-secondary fs-7 mb-1">Seleccionar Talla:</label>
+                                    <select id="selectTalla-${p.id}" class="form-select form-select-sm form-control-dark">
+                                        ${opcionesTallas}
+                                    </select>
                                 </div>
                             </div>
                             <button class="btn btn-vino w-100 fw-bold mt-2" onclick="agregarAlCarrito(${p.id})" ${p.stock === 0 ? 'disabled' : ''}>
@@ -325,18 +357,22 @@
         });
     }
 
-    // 2. VISTA ADMIN: TABLA
+    // 2. VISTA ADMIN: TABLA CON TALLAS Y COLOR
     function renderAdminTabla(lista = productos) {
         const tbody = document.getElementById("tablaProductosAdmin");
         tbody.innerHTML = "";
 
         lista.forEach(p => {
             const lowStockAlert = p.stock <= 5 ? '<span class="badge bg-danger ms-2">¡Poco stock!</span>' : '';
+            const tallasBadge = p.tallas.map(t => `<span class="badge bg-dark border border-secondary">${t}</span>`).join(' ');
+
             tbody.innerHTML += `
                 <tr>
                     <td><img src="${p.img}" style="width: 45px; height: 45px; object-fit: cover; border-radius: 8px;"></td>
                     <td class="fw-semibold">${p.nombre} ${lowStockAlert}</td>
                     <td><span class="badge bg-secondary">${p.categoria}</span></td>
+                    <td>${tallasBadge}</td>
+                    <td><span class="text-info">${p.color}</span></td>
                     <td class="text-warning fw-bold">$${p.precio.toFixed(2)}</td>
                     <td>${p.stock} uds.</td>
                     <td class="text-center">
@@ -347,10 +383,12 @@
         });
     }
 
-    // AÑADIR NUEVO PRODUCTO (SOLO ADMIN)
+    // AÑADIR NUEVO PRODUCTO CON TALLAS Y COLOR
     function guardarProducto() {
         const nombre = document.getElementById("prodNombre").value;
         const categoria = document.getElementById("prodCategoria").value;
+        const color = document.getElementById("prodColor").value || "Único";
+        const tallasInput = document.getElementById("prodTallas").value || "Única";
         const precio = parseFloat(document.getElementById("prodPrecio").value);
         const stock = parseInt(document.getElementById("prodStock").value);
         const img = document.getElementById("imgPreview").src;
@@ -360,14 +398,18 @@
             return;
         }
 
-        const nuevo = { id: Date.now(), nombre, categoria, precio, stock, img };
+        const tallas = tallasInput.split(',').map(t => t.trim().toUpperCase());
+
+        const nuevo = { id: Date.now(), nombre, categoria, precio, stock, color, tallas, img };
         productos.push(nuevo);
-        
+
         renderTodo();
         if (rolActual === 'ADMIN') renderCharts();
-        registrarKardex("Ingreso", `Nuevo producto registrado: ${nombre} (+${stock} uds)`, precio * stock);
+        registrarKardex("Ingreso", `Nuevo producto registrado: ${nombre} (${color}) (+${stock} uds)`, precio * stock);
 
         document.getElementById("prodNombre").value = "";
+        document.getElementById("prodColor").value = "";
+        document.getElementById("prodTallas").value = "";
         const modalEl = document.getElementById('modalProducto');
         bootstrap.Modal.getInstance(modalEl).hide();
     }
@@ -382,7 +424,7 @@
         }
     }
 
-    // CARRITO Y CHECKOUT
+    // CARRITO Y CHECKOUT CON TALLA Y COLOR
     function toggleCart() {
         document.getElementById("cartDrawer").classList.toggle("active");
     }
@@ -394,12 +436,17 @@
             return;
         }
 
-        const item = carrito.find(x => x.id === id);
+        const selectTalla = document.getElementById(`selectTalla-${p.id}`);
+        const tallaSeleccionada = selectTalla ? selectTalla.value : p.tallas[0];
+
+        // Se busca en el carrito por ID y Talla
+        const item = carrito.find(x => x.id === id && x.tallaSeleccionada === tallaSeleccionada);
+
         if (item) {
             if (item.cantidad < p.stock) item.cantidad++;
             else alert("Llegaste al límite del stock disponible.");
         } else {
-            carrito.push({ ...p, cantidad: 1 });
+            carrito.push({ ...p, cantidad: 1, tallaSeleccionada });
         }
         actualizarCarrito();
     }
@@ -410,7 +457,7 @@
         let subtotal = 0;
         let totalItems = 0;
 
-        carrito.forEach(item => {
+        carrito.forEach((item, index) => {
             const itemSub = item.precio * item.cantidad;
             subtotal += itemSub;
             totalItems += item.cantidad;
@@ -419,11 +466,12 @@
                 <div class="d-flex justify-content-between align-items-center mb-3 bg-dark p-2 rounded border border-secondary">
                     <div>
                         <h6 class="mb-0 fw-bold">${item.nombre}</h6>
+                        <small class="text-secondary">Talla: <b class="text-white">${item.tallaSeleccionada}</b> | Color: <b class="text-info">${item.color}</b></small><br>
                         <small class="text-secondary">$${item.precio.toFixed(2)} x ${item.cantidad}</small>
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         <span class="fw-bold text-success">$${itemSub.toFixed(2)}</span>
-                        <button class="btn btn-sm btn-outline-danger" onclick="quitarDelCarrito(${item.id})">✕</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="quitarDelCarrito(${index})">✕</button>
                     </div>
                 </div>
             `;
@@ -438,8 +486,8 @@
         document.getElementById("posTotal").innerText = `$${total.toFixed(2)}`;
     }
 
-    function quitarDelCarrito(id) {
-        carrito = carrito.filter(x => x.id !== id);
+    function quitarDelCarrito(index) {
+        carrito.splice(index, 1);
         actualizarCarrito();
     }
 
@@ -449,7 +497,6 @@
             return;
         }
 
-        // Descontar inventario
         carrito.forEach(item => {
             const p = productos.find(x => x.id === item.id);
             if (p) p.stock -= item.cantidad;
@@ -458,7 +505,7 @@
         const subtotal = carrito.reduce((acc, i) => acc + (i.precio * i.cantidad), 0);
         const total = subtotal * 1.13;
 
-        registrarKardex("Venta", `Pedido completado por cliente (${carrito.length} ítems)`, total);
+        registrarKardex("Venta", `Pedido completado (${carrito.length} ítems)`, total);
 
         generarFacturaPDF(total);
 
@@ -488,16 +535,18 @@
 
         let y = 60;
         doc.text("Producto", 15, y);
-        doc.text("Cant.", 110, y);
-        doc.text("Precio U.", 140, y);
+        doc.text("Talla/Color", 85, y);
+        doc.text("Cant.", 125, y);
+        doc.text("Precio U.", 145, y);
         doc.text("Total", 175, y);
         doc.line(15, y + 2, 195, y + 2);
 
         y += 10;
         carrito.forEach(item => {
-            doc.text(item.nombre.substring(0, 30), 15, y);
-            doc.text(`${item.cantidad}`, 110, y);
-            doc.text(`$${item.precio.toFixed(2)}`, 140, y);
+            doc.text(item.nombre.substring(0, 22), 15, y);
+            doc.text(`${item.tallaSeleccionada} / ${item.color.substring(0, 8)}`, 85, y);
+            doc.text(`${item.cantidad}`, 125, y);
+            doc.text(`$${item.precio.toFixed(2)}`, 145, y);
             doc.text(`$${(item.precio * item.cantidad).toFixed(2)}`, 175, y);
             y += 8;
         });
