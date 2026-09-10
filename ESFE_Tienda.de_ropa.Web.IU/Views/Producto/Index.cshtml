@@ -1,8 +1,8 @@
 ﻿@{
-    ViewData["Title"] = "Gestión Avanzada Claret Style";
+    ViewData["Title"] = "Catálogo y Gestión Claret Style";
 }
 
-<!-- CDN de Chart.js y jsPDF para Gráficos y PDF -->
+<!-- CDN de Chart.js y jsPDF -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -13,18 +13,15 @@
         border-radius: 12px;
         color: #fff;
     }
-
     .btn-vino {
         background-color: #800e24;
         color: #fff;
         border: none;
     }
-
-        .btn-vino:hover {
-            background-color: #a0122d;
-            color: #fff;
-        }
-
+    .btn-vino:hover {
+        background-color: #a0122d;
+        color: #fff;
+    }
     .cart-drawer {
         position: fixed;
         top: 0;
@@ -37,63 +34,98 @@
         transition: right 0.3s ease-in-out;
         box-shadow: -5px 0 15px rgba(0,0,0,0.5);
     }
-
-        .cart-drawer.active {
-            right: 0;
-        }
-
+    .cart-drawer.active {
+        right: 0;
+    }
     .badge-cart {
         position: absolute;
         top: -5px;
         right: -5px;
         background-color: #800e24;
     }
+    .product-card {
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .product-card:hover {
+        transform: translateY(-4px);
+        border-color: #800e24;
+    }
 </style>
 
 <div class="container-fluid py-3">
 
-    <!-- Encabezado con Carrito -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="fw-bold text-white mb-0">🛍️ Claret Style - Control Total</h2>
-            <p class="text-secondary mb-0">Inventario, Punto de Venta y Analítica en Tiempo Real</p>
-        </div>
-        <div class="d-flex gap-2">
-            <button class="btn btn-outline-light position-relative" onclick="toggleCart()">
-                🛒 Carrito / POS
-                <span id="cartCountBadge" class="badge rounded-pill badge-cart">0</span>
-            </button>
-            <button class="btn btn-vino fw-bold" data-bs-toggle="modal" data-bs-target="#modalProducto">
-                ➕ Nuevo Producto
-            </button>
+    <!-- BARRA SUPERIOR CON SELECTOR DE ROL -->
+    <div class="card card-dark-custom p-3 mb-4 shadow-sm">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h3 class="fw-bold text-white mb-0">🛍️ Claret Style</h3>
+                <small class="text-secondary">Plataforma de E-Commerce & Control Administrativo</small>
+            </div>
+
+            <!-- Selector de Rol -->
+            <div class="d-flex align-items-center bg-dark p-2 rounded border border-secondary gap-3">
+                <span class="fw-bold text-secondary fs-6">Vista Actual:</span>
+                <div class="btn-group" role="group">
+                    <button type="button" id="btnRolCliente" class="btn btn-sm btn-outline-light active" onclick="cambiarRol('CLIENTE')">
+                        🛍️ Cliente (Comprador)
+                    </button>
+                    <button type="button" id="btnRolAdmin" class="btn btn-sm btn-outline-warning" onclick="cambiarRol('ADMIN')">
+                        👑 Vendedor (Administrador)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Acciones según Rol -->
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-light position-relative" onclick="toggleCart()">
+                    🛒 Carrito de Compras
+                    <span id="cartCountBadge" class="badge rounded-pill badge-cart">0</span>
+                </button>
+                <button class="btn btn-vino fw-bold solo-admin d-none" data-bs-toggle="modal" data-bs-target="#modalProducto">
+                    ➕ Nuevo Producto
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- Módulo 2: DASHBOARD DE GRÁFICOS -->
-    <div class="row g-3 mb-4">
+    <!-- MÓDULO ADMINISTRATIVO: DASHBOARD DE GRÁFICOS (Solo Admin) -->
+    <div class="row g-3 mb-4 solo-admin d-none">
         <div class="col-md-6">
             <div class="card card-dark-custom p-3 shadow-sm">
-                <h5 class="fw-bold text-vino mb-3">📊 Productos por Categoria</h5>
-                <div style="height: 220px;">
+                <h5 class="fw-bold text-vino mb-3">📊 Inventario por Categoria</h5>
+                <div style="height: 200px;">
                     <canvas id="chartCategorias"></canvas>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="card card-dark-custom p-3 shadow-sm">
-                <h5 class="fw-bold text-vino mb-3">📦 Stock por Producto</h5>
-                <div style="height: 220px;">
+                <h5 class="fw-bold text-vino mb-3">📦 Niveles de Stock</h5>
+                <div style="height: 200px;">
                     <canvas id="chartStock"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Módulo principal: CATÁLOGO Y TABLA -->
-    <div class="card card-dark-custom p-4 shadow-lg mb-4">
+    <!-- MÓDULO CLIENTE: SHOWCASE DE COLECCIÓN (CATÁLOGOCARD VISTA DEDICADA) -->
+    <div class="solo-cliente mb-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="fw-bold mb-0">🧥 Catálogo de Inventario</h4>
-            <input type="text" id="inputBuscar" class="form-control form-control-dark w-25" placeholder="🔍 Buscar prenda..." onkeyup="filtrarProductos()">
+            <h4 class="fw-bold text-white mb-0">🔥 Colección Destacada</h4>
+            <div class="w-25">
+                <input type="text" id="inputBuscarCliente" class="form-control form-control-dark" placeholder="🔍 Buscar por prenda..." onkeyup="filtrarCliente()">
+            </div>
+        </div>
+        <div class="row g-4" id="contenedorTarjetasCliente">
+            <!-- Renderizado Dinámico de Tarjetas para Comprador -->
+        </div>
+    </div>
+
+    <!-- MÓDULO ADMINISTRATIVO: TABLA DE GESTIÓN (Solo Admin) -->
+    <div class="card card-dark-custom p-4 shadow-lg mb-4 solo-admin d-none">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="fw-bold mb-0">⚙️ Tabla de Control de Productos</h4>
+            <input type="text" id="inputBuscarAdmin" class="form-control form-control-dark w-25" placeholder="🔍 Filtrar tabla..." onkeyup="filtrarAdmin()">
         </div>
 
         <div class="table-responsive">
@@ -105,19 +137,19 @@
                         <th>Categoría</th>
                         <th>Precio</th>
                         <th>Stock</th>
-                        <th>Acciones</th>
+                        <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
-                <tbody id="tablaProductos">
+                <tbody id="tablaProductosAdmin">
                     <!-- Dinámico vía JS -->
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- Módulo 5: KARDEX / HISTORIAL DE MOVIMIENTOS -->
-    <div class="card card-dark-custom p-4 shadow-lg">
-        <h5 class="fw-bold text-white mb-3">📜 Historial de Movimientos (Kardex)</h5>
+    <!-- MÓDULO ADMINISTRATIVO: HISTORIAL KARDEX (Solo Admin) -->
+    <div class="card card-dark-custom p-4 shadow-lg solo-admin d-none">
+        <h5 class="fw-bold text-white mb-3">📜 Historial de Movimientos Auditoría (Kardex)</h5>
         <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
             <table class="table table-sm table-dark table-striped text-secondary mb-0">
                 <thead>
@@ -136,13 +168,13 @@
     </div>
 </div>
 
-<!-- Módulo 1: CARRITO LATERAL (POS) -->
+<!-- CARRITO LATERAL (POS / CHECKOUT) -->
 <div id="cartDrawer" class="cart-drawer p-3 d-flex flex-column text-white">
     <div class="d-flex justify-content-between align-items-center pb-3 border-bottom border-secondary">
-        <h5 class="fw-bold mb-0">🛒 Punto de Venta (POS)</h5>
+        <h5 class="fw-bold mb-0" id="tituloCarrito">🛒 Tu Carrito de Compras</h5>
         <button class="btn-close btn-close-white" onclick="toggleCart()"></button>
     </div>
-
+    
     <div class="flex-grow-1 overflow-auto py-3" id="cartItemsContainer">
         <!-- Ítems del carrito -->
     </div>
@@ -160,13 +192,13 @@
             <span>Total:</span>
             <span id="posTotal" class="text-danger">$0.00</span>
         </div>
-        <button class="btn btn-vino w-100 fw-bold py-2" onclick="finalizarVenta()">
-            💳 Procesar Venta y Generar Ticket
+        <button class="btn btn-vino w-100 fw-bold py-2" id="btnFinalizar" onclick="finalizarCompra()">
+            💳 Realizar Pedido / Checkout
         </button>
     </div>
 </div>
 
-<!-- Módulo 3: MODAL CON PREVISUALIZACIÓN DE FOTO -->
+<!-- MODAL ADMINISTRADOR: AÑADIR PRODUCTO -->
 <div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content card-dark-custom">
@@ -177,7 +209,7 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label class="form-label">Nombre del Producto</label>
-                    <input type="text" id="prodNombre" class="form-control form-control-dark" placeholder="Ej: Chaqueta Claret Velvet">
+                    <input type="text" id="prodNombre" class="form-control form-control-dark" placeholder="Ej: Chaqueta Velvet Claret">
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -186,7 +218,6 @@
                             <option value="Masculino">Masculino</option>
                             <option value="Femenino">Femenino</option>
                             <option value="Accesorios">Accesorios</option>
-                            <option value="Calzado">Calzado</option>
                         </select>
                     </div>
                     <div class="col-md-3 mb-3">
@@ -198,13 +229,12 @@
                         <input type="number" id="prodStock" class="form-control form-control-dark" value="10">
                     </div>
                 </div>
-                <!-- Previsualización de Imagen -->
                 <div class="mb-3">
                     <label class="form-label">URL de la Imagen</label>
                     <input type="text" id="prodImgUrl" class="form-control form-control-dark" placeholder="URL de la imagen" oninput="actualizarPrevisualizacion(this.value)">
                 </div>
                 <div class="text-center p-2 border border-secondary rounded">
-                    <small class="text-secondary d-block mb-1">Previsualización de Imagen:</small>
+                    <small class="text-secondary d-block mb-1">Previsualización:</small>
                     <img id="imgPreview" src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=300" style="max-height: 120px; object-fit: cover; border-radius: 8px;">
                 </div>
             </div>
@@ -217,7 +247,8 @@
 </div>
 
 <script>
-    // ESTADO DE LA APLICACIÓN
+    let rolActual = 'CLIENTE'; // ROL POR DEFECTO: CLIENTE
+
     let productos = [
         { id: 1, nombre: "Camisa Slim Vinotinto", categoria: "Masculino", precio: 35.00, stock: 12, img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300" },
         { id: 2, nombre: "Vestido Gala Claret", categoria: "Femenino", precio: 89.99, stock: 4, img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300" },
@@ -231,14 +262,72 @@
     let chartStockInstance = null;
 
     document.addEventListener("DOMContentLoaded", () => {
-        renderTabla();
-        renderCharts();
-        registrarKardex("Sistema", "Inicio del sistema de inventario", 0);
+        renderTodo();
+        registrarKardex("Sistema", "Inicio del sistema de catálogo", 0);
     });
 
-    // 1. DIBUJAR TABLA DE PRODUCTOS
-    function renderTabla(lista = productos) {
-        const tbody = document.getElementById("tablaProductos");
+    // SISTEMA DE CAMBIO DE ROL
+    function cambiarRol(nuevoRol) {
+        rolActual = nuevoRol;
+        if (nuevoRol === 'CLIENTE') {
+            document.getElementById('btnRolCliente').classList.add('active', 'btn-outline-light');
+            document.getElementById('btnRolAdmin').classList.remove('active');
+            
+            document.querySelectorAll('.solo-admin').forEach(el => el.classList.add('d-none'));
+            document.querySelectorAll('.solo-cliente').forEach(el => el.classList.remove('d-none'));
+            document.getElementById('tituloCarrito').innerText = "🛒 Tu Carrito de Compras";
+            document.getElementById('btnFinalizar').innerText = "💳 Realizar Pedido / Checkout";
+        } else {
+            document.getElementById('btnRolAdmin').classList.add('active');
+            document.getElementById('btnRolCliente').classList.remove('active');
+
+            document.querySelectorAll('.solo-cliente').forEach(el => el.classList.add('d-none'));
+            document.querySelectorAll('.solo-admin').forEach(el => el.classList.remove('d-none'));
+            document.getElementById('tituloCarrito').innerText = "🛒 Punto de Venta (POS)";
+            document.getElementById('btnFinalizar').innerText = "💳 Procesar Venta y Generar Ticket";
+
+            renderCharts();
+        }
+    }
+
+    function renderTodo() {
+        renderClienteTarjetas();
+        renderAdminTabla();
+    }
+
+    // 1. VISTA CLIENTE: TARJETAS
+    function renderClienteTarjetas(lista = productos) {
+        const contenedor = document.getElementById("contenedorTarjetasCliente");
+        contenedor.innerHTML = "";
+
+        lista.forEach(p => {
+            const agotar = p.stock === 0 ? '<span class="badge bg-danger">Agotado</span>' : `<span class="badge bg-success">${p.stock} dispon.</span>`;
+            contenedor.innerHTML += `
+                <div class="col-md-3">
+                    <div class="card card-dark-custom product-card h-100 shadow">
+                        <img src="${p.img}" class="card-img-top" style="height: 200px; object-fit: cover; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div>
+                                <span class="badge bg-secondary mb-2">${p.categoria}</span>
+                                <h5 class="fw-bold text-white mb-1">${p.nombre}</h5>
+                                <div class="d-flex justify-content-between align-items-center my-2">
+                                    <span class="fs-5 fw-bold text-warning">$${p.precio.toFixed(2)}</span>
+                                    ${agotar}
+                                </div>
+                            </div>
+                            <button class="btn btn-vino w-100 fw-bold mt-2" onclick="agregarAlCarrito(${p.id})" ${p.stock === 0 ? 'disabled' : ''}>
+                                🛒 Agregar al Carrito
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // 2. VISTA ADMIN: TABLA
+    function renderAdminTabla(lista = productos) {
+        const tbody = document.getElementById("tablaProductosAdmin");
         tbody.innerHTML = "";
 
         lista.forEach(p => {
@@ -248,24 +337,17 @@
                     <td><img src="${p.img}" style="width: 45px; height: 45px; object-fit: cover; border-radius: 8px;"></td>
                     <td class="fw-semibold">${p.nombre} ${lowStockAlert}</td>
                     <td><span class="badge bg-secondary">${p.categoria}</span></td>
-                    <td class="text-success fw-bold">$${p.precio.toFixed(2)}</td>
+                    <td class="text-warning fw-bold">$${p.precio.toFixed(2)}</td>
                     <td>${p.stock} uds.</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-light me-1" onclick="agregarAlCarrito(${p.id})">🛒 Vender</button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="eliminarProducto(${p.id})">🗑️</button>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-danger" onclick="eliminarProducto(${p.id})">🗑️ Eliminar</button>
                     </td>
                 </tr>
             `;
         });
     }
 
-    // 2. MÓDULO DE FOTO - PREVISUALIZACIÓN
-    function actualizarPrevisualizacion(url) {
-        const img = document.getElementById("imgPreview");
-        img.src = url || "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=300";
-    }
-
-    // AGREGAR NUEVO PRODUCTO
+    // AÑADIR NUEVO PRODUCTO (SOLO ADMIN)
     function guardarProducto() {
         const nombre = document.getElementById("prodNombre").value;
         const categoria = document.getElementById("prodCategoria").value;
@@ -280,12 +362,11 @@
 
         const nuevo = { id: Date.now(), nombre, categoria, precio, stock, img };
         productos.push(nuevo);
+        
+        renderTodo();
+        if (rolActual === 'ADMIN') renderCharts();
+        registrarKardex("Ingreso", `Nuevo producto registrado: ${nombre} (+${stock} uds)`, precio * stock);
 
-        renderTabla();
-        renderCharts();
-        registrarKardex("Ingreso", `Nuevo producto: ${nombre} (+${stock} uds)`, precio * stock);
-
-        // Limpiar y cerrar modal
         document.getElementById("prodNombre").value = "";
         const modalEl = document.getElementById('modalProducto');
         bootstrap.Modal.getInstance(modalEl).hide();
@@ -295,13 +376,13 @@
         if(confirm("¿Seguro que deseas eliminar este producto?")) {
             const p = productos.find(x => x.id === id);
             productos = productos.filter(x => x.id !== id);
-            renderTabla();
-            renderCharts();
+            renderTodo();
+            if (rolActual === 'ADMIN') renderCharts();
             registrarKardex("Baja", `Producto eliminado: ${p.nombre}`, 0);
         }
     }
 
-    // 3. CARRITO / PUNTO DE VENTA (POS)
+    // CARRITO Y CHECKOUT
     function toggleCart() {
         document.getElementById("cartDrawer").classList.toggle("active");
     }
@@ -316,7 +397,7 @@
         const item = carrito.find(x => x.id === id);
         if (item) {
             if (item.cantidad < p.stock) item.cantidad++;
-            else alert("Alcanzaste el límite de stock de este producto.");
+            else alert("Llegaste al límite del stock disponible.");
         } else {
             carrito.push({ ...p, cantidad: 1 });
         }
@@ -362,14 +443,13 @@
         actualizarCarrito();
     }
 
-    // 4. FINALIZAR VENTA & GENERAR PDF DE FACTURA
-    function finalizarVenta() {
+    function finalizarCompra() {
         if (carrito.length === 0) {
             alert("El carrito está vacío.");
             return;
         }
 
-        // Descontar Stock
+        // Descontar inventario
         carrito.forEach(item => {
             const p = productos.find(x => x.id === item.id);
             if (p) p.stock -= item.cantidad;
@@ -378,19 +458,17 @@
         const subtotal = carrito.reduce((acc, i) => acc + (i.precio * i.cantidad), 0);
         const total = subtotal * 1.13;
 
-        registrarKardex("Venta", `Venta de ${carrito.length} ítems`, total);
+        registrarKardex("Venta", `Pedido completado por cliente (${carrito.length} ítems)`, total);
 
-        // Generar Factura PDF
         generarFacturaPDF(total);
 
-        // Reset
         carrito = [];
         actualizarCarrito();
-        renderTabla();
-        renderCharts();
+        renderTodo();
+        if (rolActual === 'ADMIN') renderCharts();
         toggleCart();
 
-        alert("🎉 Venta realizada con éxito. Se ha descargado el Ticket de Compra.");
+        alert("🎉 ¡Gracias por tu compra! Tu ticket ha sido generado correctamente.");
     }
 
     function generarFacturaPDF(total) {
@@ -401,12 +479,12 @@
         doc.rect(0, 0, 210, 30, 'F');
         doc.setTextColor(255, 255, 255);
         doc.setFontSize(18);
-        doc.text("CLARET STYLE - TICKET DE COMPRA", 15, 20);
+        doc.text("CLARET STYLE - COMPROBANTE DE COMPRA", 15, 20);
 
         doc.setTextColor(0, 0, 0);
         doc.setFontSize(11);
         doc.text(`Fecha: ${new Date().toLocaleString()}`, 15, 40);
-        doc.text(`Comprobante No: #CS-${Math.floor(Math.random() * 90000 + 10000)}`, 15, 48);
+        doc.text(`Ticket No: #CS-${Math.floor(Math.random() * 90000 + 10000)}`, 15, 48);
 
         let y = 60;
         doc.text("Producto", 15, y);
@@ -426,17 +504,15 @@
 
         doc.line(15, y + 2, 195, y + 2);
         doc.setFontSize(14);
-        doc.text(`TOTAL PAGADO (IVA Inc.): $${total.toFixed(2)}`, 110, y + 15);
+        doc.text(`TOTAL PAGADO: $${total.toFixed(2)}`, 110, y + 15);
 
-        doc.save(`Ticket_ClaretStyle_${Date.now()}.pdf`);
+        doc.save(`Comprobante_ClaretStyle_${Date.now()}.pdf`);
     }
 
-    // 5. DASHBOARD CON CHART.JS
     function renderCharts() {
         const catCounts = {};
         productos.forEach(p => catCounts[p.categoria] = (catCounts[p.categoria] || 0) + 1);
 
-        // Chart Categorías
         if (chartCatInstance) chartCatInstance.destroy();
         const ctxCat = document.getElementById('chartCategorias').getContext('2d');
         chartCatInstance = new Chart(ctxCat, {
@@ -445,21 +521,20 @@
                 labels: Object.keys(catCounts),
                 datasets: [{
                     data: Object.values(catCounts),
-                    backgroundColor: ['#800e24', '#2a9d8f', '#e76f51', '#e9c46a']
+                    backgroundColor: ['#800e24', '#2a9d8f', '#e76f51']
                 }]
             },
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#fff' } } } }
         });
 
-        // Chart Stock
         if (chartStockInstance) chartStockInstance.destroy();
         const ctxStock = document.getElementById('chartStock').getContext('2d');
         chartStockInstance = new Chart(ctxStock, {
             type: 'bar',
             data: {
-                labels: productos.map(p => p.nombre.substring(0, 12) + '...'),
+                labels: productos.map(p => p.nombre.substring(0, 10) + '...'),
                 datasets: [{
-                    label: 'Unidades Disponibles',
+                    label: 'Unidades',
                     data: productos.map(p => p.stock),
                     backgroundColor: '#800e24'
                 }]
@@ -467,23 +542,14 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                scales: {
-                    x: { ticks: { color: '#fff' } },
-                    y: { ticks: { color: '#fff' } }
-                },
+                scales: { x: { ticks: { color: '#fff' } }, y: { ticks: { color: '#fff' } } },
                 plugins: { legend: { labels: { color: '#fff' } } }
             }
         });
     }
 
-    // KARDEX / AUDITORÍA
     function registrarKardex(tipo, detalle, monto) {
-        kardex.unshift({
-            fecha: new Date().toLocaleTimeString(),
-            tipo,
-            detalle,
-            monto
-        });
+        kardex.unshift({ fecha: new Date().toLocaleTimeString(), tipo, detalle, monto });
         const tbody = document.getElementById("tablaKardex");
         tbody.innerHTML = "";
         kardex.forEach(k => {
@@ -498,10 +564,17 @@
         });
     }
 
-    // FILTRO DE BÚSQUEDA
-    function filtrarProductos() {
-        const text = document.getElementById("inputBuscar").value.toLowerCase();
-        const filtrados = productos.filter(p => p.nombre.toLowerCase().includes(text) || p.categoria.toLowerCase().includes(text));
-        renderTabla(filtrados);
+    function actualizarPrevisualizacion(url) {
+        document.getElementById("imgPreview").src = url || "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=300";
+    }
+
+    function filtrarCliente() {
+        const text = document.getElementById("inputBuscarCliente").value.toLowerCase();
+        renderClienteTarjetas(productos.filter(p => p.nombre.toLowerCase().includes(text)));
+    }
+
+    function filtrarAdmin() {
+        const text = document.getElementById("inputBuscarAdmin").value.toLowerCase();
+        renderAdminTabla(productos.filter(p => p.nombre.toLowerCase().includes(text)));
     }
 </script>
