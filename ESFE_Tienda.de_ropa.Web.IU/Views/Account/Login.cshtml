@@ -1,74 +1,62 @@
 ﻿@{
-    ViewData["Title"] = "Iniciar Sesión";
+    ViewData["Title"] = "Iniciar Sesión - Claret Style";
 }
 
 <style>
-    .login-card {
-        background-color: #1e1e1e;
-        border: 1px solid #4a0815;
-        border-radius: 12px;
-        max-width: 420px;
-        margin: 50px auto;
+    body {
+        background-color: #121212;
     }
-
+    .card-dark-custom {
+        background-color: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 12px;
+        color: #fff;
+    }
     .btn-vino {
         background-color: #800e24;
-        color: #ffffff;
+        color: #fff;
         border: none;
     }
-
-        .btn-vino:hover {
-            background-color: #a0122d;
-            color: #ffffff;
-        }
-
-    .form-control-dark {
-        background-color: #2b2b2b;
-        border: 1px solid #444444;
-        color: #ffffff;
+    .btn-vino:hover {
+        background-color: #a0122d;
+        color: #fff;
     }
-
-        .form-control-dark:focus {
-            background-color: #333333;
-            color: #ffffff;
-            border-color: #800e24;
-            box-shadow: 0 0 0 0.25rem rgba(128, 14, 36, 0.4);
-        }
 </style>
 
-<div class="container">
-    <div class="card login-card shadow-lg p-4">
-        <div class="text-center mb-4">
-            <h2 class="fw-bold" style="color: #d1345b;">🔐 Iniciar Sesión</h2>
-            <p class="text-secondary small">Ingresa tus credenciales para acceder al sistema</p>
-        </div>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-4">
+        <div class="card card-dark-custom p-4 shadow-lg text-center">
+            <h3 class="fw-bold text-white mb-1">🔐 Claret Style</h3>
+            <p class="text-secondary small mb-4">Ingresa tus credenciales para acceder al catálogo</p>
 
-        @if (ViewBag.Error != null)
-        {
-            <div class="alert alert-danger py-2 text-center" role="alert">
-                @ViewBag.Error
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger p-2 small mb-3">
+                    ❌ @ViewBag.Error
+                </div>
+            }
+
+            <form asp-controller="Account" asp-action="Login" method="post">
+                <div class="text-start mb-3">
+                    <label class="form-label text-secondary small">Usuario</label>
+                    <input type="text" name="usuario" class="form-control bg-dark text-white border-secondary" placeholder="Ej: admin o cliente" required>
+                </div>
+
+                <div class="text-start mb-4">
+                    <label class="form-label text-secondary small">Contraseña</label>
+                    <input type="password" name="password" class="form-control bg-dark text-white border-secondary" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn btn-vino w-100 fw-bold py-2 mb-3">
+                    🚀 Iniciar Sesión
+                </button>
+            </form>
+
+            <div class="border-top border-secondary pt-3 mt-2">
+                <small class="text-secondary d-block">Credenciales de prueba:</small>
+                <small class="text-warning"><b>Admin:</b> admin / admin123</small><br>
+                <small class="text-info"><b>Cliente:</b> cliente / 1234</small>
             </div>
-        }
-
-        <form asp-action="Login" method="post">
-            <div class="mb-3">
-                <label class="form-label fw-semibold">Correo Electrónico</label>
-                <input type="email" name="email" class="form-control form-control-dark" placeholder="admin@tienda.com" required />
-            </div>
-
-            <div class="mb-4">
-                <label class="form-label fw-semibold">Contraseña</label>
-                <input type="password" name="password" class="form-control form-control-dark" placeholder="••••••••" required />
-            </div>
-
-            <button type="submit" class="btn btn-vino w-100 fw-bold py-2 shadow-sm">
-                Ingresar al Sistema
-            </button>
-        </form>
-
-        <div class="text-center mt-4 border-top border-secondary pt-3">
-            <span class="text-secondary small">BIENVENIDOS</span><br />
-            <small class="text-warning">PORFAVOR INICIE SESION</small>
         </div>
     </div>
 </div>

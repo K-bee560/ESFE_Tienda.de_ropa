@@ -1,132 +1,80 @@
 ﻿@{
-    ViewData["Title"] = "Página Principal";
+    ViewData["Title"] = "Página Principal - Claret Style";
 }
 
 <style>
     .hero-section {
-        background: linear-gradient(135deg, #4a0815 0%, #1a0307 100%);
-        border: 1px solid #610c1d;
-        border-radius: 15px;
-        padding: 50px 30px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        background: linear-gradient(135deg, #2b0008 0%, #121212 100%);
+        border: 1px solid #333;
+        border-radius: 16px;
+        padding: 60px 20px;
     }
-
-    .btn-vino {
-        background-color: #800e24;
-        color: #ffffff;
-        border: none;
-        padding: 12px 28px;
-        font-weight: bold;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
-    }
-
-        .btn-vino:hover {
-            background-color: #a0122d;
-            color: #ffffff;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(160, 18, 45, 0.4);
-        }
 
     .card-dark-custom {
-        background-color: #1e1e1e;
-        border: 1px solid #333333;
-        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
+        background-color: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 12px;
+        color: #fff;
+        transition: transform 0.2s ease, border-color 0.2s ease;
     }
 
         .card-dark-custom:hover {
             transform: translateY(-5px);
             border-color: #800e24;
-            box-shadow: 0 8px 20px rgba(128, 14, 36, 0.3) !important;
         }
 
-    .icon-box {
-        font-size: 2.5rem;
-        color: #d1345b;
+    .btn-vino {
+        background-color: #800e24;
+        color: #fff;
+        border: none;
     }
 
-    /* Estilos para la sección de Iniciativa */
-    .about-section {
-        background-color: #1a1a1a;
-        border-left: 4px solid #800e24;
-        border-radius: 12px;
-        padding: 30px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
+        .btn-vino:hover {
+            background-color: #a0122d;
+            color: #fff;
+        }
 </style>
 
-<div class="container mt-4">
-    <!-- Banner Principal -->
-    <div class="hero-section text-center text-white mb-5">
-        <h1 class="display-4 fw-bold mb-3">
-            Bienvenido a <span style="color: #d1345b;">Claret Style</span>
-        </h1>
-        <p class="lead text-light mx-auto mb-4" style="max-width: 600px;">
+<div class="container py-4">
+    <!-- BANNER PRINCIPAL -->
+    <div class="hero-section text-center text-white mb-5 shadow-lg">
+        <h1 class="display-4 fw-bold mb-3">Bienvenido a <span style="color: #e63946;">Claret Style</span></h1>
+        <p class="lead text-secondary max-w-2xl mx-auto mb-4" style="max-width: 600px;">
             Sistema de gestión de inventario y catálogo exclusivo para ropa urbana, formal y accesorios.
         </p>
-        <div class="d-flex justify-content-center gap-3">
-            <a asp-controller="Producto" asp-action="Index" class="btn btn-vino">
-                👔 Ver Catálogo de Productos
-            </a>
-        </div>
+        <a href="/Account/Login" class="btn btn-vino btn-lg fw-bold px-4 py-2 shadow">
+            👔 Ver Catálogo de Productos
+        </a>
     </div>
 
-    <!-- Secciones de Acceso Rápido Clicleables -->
-    <div class="row text-center mb-5">
-        <div class="col-md-4 mb-4">
-            <a asp-controller="Producto" asp-action="Index" class="text-decoration-none">
-                <div class="card card-dark-custom h-100 p-4 shadow">
-                    <div class="card-body">
-                        <div class="icon-box mb-3">🛍️</div>
-                        <h5 class="card-title fw-bold text-white mb-2">Colección Exclusiva</h5>
-                        <p class="card-text text-secondary">Diseños modernos organizados por categorías y prendas disponibles.</p>
-                    </div>
+    <!-- TARJETAS DE ACCESO -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <a href="/Account/Login" class="text-decoration-none">
+                <div class="card card-dark-custom p-4 text-center h-100">
+                    <div class="fs-1 mb-3">🛍️</div>
+                    <h5 class="fw-bold text-white mb-2">Colección Exclusiva</h5>
+                    <p class="text-secondary small mb-0">Diseños modernos organizados por categorías y prendas disponibles.</p>
                 </div>
             </a>
         </div>
-        <div class="col-md-4 mb-4">
-            <a asp-controller="Producto" asp-action="Index" class="text-decoration-none">
-                <div class="card card-dark-custom h-100 p-4 shadow">
-                    <div class="card-body">
-                        <div class="icon-box mb-3">⚡</div>
-                        <h5 class="card-title fw-bold text-white mb-2">Gestión de Stock</h5>
-                        <p class="card-text text-secondary">Módulo de administración de inventarios, precios y tallas.</p>
-                    </div>
+        <div class="col-md-4">
+            <a href="/Account/Login" class="text-decoration-none">
+                <div class="card card-dark-custom p-4 text-center h-100">
+                    <div class="fs-1 mb-3">⚡</div>
+                    <h5 class="fw-bold text-white mb-2">Gestión de Stock</h5>
+                    <p class="text-secondary small mb-0">Módulo de administración de inventarios, precios y tallas.</p>
                 </div>
             </a>
         </div>
-        <div class="col-md-4 mb-4">
-            <a asp-controller="Account" asp-action="Login" class="text-decoration-none">
-                <div class="card card-dark-custom h-100 p-4 shadow">
-                    <div class="card-body">
-                        <div class="icon-box mb-3">🔐</div>
-                        <h5 class="card-title fw-bold text-white mb-2">Iniciar Sesión</h5>
-                        <p class="card-text text-secondary">Acceso de seguridad para administradores y personal de tienda.</p>
-                    </div>
+        <div class="col-md-4">
+            <a href="/Account/Login" class="text-decoration-none">
+                <div class="card card-dark-custom p-4 text-center h-100">
+                    <div class="fs-1 mb-3">🔐</div>
+                    <h5 class="fw-bold text-white mb-2">Iniciar Sesión</h5>
+                    <p class="text-secondary small mb-0">Acceso de seguridad para administradores y personal de tienda.</p>
                 </div>
             </a>
-        </div>
-    </div>
-
-    <!-- Sección de la Iniciativa de la Página -->
-    <div class="about-section mb-5">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h3 class="fw-bold text-white mb-2">
-                    ✨ La Iniciativa <span style="color: #d1345b;">Claret Style</span>
-                </h3>
-                <p class="text-secondary mb-0">
-                    Nacemos con el propósito de fusionar la elegancia del estilo contemporáneo con una gestión digital ágil y eficiente. <strong class="text-light">Claret Style</strong> busca brindar una experiencia de catálogo intuitiva, organizada y vanguardista, optimizando el control de prendas, stock y tendencias en un solo lugar.
-                </p>
-            </div>
-            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
-                <span class="badge px-3 py-2 fs-6" style="background-color: #4a0815; color: #d1345b; border: 1px solid #800e24;">
-                    Moda & Innovación Digital
-                </span>
-            </div>
         </div>
     </div>
 </div>
