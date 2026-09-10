@@ -4,231 +4,36 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Claret Style</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <style>
-        /* Estilos Globales de la App */
-        :root {
-            --primary-color: #800e24;
-            --bg-body: #121212;
-            --text-color: #e0e0e0;
-        }
-
-        body.light-mode {
-            --bg-body: #f8f9fa;
-            --text-color: #212529;
-        }
-
-        body {
-            background-color: var(--bg-body) !important;
-            color: var(--text-color) !important;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .navbar-claret {
-            background-color: #4a0815 !important;
-            border-bottom: 2px solid #800e24;
-        }
-
-        .dropdown-menu-dark-custom {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
-        }
-
-        .dropdown-menu-dark-custom .dropdown-item {
-            color: #d1d1d1;
-        }
-
-        .dropdown-menu-dark-custom .dropdown-item:hover {
-            background-color: #800e24;
-            color: #ffffff;
-        }
-
-        .avatar-circle {
-            width: 36px;
-            height: 36px;
-            background-color: #800e24;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            border: 2px solid #ffffff33;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/style.css" />
 </head>
-<body>
-    <!-- Navbar Principal -->
+<body style="background-color: #121212; color: #fff;">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark navbar-claret shadow mb-3">
-            <div class="container-fluid px-4">
-                <a class="navbar-brand fw-bold fs-4 text-white d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="Index">
-                    <span>🛍️</span> Claret Style
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm style-navbar" style="background-color: #800e24; padding: 10px 20px;">
+            <div class="container-fluid d-flex justify-content-between align-items-center">
+                <a class="navbar-brand text-white fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                    🛍️ Claret Style
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1 ms-3">
-                        <li class="nav-item">
-                            <a class="nav-link text-white fw-semibold" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white fw-semibold" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a>
-                        </li>
-                    </ul>
-
-                    <!-- Menú de Usuario y Ajustes -->
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="dropdown">
-                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle gap-2" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                <div class="avatar-circle">AD</div>
-                                <span class="d-none d-md-inline fw-semibold">Admin Claret</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark-custom shadow-lg mt-2" aria-labelledby="userDropdown">
-                                <li>
-                                    <div class="dropdown-header text-secondary">
-                                        Sesión iniciada como:<br><strong class="text-white">admin@claretstyle.com</strong>
-                                    </div>
-                                </li>
-                                <li><hr class="dropdown-divider border-secondary"></li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center gap-2" href="#" data-bs-toggle="modal" data-bs-target="#modalAjustes">
-                                        ⚙️ Ajustes del Sistema
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider border-secondary"></li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center gap-2 text-danger fw-bold" href="#" onclick="cerrarSesion()">
-                                        🚪 Cerrar Sesión
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
+                
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Rutas con controladores para no perder la sesión -->
+                    <a class="text-white text-decoration-none px-2" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                    <a class="text-white text-decoration-none px-2" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a>
+                    
+                    <!-- Partial del Login para mantener la autenticación -->
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container">
+    <div class="container mt-4">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <!-- Modal de Ajustes -->
-    <div class="modal fade" id="modalAjustes" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content card-dark-custom text-white" style="background-color: #1e1e1e; border: 1px solid #333;">
-                <div class="modal-header bg-vino">
-                    <h5 class="modal-title fw-bold">⚙️ Ajustes del Sistema</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Tema Claro / Oscuro -->
-                    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary">
-                        <div>
-                            <h6 class="fw-bold mb-0">Modo de Apariencia</h6>
-                            <small class="text-secondary">Cambiar entre tema oscuro y claro</small>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="switchTema" onchange="alternarTema()">
-                        </div>
-                    </div>
-
-                    <!-- Notificaciones del sistema -->
-                    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary">
-                        <div>
-                            <h6 class="fw-bold mb-0">Alertas de Stock Bajo</h6>
-                            <small class="text-secondary">Recibir avisos cuando el stock sea menor a 5</small>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="switchAlertas" checked>
-                        </div>
-                    </div>
-
-                    <!-- Datos del Negocio -->
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Nombre de la Tienda</label>
-                        <input type="text" id="inputNombreTienda" class="form-control form-control-dark" value="Claret Style Store">
-                    </div>
-                </div>
-                <div class="modal-footer border-secondary">
-                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-vino fw-bold" onclick="guardarAjustes()">Guardar Cambios</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="~/lib/jquery/dist/jquery.min.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
-    <script>
-        // Cierre de Sesión Funcional
-        function cerrarSesion() {
-            if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-                // Borra sesión / token local
-                localStorage.clear();
-                sessionStorage.clear();
-                
-                // Efecto visual de deslogueo y redirección
-                document.body.innerHTML = `
-                    <div class="d-flex justify-content-center align-items-center vh-100 bg-dark text-white text-center">
-                        <div>
-                            <div class="spinner-border text-danger mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
-                            <h3>Cerrando sesión de Claret Style...</h3>
-                            <p class="text-secondary">Redirigiendo de forma segura...</p>
-                        </div>
-                    </div>
-                `;
-
-                setTimeout(() => {
-                    // Redirige al inicio o pantalla principal
-                    window.location.href = '/Home/Index';
-                }, 1500);
-            }
-        }
-
-        // Alternar Tema Claro / Oscuro funcional
-        function alternarTema() {
-            const esModoClaro = document.getElementById('switchTema').checked;
-            if (esModoClaro) {
-                document.body.classList.add('light-mode');
-                localStorage.setItem('theme', 'light');
-            } else {
-                document.body.classList.remove('light-mode');
-                localStorage.setItem('theme', 'dark');
-            }
-        }
-
-        // Guardar Ajustes
-        function guardarAjustes() {
-            const nombreTienda = document.getElementById('inputNombreTienda').value;
-            localStorage.setItem('nombreTienda', nombreTienda);
-            
-            // Cerrar modal
-            const modalEl = document.getElementById('modalAjustes');
-            const modal = bootstrap.Modal.getInstance(modalEl);
-            if (modal) modal.hide();
-
-            alert('✨ Ajustes guardados correctamente.');
-        }
-
-        // Cargar preferencias al iniciar
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'light') {
-                document.getElementById('switchTema').checked = true;
-                document.body.classList.add('light-mode');
-            }
-        });
-    </script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
