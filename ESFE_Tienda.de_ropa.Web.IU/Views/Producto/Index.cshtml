@@ -2,7 +2,7 @@
     ViewData["Title"] = "Catálogo y Gestión Claret Style";
 }
 
-<!-- CDN de Chart.js y jsPDF para Gráficos y PDF -->
+<!-- CDN de Chart.js y jsPDF -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -78,7 +78,7 @@
         font-size: 0.75rem;
     }
 
-    /* TARJETAS DE PRODUCTOS DE LA COLECCIÓN */
+    /* TARJETAS DE PRODUCTOS */
     .product-card {
         transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s ease, box-shadow 0.3s ease;
     }
@@ -100,7 +100,7 @@
 
 <div class="container-fluid py-3">
 
-    <!-- BARRA SUPERIOR CON SELECTOR DE ROL -->
+    <!-- BARRA SUPERIOR CON SELECTOR DE ROL Y LOGIN CLIENTE -->
     <div class="card card-dark-custom p-3 mb-4 shadow-sm">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
@@ -110,23 +110,31 @@
 
             <!-- Selector de Rol -->
             <div class="d-flex align-items-center bg-dark p-2 rounded border border-secondary gap-3">
-                <span class="fw-bold text-secondary fs-6">Vista Actual:</span>
+                <span class="fw-bold text-secondary fs-6">Vista:</span>
                 <div class="btn-group" role="group">
                     <button type="button" id="btnRolCliente" class="btn btn-sm btn-outline-light active" onclick="cambiarRol('CLIENTE')">
-                        🛍️ Cliente (Comprador)
+                        🛍️ Comprador
                     </button>
                     <button type="button" id="btnRolAdmin" class="btn btn-sm btn-outline-warning" onclick="cambiarRol('ADMIN')">
-                        👑 Vendedor (Administrador)
+                        👑 Vendedor (Admin)
                     </button>
                 </div>
             </div>
 
-            <!-- Acciones según Rol -->
-            <div class="d-flex gap-2">
+            <!-- Estado de Usuario Cliente / Carrito -->
+            <div class="d-flex gap-2 align-items-center">
+                <!-- Estado Cuenta Cliente -->
+                <div id="contenedorUsuarioCliente" class="solo-cliente">
+                    <button class="btn btn-outline-info btn-sm fw-semibold" onclick="abrirModalAuth()">
+                        👤 Iniciar Sesión / Registrarse
+                    </button>
+                </div>
+
                 <button class="btn btn-outline-light position-relative fw-semibold px-3" onclick="toggleCart()">
-                    🛒 Carrito de Compras
+                    🛒 Carrito
                     <span id="cartCountBadge" class="badge rounded-pill badge-cart">0</span>
                 </button>
+
                 <button class="btn btn-vino fw-bold solo-admin d-none px-3" data-bs-toggle="modal" data-bs-target="#modalProducto">
                     ➕ Nuevo Producto
                 </button>
@@ -138,7 +146,7 @@
     <div class="row g-3 mb-4 solo-admin d-none">
         <div class="col-md-6">
             <div class="card card-dark-custom p-3 shadow-sm">
-                <h5 class="fw-bold text-danger mb-3">📊 Inventario por Categoria</h5>
+                <h5 class="fw-bold text-danger mb-3">📊 Inventario por Categoría</h5>
                 <div style="height: 200px;">
                     <canvas id="chartCategorias"></canvas>
                 </div>
@@ -159,11 +167,11 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="fw-bold text-white mb-0">🔥 Colección Destacada</h4>
             <div class="w-25">
-                <input type="text" id="inputBuscarCliente" class="form-control form-control-dark" placeholder="🔍 Buscar por prenda..." onkeyup="filtrarCliente()">
+                <input type="text" id="inputBuscarCliente" class="form-control form-control-dark" placeholder="🔍 Buscar prendas..." onkeyup="filtrarCliente()">
             </div>
         </div>
         <div class="row g-4" id="contenedorTarjetasCliente">
-            <!-- Renderizado Dinámico de Tarjetas para Comprador -->
+            <!-- Renderizado Dinámico de Productos -->
         </div>
     </div>
 
@@ -189,7 +197,7 @@
                     </tr>
                 </thead>
                 <tbody id="tablaProductosAdmin">
-                    <!-- Dinámico vía JS -->
+                    <!-- Dinámico via JS -->
                 </tbody>
             </table>
         </div>
@@ -243,6 +251,33 @@
         <button class="btn btn-vino w-100 fw-bold py-2" id="btnFinalizar" onclick="finalizarCompra()">
             💳 Realizar Pedido / Checkout
         </button>
+    </div>
+</div>
+
+<!-- MODAL REGISTRO / LOGIN CLIENTE (NUEVO) -->
+<div class="modal fade" id="modalAuthCliente" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card-dark-custom p-3">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title fw-bold text-white" id="modalAuthTitle">🔐 Inicia Sesión para Comprar</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-secondary small mb-3">Debes registrarte o ingresar a tu cuenta para añadir prendas a tu carrito y procesar tu pedido.</p>
+                <div class="mb-3">
+                    <label class="form-label text-secondary small">Nombre Completo</label>
+                    <input type="text" id="clienteNombre" class="form-control form-control-dark" placeholder="Ej: Carlos Mendoza">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-secondary small">Correo Electrónico</label>
+                    <input type="email" id="clienteCorreo" class="form-control form-control-dark" placeholder="ejemplo@correo.com">
+                </div>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-vino fw-bold" onclick="registrarCliente()">Continuar / Ingresar</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -330,7 +365,11 @@
 
 <script>
     let rolActual = 'CLIENTE';
-    const ADMIN_PIN = "1234"; // 🔑 CAMBIA AQUÍ TU CONTRASEÑA DE VENDEDOR
+    const ADMIN_PIN = "1234";
+
+    // ESTADO DE SESIÓN CLIENTE
+    let clienteSesion = null; // { nombre: '', correo: '' }
+    let productoPendienteId = null; // Guarda el id si intentó comprar sin registrarse
 
     let productos = [
         { id: 1, nombre: "Camisa Slim Vinotinto", categoria: "Masculino", precio: 35.00, stock: 12, color: "Vinotinto", tallas: ["S", "M", "L"], img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300" },
@@ -349,7 +388,54 @@
         registrarKardex("Sistema", "Inicio del sistema de catálogo", 0);
     });
 
-    // SISTEMA DE SEGURIDAD Y CAMBIO DE ROL
+    // SISTEMA DE AUTENTICACIÓN DE CLIENTE
+    function abrirModalAuth(idProducto = null) {
+        productoPendienteId = idProducto;
+        const modal = new bootstrap.Modal(document.getElementById('modalAuthCliente'));
+        modal.show();
+    }
+
+    function registrarCliente() {
+        const nombre = document.getElementById("clienteNombre").value.trim();
+        const correo = document.getElementById("clienteCorreo").value.trim();
+
+        if (!nombre || !correo) {
+            alert("Por favor completa tu nombre y correo electrónico.");
+            return;
+        }
+
+        clienteSesion = { nombre, correo };
+
+        // Actualizar UI del Navbar con el cliente activo
+        document.getElementById("contenedorUsuarioCliente").innerHTML = `
+            <div class="d-flex align-items-center gap-2 bg-dark p-1 px-2 rounded border border-secondary">
+                <span class="fs-7 text-white">👋 Hola, <b>${nombre}</b></span>
+                <button class="btn btn-sm btn-link text-danger p-0 text-decoration-none" onclick="cerrarSesionCliente()">Salir</button>
+            </div>
+        `;
+
+        const modalEl = document.getElementById('modalAuthCliente');
+        bootstrap.Modal.getInstance(modalEl).hide();
+
+        // Si venía de presionar un producto, se lo agrega automáticamente
+        if (productoPendienteId) {
+            agregarAlCarrito(productoPendienteId);
+            productoPendienteId = null;
+        }
+    }
+
+    function cerrarSesionCliente() {
+        clienteSesion = null;
+        document.getElementById("contenedorUsuarioCliente").innerHTML = `
+            <button class="btn btn-outline-info btn-sm fw-semibold" onclick="abrirModalAuth()">
+                👤 Iniciar Sesión / Registrarse
+            </button>
+        `;
+        carrito = [];
+        actualizarCarrito();
+    }
+
+    // ROLES Y VISTAS
     function cambiarRol(nuevoRol) {
         if (nuevoRol === 'ADMIN' && rolActual !== 'ADMIN') {
             document.getElementById("inputAdminPin").value = "";
@@ -359,18 +445,14 @@
             modalAuth.show();
             return;
         }
-
         aplicarCambioRol(nuevoRol);
     }
 
     function validarPinAdmin() {
         const pinIngresado = document.getElementById("inputAdminPin").value;
-
         if (pinIngresado === ADMIN_PIN) {
             const modalEl = document.getElementById('modalPasswordAdmin');
-            const modalInstance = bootstrap.Modal.getInstance(modalEl);
-            if (modalInstance) modalInstance.hide();
-
+            bootstrap.Modal.getInstance(modalEl).hide();
             aplicarCambioRol('ADMIN');
         } else {
             document.getElementById("alertPasswordError").classList.remove("d-none");
@@ -381,9 +463,7 @@
 
     function cancelarAccesoAdmin() {
         const modalEl = document.getElementById('modalPasswordAdmin');
-        const modalInstance = bootstrap.Modal.getInstance(modalEl);
-        if (modalInstance) modalInstance.hide();
-
+        bootstrap.Modal.getInstance(modalEl).hide();
         document.getElementById('btnRolCliente').classList.add('active', 'btn-outline-light');
         document.getElementById('btnRolAdmin').classList.remove('active');
     }
@@ -417,7 +497,7 @@
         renderAdminTabla();
     }
 
-    // 1. TARJETAS CLIENTE
+    // 1. RENDERING TARJETAS
     function renderClienteTarjetas(lista = productos) {
         const contenedor = document.getElementById("contenedorTarjetasCliente");
         contenedor.innerHTML = "";
@@ -451,7 +531,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <button class="btn btn-vino w-100 fw-bold mt-2" onclick="agregarAlCarrito(${p.id})" ${p.stock === 0 ? 'disabled' : ''}>
+                            <button class="btn btn-vino w-100 fw-bold mt-2" onclick="intentarAgregarAlCarrito(${p.id})" ${p.stock === 0 ? 'disabled' : ''}>
                                 🛒 Agregar al Carrito
                             </button>
                         </div>
@@ -461,7 +541,37 @@
         });
     }
 
-    // 2. TABLA VENDEDOR / ADMIN
+    // CONTROL DE INGRESO ANTES DE AÑADIR
+    function intentarAgregarAlCarrito(id) {
+        if (rolActual === 'CLIENTE' && !clienteSesion) {
+            abrirModalAuth(id);
+        } else {
+            agregarAlCarrito(id);
+        }
+    }
+
+    function agregarAlCarrito(id) {
+        const p = productos.find(x => x.id === id);
+        if (p.stock <= 0) {
+            alert("⚠️ Sin Stock disponible.");
+            return;
+        }
+
+        const selectTalla = document.getElementById(`selectTalla-${p.id}`);
+        const tallaSeleccionada = selectTalla ? selectTalla.value : p.tallas[0];
+
+        const item = carrito.find(x => x.id === id && x.tallaSeleccionada === tallaSeleccionada);
+
+        if (item) {
+            if (item.cantidad < p.stock) item.cantidad++;
+            else alert("Llegaste al límite del stock disponible.");
+        } else {
+            carrito.push({ ...p, cantidad: 1, tallaSeleccionada });
+        }
+        actualizarCarrito();
+    }
+
+    // 2. TABLA ADMIN
     function renderAdminTabla(lista = productos) {
         const tbody = document.getElementById("tablaProductosAdmin");
         tbody.innerHTML = "";
@@ -530,27 +640,6 @@
         document.getElementById("cartDrawer").classList.toggle("active");
     }
 
-    function agregarAlCarrito(id) {
-        const p = productos.find(x => x.id === id);
-        if (p.stock <= 0) {
-            alert("⚠️ Sin Stock disponible.");
-            return;
-        }
-
-        const selectTalla = document.getElementById(`selectTalla-${p.id}`);
-        const tallaSeleccionada = selectTalla ? selectTalla.value : p.tallas[0];
-
-        const item = carrito.find(x => x.id === id && x.tallaSeleccionada === tallaSeleccionada);
-
-        if (item) {
-            if (item.cantidad < p.stock) item.cantidad++;
-            else alert("Llegaste al límite del stock disponible.");
-        } else {
-            carrito.push({ ...p, cantidad: 1, tallaSeleccionada });
-        }
-        actualizarCarrito();
-    }
-
     function actualizarCarrito() {
         const container = document.getElementById("cartItemsContainer");
         container.innerHTML = "";
@@ -605,7 +694,9 @@
         const subtotal = carrito.reduce((acc, i) => acc + (i.precio * i.cantidad), 0);
         const total = subtotal * 1.13;
 
-        registrarKardex("Venta", `Pedido completado (${carrito.length} ítems)`, total);
+        const compradorInfo = clienteSesion ? clienteSesion.nombre : "Venta General POS";
+
+        registrarKardex("Venta", `Pedido por ${compradorInfo} (${carrito.length} ítems)`, total);
         generarFacturaPDF(total);
 
         carrito = [];
@@ -614,12 +705,15 @@
         if (rolActual === 'ADMIN') renderCharts();
         toggleCart();
 
-        alert("🎉 ¡Gracias por tu compra! Tu ticket ha sido generado correctamente.");
+        alert(`🎉 ¡Gracias por tu compra ${compradorInfo}! Tu ticket ha sido generado correctamente.`);
     }
 
     function generarFacturaPDF(total) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
+
+        const clienteNombre = clienteSesion ? clienteSesion.nombre : "Cliente Mostrar / Venta POS";
+        const clienteCorreo = clienteSesion ? clienteSesion.correo : "Sin correo registrado";
 
         doc.setFillColor(128, 14, 36);
         doc.rect(0, 0, 210, 30, 'F');
@@ -628,11 +722,14 @@
         doc.text("CLARET STYLE - COMPROBANTE DE COMPRA", 15, 20);
 
         doc.setTextColor(0, 0, 0);
-        doc.setFontSize(11);
-        doc.text(`Fecha: ${new Date().toLocaleString()}`, 15, 40);
-        doc.text(`Ticket No: #CS-${Math.floor(Math.random() * 90000 + 10000)}`, 15, 48);
+        doc.setFontSize(10);
+        doc.text(`Cliente: ${clienteNombre}`, 15, 40);
+        doc.text(`Correo: ${clienteCorreo}`, 15, 46);
+        doc.text(`Fecha: ${new Date().toLocaleString()}`, 15, 52);
+        doc.text(`Ticket No: #CS-${Math.floor(Math.random() * 90000 + 10000)}`, 15, 58);
 
-        let y = 60;
+        let y = 70;
+        doc.setFontSize(11);
         doc.text("Producto", 15, y);
         doc.text("Talla/Color", 85, y);
         doc.text("Cant.", 125, y);
