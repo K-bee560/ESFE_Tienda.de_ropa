@@ -15,7 +15,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 20px;
+    padding: 20px 0;
 }
 
 /* Tarjeta Principal */
@@ -24,7 +24,7 @@ body {
     padding: 30px;
     border-radius: 16px;
     max-width: 400px;
-    width: 100%;
+    width: 90%;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     text-align: center;
 }
@@ -38,7 +38,7 @@ h1 {
 p {
     font-size: 14px;
     color: #aaa;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 /* Vista previa e imagen */
@@ -51,7 +51,7 @@ p {
 
     .preview-box img {
         width: 100%;
-        height: 200px;
+        height: 180px;
         object-fit: cover;
         display: block;
         border-radius: 10px;
@@ -139,11 +139,9 @@ p {
     border-left: 4px solid #722F37;
 }
 
-.hidden {
-    display: none;
-}
-
-/* Redes Sociales */
+/* ==========================================
+   REDES SOCIALES (Visibles abajo)
+   ========================================== */
 .social-links {
     margin-top: 25px;
     border-top: 1px solid #333;
@@ -152,6 +150,7 @@ p {
 
     .social-links p {
         margin-bottom: 10px;
+        font-size: 13px;
     }
 
 .icons {
@@ -164,11 +163,11 @@ p {
         color: #e63946;
         text-decoration: none;
         font-size: 14px;
-        font-weight: 500;
-        transition: color 0.3s, transform 0.3s;
+        font-weight: 600;
+        transition: all 0.3s ease;
     }
 
         .icons a:hover {
             color: #ffffff;
-            transform: scale(1.1);
+            transform: scale(1.15);
         }
