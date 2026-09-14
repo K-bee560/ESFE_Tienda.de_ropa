@@ -121,7 +121,7 @@
                 </div>
             </div>
 
-            <!-- Estado de Usuario Cliente / Carrito -->
+            <!-- Estado de Usuario Cliente, Carrito y Ajustes -->
             <div class="d-flex gap-2 align-items-center">
                 <!-- Estado Cuenta Cliente -->
                 <div id="contenedorUsuarioCliente" class="solo-cliente">
@@ -130,9 +130,15 @@
                     </button>
                 </div>
 
+                <!-- Botón de Carrito -->
                 <button class="btn btn-outline-light position-relative fw-semibold px-3" onclick="toggleCart()">
                     🛒 Carrito
                     <span id="cartCountBadge" class="badge rounded-pill badge-cart">0</span>
+                </button>
+
+                <!-- BOTÓN DE AJUSTES (AÑADIDO NUEVAMENTE) -->
+                <button class="btn btn-outline-secondary px-3" data-bs-toggle="modal" data-bs-target="#modalAjustes" title="Configuración del Sistema">
+                    ⚙️
                 </button>
 
                 <button class="btn btn-vino fw-bold solo-admin d-none px-3" data-bs-toggle="modal" data-bs-target="#modalProducto">
@@ -254,7 +260,40 @@
     </div>
 </div>
 
-<!-- MODAL REGISTRO / LOGIN CLIENTE (NUEVO) -->
+<!-- MODAL DE AJUSTES DEL SISTEMA (NUEVO) -->
+<div class="modal fade" id="modalAjustes" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card-dark-custom p-3">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title fw-bold text-white">⚙️ Ajustes del Sistema</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label text-secondary small">Moneda del Sistema</label>
+                    <select id="settingMoneda" class="form-select form-control-dark">
+                        <option value="USD">USD ($) - Dólar Estadounidense</option>
+                        <option value="EUR">EUR (€) - Euro</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-secondary small">Porcentaje de Impuesto / IVA (%)</label>
+                    <input type="number" id="settingIva" class="form-control form-control-dark" value="13">
+                </div>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="settingNotificaciones" checked>
+                    <label class="form-check-label text-white small" for="settingNotificaciones">Notificaciones emergentes de compras</label>
+                </div>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-vino fw-bold" onclick="guardarAjustes()">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL REGISTRO / LOGIN CLIENTE -->
 <div class="modal fade" id="modalAuthCliente" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content card-dark-custom p-3">
@@ -367,9 +406,10 @@
     let rolActual = 'CLIENTE';
     const ADMIN_PIN = "1234";
 
-    // ESTADO DE SESIÓN CLIENTE
-    let clienteSesion = null; // { nombre: '', correo: '' }
-    let productoPendienteId = null; // Guarda el id si intentó comprar sin registrarse
+    // ESTADO DE SESIÓN CLIENTE Y CONFIGURACIÓN
+    let clienteSesion = null;
+    let productoPendienteId = null;
+    let porcentajeIva = 0.13;
 
     let productos = [
         { id: 1, nombre: "Camisa Slim Vinotinto", categoria: "Masculino", precio: 35.00, stock: 12, color: "Vinotinto", tallas: ["S", "M", "L"], img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300" },
@@ -387,6 +427,18 @@
         renderTodo();
         registrarKardex("Sistema", "Inicio del sistema de catálogo", 0);
     });
+
+    // LÓGICA DE AJUSTES
+    function guardarAjustes() {
+        const valIva = parseFloat(document.getElementById("settingIva").value);
+        if (!isNaN(valIva)) {
+            porcentajeIva = valIva / 100;
+        }
+        actualizarCarrito();
+        const modalEl = document.getElementById('modalAjustes');
+        bootstrap.Modal.getInstance(modalEl).hide();
+        alert("⚙️ Ajustes guardados correctamente.");
+    }
 
     // SISTEMA DE AUTENTICACIÓN DE CLIENTE
     function abrirModalAuth(idProducto = null) {
@@ -406,7 +458,6 @@
 
         clienteSesion = { nombre, correo };
 
-        // Actualizar UI del Navbar con el cliente activo
         document.getElementById("contenedorUsuarioCliente").innerHTML = `
             <div class="d-flex align-items-center gap-2 bg-dark p-1 px-2 rounded border border-secondary">
                 <span class="fs-7 text-white">👋 Hola, <b>${nombre}</b></span>
@@ -417,7 +468,6 @@
         const modalEl = document.getElementById('modalAuthCliente');
         bootstrap.Modal.getInstance(modalEl).hide();
 
-        // Si venía de presionar un producto, se lo agrega automáticamente
         if (productoPendienteId) {
             agregarAlCarrito(productoPendienteId);
             productoPendienteId = null;
@@ -497,7 +547,7 @@
         renderAdminTabla();
     }
 
-    // 1. RENDERING TARJETAS
+    // TARJETAS CLIENTE
     function renderClienteTarjetas(lista = productos) {
         const contenedor = document.getElementById("contenedorTarjetasCliente");
         contenedor.innerHTML = "";
@@ -541,7 +591,6 @@
         });
     }
 
-    // CONTROL DE INGRESO ANTES DE AÑADIR
     function intentarAgregarAlCarrito(id) {
         if (rolActual === 'CLIENTE' && !clienteSesion) {
             abrirModalAuth(id);
@@ -571,7 +620,7 @@
         actualizarCarrito();
     }
 
-    // 2. TABLA ADMIN
+    // TABLA ADMIN
     function renderAdminTabla(lista = productos) {
         const tbody = document.getElementById("tablaProductosAdmin");
         tbody.innerHTML = "";
@@ -666,7 +715,7 @@
             `;
         });
 
-        const iva = subtotal * 0.13;
+        const iva = subtotal * porcentajeIva;
         const total = subtotal + iva;
 
         document.getElementById("cartCountBadge").innerText = totalItems;
@@ -692,7 +741,7 @@
         });
 
         const subtotal = carrito.reduce((acc, i) => acc + (i.precio * i.cantidad), 0);
-        const total = subtotal * 1.13;
+        const total = subtotal * (1 + porcentajeIva);
 
         const compradorInfo = clienteSesion ? clienteSesion.nombre : "Venta General POS";
 
@@ -712,7 +761,7 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
-        const clienteNombre = clienteSesion ? clienteSesion.nombre : "Cliente Mostrar / Venta POS";
+        const clienteNombre = clienteSesion ? clienteSesion.nombre : "Cliente Mostrador / Venta POS";
         const clienteCorreo = clienteSesion ? clienteSesion.correo : "Sin correo registrado";
 
         doc.setFillColor(128, 14, 36);
@@ -823,3 +872,4 @@
         renderAdminTabla(productos.filter(p => p.nombre.toLowerCase().includes(text)));
     }
 </script>
+
