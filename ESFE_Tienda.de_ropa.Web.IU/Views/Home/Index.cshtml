@@ -18,21 +18,36 @@
         transition: transform 0.2s ease, border-color 0.2s ease;
     }
 
-        .card-dark-custom:hover {
-            transform: translateY(-5px);
-            border-color: #800e24;
-        }
-
-    .btn-vino {
-        background-color: #800e24;
-        color: #fff;
-        border: none;
+    .card-dark-custom:hover {
+        transform: translateY(-5px);
+        border-color: #800e24;
     }
 
-        .btn-vino:hover {
-            background-color: #a0122d;
-            color: #fff;
-        }
+    /* ==========================================
+       NUEVA ANIMACIÓN Y DISEÑO PARA EL BOTÓN VINO
+       ========================================== */
+    .btn-vino {
+        background: linear-gradient(135deg, #800e24, #b21323) !important;
+        color: #fff !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(128, 14, 36, 0.4) !important;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+        display: inline-block;
+    }
+
+    /* Efecto al pasar el mouse (se eleva, escala y emite brillo) */
+    .btn-vino:hover {
+        background: linear-gradient(135deg, #a0122d, #d91b2c) !important;
+        color: #fff !important;
+        transform: translateY(-4px) scale(1.03) !important;
+        box-shadow: 0 8px 25px rgba(217, 27, 44, 0.6) !important;
+    }
+
+    /* Efecto al hacer clic */
+    .btn-vino:active {
+        transform: translateY(-1px) scale(0.98) !important;
+        box-shadow: 0 4px 10px rgba(128, 14, 36, 0.3) !important;
+    }
 </style>
 
 <div class="container py-4">

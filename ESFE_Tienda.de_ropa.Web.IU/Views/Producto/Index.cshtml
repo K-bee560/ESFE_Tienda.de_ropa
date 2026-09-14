@@ -7,24 +7,51 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
+    /* TARJETAS Y CONTENEDORES */
     .card-dark-custom {
         background-color: #1a1a1a;
         border: 1px solid #333;
         border-radius: 12px;
         color: #fff;
+        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
+    /* BOTÓN VINO CON ANIMACIÓN FLUIDA Y GRADIENTE */
     .btn-vino {
-        background-color: #800e24;
-        color: #fff;
-        border: none;
+        background: linear-gradient(135deg, #800e24 0%, #b21323 100%) !important;
+        color: #ffffff !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(128, 14, 36, 0.4) !important;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
     }
 
-        .btn-vino:hover {
-            background-color: #a0122d;
-            color: #fff;
-        }
+    .btn-vino:hover {
+        background: linear-gradient(135deg, #a0122d 0%, #d91b2c 100%) !important;
+        color: #ffffff !important;
+        transform: translateY(-3px) scale(1.02) !important;
+        box-shadow: 0 8px 22px rgba(217, 27, 44, 0.6) !important;
+    }
 
+    .btn-vino:active {
+        transform: translateY(-1px) scale(0.98) !important;
+        box-shadow: 0 4px 10px rgba(128, 14, 36, 0.3) !important;
+    }
+
+    /* INPUTS Y SELECTS CON ESTILO OSCURO ELEGANTE */
+    .form-control-dark {
+        background-color: #121212 !important;
+        color: #ffffff !important;
+        border: 1px solid #333 !important;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+    }
+
+    .form-control-dark:focus {
+        border-color: #800e24 !important;
+        box-shadow: 0 0 10px rgba(128, 14, 36, 0.5) !important;
+        outline: none !important;
+    }
+
+    /* CARRITO LATERAL (DRAWER) */
     .cart-drawer {
         position: fixed;
         top: 0;
@@ -34,29 +61,41 @@
         background-color: #181818;
         border-left: 2px solid #800e24;
         z-index: 1050;
-        transition: right 0.3s ease-in-out;
-        box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+        transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: -8px 0 25px rgba(0, 0, 0, 0.7);
     }
 
-        .cart-drawer.active {
-            right: 0;
-        }
+    .cart-drawer.active {
+        right: 0;
+    }
 
     .badge-cart {
         position: absolute;
-        top: -5px;
-        right: -5px;
-        background-color: #800e24;
+        top: -6px;
+        right: -6px;
+        background: linear-gradient(135deg, #800e24, #d91b2c);
+        border: 2px solid #1a1a1a;
+        font-size: 0.75rem;
     }
 
+    /* TARJETAS DE PRODUCTOS DE LA COLECCIÓN */
     .product-card {
-        transition: transform 0.2s ease, border-color 0.2s ease;
+        transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
-        .product-card:hover {
-            transform: translateY(-4px);
-            border-color: #800e24;
-        }
+    .product-card:hover {
+        transform: translateY(-6px) scale(1.01);
+        border-color: #800e24 !important;
+        box-shadow: 0 12px 30px rgba(128, 14, 36, 0.3) !important;
+    }
+
+    .product-card img {
+        transition: transform 0.5s ease;
+    }
+
+    .product-card:hover img {
+        transform: scale(1.03);
+    }
 </style>
 
 <div class="container-fluid py-3">
@@ -84,11 +123,11 @@
 
             <!-- Acciones según Rol -->
             <div class="d-flex gap-2">
-                <button class="btn btn-outline-light position-relative" onclick="toggleCart()">
+                <button class="btn btn-outline-light position-relative fw-semibold px-3" onclick="toggleCart()">
                     🛒 Carrito de Compras
                     <span id="cartCountBadge" class="badge rounded-pill badge-cart">0</span>
                 </button>
-                <button class="btn btn-vino fw-bold solo-admin d-none" data-bs-toggle="modal" data-bs-target="#modalProducto">
+                <button class="btn btn-vino fw-bold solo-admin d-none px-3" data-bs-toggle="modal" data-bs-target="#modalProducto">
                     ➕ Nuevo Producto
                 </button>
             </div>
@@ -99,7 +138,7 @@
     <div class="row g-3 mb-4 solo-admin d-none">
         <div class="col-md-6">
             <div class="card card-dark-custom p-3 shadow-sm">
-                <h5 class="fw-bold text-vino mb-3">📊 Inventario por Categoria</h5>
+                <h5 class="fw-bold text-danger mb-3">📊 Inventario por Categoria</h5>
                 <div style="height: 200px;">
                     <canvas id="chartCategorias"></canvas>
                 </div>
@@ -107,7 +146,7 @@
         </div>
         <div class="col-md-6">
             <div class="card card-dark-custom p-3 shadow-sm">
-                <h5 class="fw-bold text-vino mb-3">📦 Niveles de Stock</h5>
+                <h5 class="fw-bold text-danger mb-3">📦 Niveles de Stock</h5>
                 <div style="height: 200px;">
                     <canvas id="chartStock"></canvas>
                 </div>
@@ -235,18 +274,18 @@
 <div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content card-dark-custom">
-            <div class="modal-header bg-vino">
-                <h5 class="modal-title fw-bold">➕ Agregar Nuevo Producto</h5>
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title fw-bold text-white">➕ Agregar Nuevo Producto</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label class="form-label">Nombre del Producto</label>
+                    <label class="form-label text-secondary small">Nombre del Producto</label>
                     <input type="text" id="prodNombre" class="form-control form-control-dark" placeholder="Ej: Chaqueta Velvet Claret">
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Categoría</label>
+                        <label class="form-label text-secondary small">Categoría</label>
                         <select id="prodCategoria" class="form-select form-control-dark">
                             <option value="Masculino">Masculino</option>
                             <option value="Femenino">Femenino</option>
@@ -254,26 +293,26 @@
                         </select>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Color</label>
+                        <label class="form-label text-secondary small">Color</label>
                         <input type="text" id="prodColor" class="form-control form-control-dark" placeholder="Ej: Vinotinto, Negro">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Tallas Disponibles</label>
+                        <label class="form-label text-secondary small">Tallas Disponibles</label>
                         <input type="text" id="prodTallas" class="form-control form-control-dark" placeholder="Ej: S, M, L, XL">
                     </div>
                     <div class="col-md-3 mb-3">
-                        <label class="form-label">Precio ($)</label>
+                        <label class="form-label text-secondary small">Precio ($)</label>
                         <input type="number" id="prodPrecio" class="form-control form-control-dark" value="25.00" step="0.01">
                     </div>
                     <div class="col-md-3 mb-3">
-                        <label class="form-label">Stock</label>
+                        <label class="form-label text-secondary small">Stock</label>
                         <input type="number" id="prodStock" class="form-control form-control-dark" value="10">
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">URL de la Imagen</label>
+                    <label class="form-label text-secondary small">URL de la Imagen</label>
                     <input type="text" id="prodImgUrl" class="form-control form-control-dark" placeholder="URL de la imagen" oninput="actualizarPrevisualizacion(this.value)">
                 </div>
                 <div class="text-center p-2 border border-secondary rounded">
@@ -389,8 +428,10 @@
 
             contenedor.innerHTML += `
                 <div class="col-md-3">
-                    <div class="card card-dark-custom product-card h-100 shadow">
-                        <img src="${p.img}" class="card-img-top" style="height: 200px; object-fit: cover; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                    <div class="card card-dark-custom product-card h-100 shadow overflow-hidden">
+                        <div style="overflow: hidden;">
+                            <img src="${p.img}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                        </div>
                         <div class="card-body d-flex flex-column justify-content-between">
                             <div>
                                 <div class="d-flex justify-content-between mb-2">

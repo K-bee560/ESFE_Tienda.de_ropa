@@ -7,12 +7,91 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ESFE_Tienda_de_ropa.Web.UI.styles.css" asp-append-version="true" />
+
+    <style>
+            /* Navbar con degradado vino y sombra */
+            .navbar-claret {
+                background: linear-gradient(135deg, #800e24 0%, #5c0919 100%) !important;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            }
+
+            /* Marca / Logo animado */
+            .brand-hover {
+                transition: transform 0.3s ease;
+            }
+
+                .brand-hover:hover {
+                    transform: scale(1.05);
+                }
+
+            /* Animación para enlaces del menú */
+            .nav-link-custom {
+                position: relative;
+                color: rgba(255, 255, 255, 0.85) !important;
+                font-weight: 500;
+                transition: color 0.3s ease, transform 0.2s ease;
+                padding-bottom: 4px;
+            }
+
+                .nav-link-custom:hover {
+                    color: #ffffff !important;
+                    transform: translateY(-2px);
+                }
+
+                .nav-link-custom::after {
+                    content: '';
+                    position: absolute;
+                    width: 0%;
+                    height: 2px;
+                    bottom: 0;
+                    left: 50%;
+                    background-color: #e63946;
+                    transition: all 0.3s ease;
+                    transform: translateX(-50%);
+                }
+
+                .nav-link-custom:hover::after {
+                    width: 80%;
+                }
+
+            /* Avatar de usuario animado */
+            .user-avatar-badge {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                cursor: pointer;
+            }
+
+                .user-avatar-badge:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 0 10px rgba(230, 57, 70, 0.6);
+                }
+
+            /* Footer General */
+            .footer-claret {
+                background-color: #0d0d0d;
+                border-top: 1px solid #262626;
+                color: #888;
+                font-size: 0.875rem;
+            }
+
+            .social-link {
+                color: #e63946;
+                text-decoration: none;
+                transition: color 0.3s ease, transform 0.2s ease;
+                display: inline-block;
+            }
+
+                .social-link:hover {
+                    color: #fff;
+                    transform: translateY(-2px);
+                }
+    </style>
 </head>
-<body class="bg-dark text-light">
+<body class="bg-dark text-light d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3" style="background-color: #800e24;">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark navbar-claret border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand text-white fw-bold d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="Index">
+                <a class="navbar-brand text-white fw-bold d-flex align-items-center gap-2 brand-hover" asp-area="" asp-controller="Home" asp-action="Index">
                     🛍️ Claret Style
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -20,32 +99,46 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1 ms-3">
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                            <a class="nav-link nav-link-custom px-3" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a>
+                            <a class="nav-link nav-link-custom px-3" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a>
                         </li>
                     </ul>
 
-                    <!-- Usuario Admin Claret con el estilo original de tu app -->
-                    <div class="d-flex align-items-center text-white">
-                        <div class="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center me-2 fw-bold" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                    <!-- Usuario Admin Claret con animación de pulso -->
+                    <div class="d-flex align-items-center text-white user-avatar-badge px-2 py-1 rounded-pill">
+                        <div class="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center me-2 fw-bold shadow-sm" style="width: 32px; height: 32px; font-size: 0.8rem;">
                             AD
                         </div>
-                        <span>Admin Claret</span>
+                        <span class="fw-semibold small">Admin Claret</span>
                     </div>
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container">
+    <div class="container flex-grow-1">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+
+    <!-- Pie de página integrado -->
+    <footer class="footer-claret py-3 text-center mt-auto">
+        <div class="container">
+            <p class="mb-1">&copy; 2026 - <b>Claret Style</b> | Sistema de Gestión de Inventarios</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#" class="social-link">Instagram</a>
+                <span>•</span>
+                <a href="#" class="social-link">TikTok</a>
+                <span>•</span>
+                <a href="#" class="social-link">Facebook</a>
+            </div>
+        </div>
+    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
