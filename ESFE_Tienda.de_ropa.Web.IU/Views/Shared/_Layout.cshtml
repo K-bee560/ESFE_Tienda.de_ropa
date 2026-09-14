@@ -4,87 +4,82 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Claret Style</title>
+    
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ESFE_Tienda_de_ropa.Web.UI.styles.css" asp-append-version="true" />
 
     <style>
-            /* Navbar con degradado vino y sombra */
-            .navbar-claret {
-                background: linear-gradient(135deg, #800e24 0%, #5c0919 100%) !important;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-            }
+        /* Navbar con degradado vino y sombra */
+        .navbar-claret {
+            background: linear-gradient(135deg, #800e24 0%, #5c0919 100%) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
 
-            /* Marca / Logo animado */
-            .brand-hover {
-                transition: transform 0.3s ease;
-            }
+        /* Marca / Logo animado */
+        .brand-hover {
+            transition: transform 0.3s ease;
+        }
 
-                .brand-hover:hover {
-                    transform: scale(1.05);
-                }
+        .brand-hover:hover {
+            transform: scale(1.05);
+        }
 
-            /* Animación para enlaces del menú */
-            .nav-link-custom {
-                position: relative;
-                color: rgba(255, 255, 255, 0.85) !important;
-                font-weight: 500;
-                transition: color 0.3s ease, transform 0.2s ease;
-                padding-bottom: 4px;
-            }
+        /* Animación para enlaces del menú */
+        .nav-link-custom {
+            position: relative;
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding-bottom: 4px;
+        }
 
-                .nav-link-custom:hover {
-                    color: #ffffff !important;
-                    transform: translateY(-2px);
-                }
+        .nav-link-custom:hover {
+            color: #ffffff !important;
+            transform: translateY(-2px);
+        }
 
-                .nav-link-custom::after {
-                    content: '';
-                    position: absolute;
-                    width: 0%;
-                    height: 2px;
-                    bottom: 0;
-                    left: 50%;
-                    background-color: #e63946;
-                    transition: all 0.3s ease;
-                    transform: translateX(-50%);
-                }
+        .nav-link-custom::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: #e63946;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
 
-                .nav-link-custom:hover::after {
-                    width: 80%;
-                }
+        .nav-link-custom:hover::after {
+            width: 80%;
+        }
 
-            /* Avatar de usuario animado */
-            .user-avatar-badge {
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                cursor: pointer;
-            }
+        /* Avatar de usuario animado */
+        .user-avatar-badge {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
 
-                .user-avatar-badge:hover {
-                    transform: scale(1.1);
-                    box-shadow: 0 0 10px rgba(230, 57, 70, 0.6);
-                }
+        .user-avatar-badge:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(230, 57, 70, 0.6);
+        }
 
-            /* Footer General */
-            .footer-claret {
-                background-color: #0d0d0d;
-                border-top: 1px solid #262626;
-                color: #888;
-                font-size: 0.875rem;
-            }
+        /* Footer General */
+        .social-link {
+            color: #e63946;
+            text-decoration: none;
+            transition: color 0.3s ease, transform 0.2s ease;
+            display: inline-block;
+        }
 
-            .social-link {
-                color: #e63946;
-                text-decoration: none;
-                transition: color 0.3s ease, transform 0.2s ease;
-                display: inline-block;
-            }
-
-                .social-link:hover {
-                    color: #fff;
-                    transform: translateY(-2px);
-                }
+        .social-link:hover {
+            color: #fff;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body class="bg-dark text-light d-flex flex-column min-vh-100">
@@ -128,21 +123,29 @@
 
     <!-- Pie de página integrado -->
     <footer class="border-top footer text-muted bg-dark text-center py-3">
-    <div class="container text-secondary">
-        &copy; 2026 - <strong class="text-white">Claret Style</strong> | Sistema de Gestión de Inventarios
-        <div class="mt-2">
-            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" class="text-danger fw-bold text-decoration-none mx-2">
-                <i class="bi bi-instagram me-1"></i>Instagram
-            </a>
-            <span class="text-secondary">•</span>
-            <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" class="text-danger fw-bold text-decoration-none mx-2">
-                <i class="bi bi-tiktok me-1"></i>TikTok
-            </a>
-            <span class="text-secondary">•</span>
-            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" class="text-danger fw-bold text-decoration-none mx-2">
-                <i class="bi bi-facebook me-1"></i>Facebook
-            </a>
+        <div class="container text-secondary">
+            &copy; 2026 - <strong class="text-white">Claret Style</strong> | Sistema de Gestión de Inventarios
+            <div class="mt-2">
+                <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" class="social-link fw-bold mx-2">
+                    <i class="bi bi-instagram me-1"></i>Instagram
+                </a>
+                <span class="text-secondary">•</span>
+                <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" class="social-link fw-bold mx-2">
+                    <i class="bi bi-tiktok me-1"></i>TikTok
+                </a>
+                <span class="text-secondary">•</span>
+                <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" class="social-link fw-bold mx-2">
+                    <i class="bi bi-facebook me-1"></i>Facebook
+                </a>
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
 
