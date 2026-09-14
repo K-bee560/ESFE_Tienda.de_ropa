@@ -25,17 +25,17 @@
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
     }
 
-    .btn-vino:hover {
-        background: linear-gradient(135deg, #a0122d 0%, #d91b2c 100%) !important;
-        color: #ffffff !important;
-        transform: translateY(-3px) scale(1.02) !important;
-        box-shadow: 0 8px 22px rgba(217, 27, 44, 0.6) !important;
-    }
+        .btn-vino:hover {
+            background: linear-gradient(135deg, #a0122d 0%, #d91b2c 100%) !important;
+            color: #ffffff !important;
+            transform: translateY(-3px) scale(1.02) !important;
+            box-shadow: 0 8px 22px rgba(217, 27, 44, 0.6) !important;
+        }
 
-    .btn-vino:active {
-        transform: translateY(-1px) scale(0.98) !important;
-        box-shadow: 0 4px 10px rgba(128, 14, 36, 0.3) !important;
-    }
+        .btn-vino:active {
+            transform: translateY(-1px) scale(0.98) !important;
+            box-shadow: 0 4px 10px rgba(128, 14, 36, 0.3) !important;
+        }
 
     /* INPUTS Y SELECTS CON ESTILO OSCURO ELEGANTE */
     .form-control-dark {
@@ -45,11 +45,11 @@
         transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
     }
 
-    .form-control-dark:focus {
-        border-color: #800e24 !important;
-        box-shadow: 0 0 10px rgba(128, 14, 36, 0.5) !important;
-        outline: none !important;
-    }
+        .form-control-dark:focus {
+            border-color: #800e24 !important;
+            box-shadow: 0 0 10px rgba(128, 14, 36, 0.5) !important;
+            outline: none !important;
+        }
 
     /* CARRITO LATERAL (DRAWER) */
     .cart-drawer {
@@ -65,9 +65,9 @@
         box-shadow: -8px 0 25px rgba(0, 0, 0, 0.7);
     }
 
-    .cart-drawer.active {
-        right: 0;
-    }
+        .cart-drawer.active {
+            right: 0;
+        }
 
     .badge-cart {
         position: absolute;
@@ -83,29 +83,36 @@
         transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .product-card:hover {
-        transform: translateY(-6px) scale(1.01);
-        border-color: #800e24 !important;
-        box-shadow: 0 12px 30px rgba(128, 14, 36, 0.3) !important;
-    }
+        .product-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            border-color: #800e24 !important;
+            box-shadow: 0 12px 30px rgba(128, 14, 36, 0.3) !important;
+        }
 
-    .product-card img {
-        transition: transform 0.5s ease;
-    }
+        .product-card img {
+            transition: transform 0.5s ease;
+        }
 
-    .product-card:hover img {
-        transform: scale(1.03);
+        .product-card:hover img {
+            transform: scale(1.03);
+        }
+
+    /* BANNER DE OFERTAS */
+    .banner-ofertas {
+        background: linear-gradient(90deg, #800e24 0%, #1a1a1a 100%);
+        border: 1px solid #800e24;
+        border-radius: 12px;
     }
 </style>
 
 <div class="container-fluid py-3">
 
-    <!-- BARRA SUPERIOR CON SELECTOR DE ROL Y LOGIN CLIENTE -->
+    <!-- BARRA SUPERIOR CON SELECTOR DE ROL, TELÉFONO Y BOTONES DE CONTROL -->
     <div class="card card-dark-custom p-3 mb-4 shadow-sm">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
                 <h3 class="fw-bold text-white mb-0">🛍️ Claret Style</h3>
-                <small class="text-secondary">Plataforma de E-Commerce & Control Administrativo</small>
+                <small class="text-secondary">Plataforma de E-Commerce & Control Administrativo | 📞 <b>+503 2255-8800</b></small>
             </div>
 
             <!-- Selector de Rol -->
@@ -123,20 +130,17 @@
 
             <!-- Estado de Usuario Cliente, Carrito y Ajustes -->
             <div class="d-flex gap-2 align-items-center">
-                <!-- Estado Cuenta Cliente -->
                 <div id="contenedorUsuarioCliente" class="solo-cliente">
                     <button class="btn btn-outline-info btn-sm fw-semibold" onclick="abrirModalAuth()">
                         👤 Iniciar Sesión / Registrarse
                     </button>
                 </div>
 
-                <!-- Botón de Carrito -->
                 <button class="btn btn-outline-light position-relative fw-semibold px-3" onclick="toggleCart()">
                     🛒 Carrito
                     <span id="cartCountBadge" class="badge rounded-pill badge-cart">0</span>
                 </button>
 
-                <!-- BOTÓN DE AJUSTES (AÑADIDO NUEVAMENTE) -->
                 <button class="btn btn-outline-secondary px-3" data-bs-toggle="modal" data-bs-target="#modalAjustes" title="Configuración del Sistema">
                     ⚙️
                 </button>
@@ -146,6 +150,16 @@
                 </button>
             </div>
         </div>
+    </div>
+
+    <!-- BANNER DE OFERTAS ESPECIALES (NUEVO) -->
+    <div class="banner-ofertas p-3 mb-4 text-white d-flex justify-content-between align-items-center flex-wrap solo-cliente">
+        <div>
+            <span class="badge bg-danger mb-1">🔥 Promoción de la Semana</span>
+            <h5 class="fw-bold mb-0">20% de descuento en la colección de Chaquetas y Sacos</h5>
+            <small class="text-light">Aplica en compras mayores a $50.00 usando el código: <b>CLARET20</b></small>
+        </div>
+        <button class="btn btn-sm btn-light fw-bold text-dark mt-2 mt-md-0" onclick="filtrarOfertas('Chaqueta')">Ver Ofertas 🏷️</button>
     </div>
 
     <!-- MÓDULO ADMINISTRATIVO: DASHBOARD DE GRÁFICOS (Solo Admin) -->
@@ -169,7 +183,7 @@
     </div>
 
     <!-- MÓDULO CLIENTE: SHOWCASE DE COLECCIÓN -->
-    <div class="solo-cliente mb-5">
+    <div class="solo-cliente mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="fw-bold text-white mb-0">🔥 Colección Destacada</h4>
             <div class="w-25">
@@ -178,6 +192,26 @@
         </div>
         <div class="row g-4" id="contenedorTarjetasCliente">
             <!-- Renderizado Dinámico de Productos -->
+        </div>
+    </div>
+
+    <!-- SECCIÓN DE UBICACIÓN Y CONTACTO DE LA TIENDA (NUEVO) -->
+    <div class="card card-dark-custom p-4 mb-4 solo-cliente">
+        <div class="row align-items-center">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <h4 class="fw-bold text-white mb-2">📍 Visita Nuestra Tienda Física</h4>
+                <p class="text-secondary mb-1"><b>Dirección:</b> Centro Comercial Galería Claret, Local 12-B, Nivel 2, San Salvador.</p>
+                <p class="text-secondary mb-1"><b>Teléfono de Atención:</b> 📞 +503 2255-8800</p>
+                <p class="text-secondary mb-1"><b>Atención por WhatsApp:</b> 💬 +503 7799-1122</p>
+                <p class="text-secondary mb-0"><b>Horarios:</b> Lunes a Sábado: 9:00 AM - 7:00 PM | Domingos: 10:00 AM - 5:00 PM</p>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 bg-dark rounded border border-secondary text-center">
+                    <span class="fs-1">🗺️</span>
+                    <h6 class="fw-bold text-white mt-2">Mapa de Ubicación Interactivo</h6>
+                    <small class="text-secondary">Sucursal Principal Escalón</small>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -260,7 +294,7 @@
     </div>
 </div>
 
-<!-- MODAL DE AJUSTES DEL SISTEMA (NUEVO) -->
+<!-- MODAL DE AJUSTES DEL SISTEMA -->
 <div class="modal fade" id="modalAjustes" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content card-dark-custom p-3">
@@ -406,7 +440,6 @@
     let rolActual = 'CLIENTE';
     const ADMIN_PIN = "1234";
 
-    // ESTADO DE SESIÓN CLIENTE Y CONFIGURACIÓN
     let clienteSesion = null;
     let productoPendienteId = null;
     let porcentajeIva = 0.13;
@@ -428,7 +461,6 @@
         registrarKardex("Sistema", "Inicio del sistema de catálogo", 0);
     });
 
-    // LÓGICA DE AJUSTES
     function guardarAjustes() {
         const valIva = parseFloat(document.getElementById("settingIva").value);
         if (!isNaN(valIva)) {
@@ -440,7 +472,6 @@
         alert("⚙️ Ajustes guardados correctamente.");
     }
 
-    // SISTEMA DE AUTENTICACIÓN DE CLIENTE
     function abrirModalAuth(idProducto = null) {
         productoPendienteId = idProducto;
         const modal = new bootstrap.Modal(document.getElementById('modalAuthCliente'));
@@ -485,7 +516,6 @@
         actualizarCarrito();
     }
 
-    // ROLES Y VISTAS
     function cambiarRol(nuevoRol) {
         if (nuevoRol === 'ADMIN' && rolActual !== 'ADMIN') {
             document.getElementById("inputAdminPin").value = "";
@@ -547,7 +577,6 @@
         renderAdminTabla();
     }
 
-    // TARJETAS CLIENTE
     function renderClienteTarjetas(lista = productos) {
         const contenedor = document.getElementById("contenedorTarjetasCliente");
         contenedor.innerHTML = "";
@@ -620,7 +649,6 @@
         actualizarCarrito();
     }
 
-    // TABLA ADMIN
     function renderAdminTabla(lista = productos) {
         const tbody = document.getElementById("tablaProductosAdmin");
         tbody.innerHTML = "";
@@ -776,8 +804,9 @@
         doc.text(`Correo: ${clienteCorreo}`, 15, 46);
         doc.text(`Fecha: ${new Date().toLocaleString()}`, 15, 52);
         doc.text(`Ticket No: #CS-${Math.floor(Math.random() * 90000 + 10000)}`, 15, 58);
+        doc.text(`Soporte/Dudas: +503 2255-8800 | Galería Claret, Local 12-B`, 15, 64);
 
-        let y = 70;
+        let y = 74;
         doc.setFontSize(11);
         doc.text("Producto", 15, y);
         doc.text("Talla/Color", 85, y);
@@ -867,9 +896,13 @@
         renderClienteTarjetas(productos.filter(p => p.nombre.toLowerCase().includes(text)));
     }
 
+    function filtrarOfertas(filtro) {
+        document.getElementById("inputBuscarCliente").value = filtro;
+        filtrarCliente();
+    }
+
     function filtrarAdmin() {
         const text = document.getElementById("inputBuscarAdmin").value.toLowerCase();
         renderAdminTabla(productos.filter(p => p.nombre.toLowerCase().includes(text)));
     }
 </script>
-
