@@ -1,173 +1,174 @@
-﻿/* --- ESTILOS GENERALES Y BASE --- */
+﻿/* ==========================================
+   ESTILOS GENERALES
+   ========================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #121212;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #1a1a1a;
     color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    margin: 0;
-    padding: 20px 0;
+    padding: 20px;
 }
 
+/* Tarjeta Principal */
 .card {
-    background-color: #1a1a1a;
-    padding: 25px;
-    border-radius: 12px;
-    border: 1px solid #333;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    background-color: #262626;
+    padding: 30px;
+    border-radius: 16px;
+    max-width: 400px;
     width: 100%;
-    max-width: 380px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     text-align: center;
 }
 
 h1 {
-    color: #ffffff;
-    font-size: 1.6rem;
-    margin-bottom: 5px;
+    font-size: 24px;
+    color: #e63946;
+    margin-bottom: 6px;
 }
 
 p {
+    font-size: 14px;
     color: #aaa;
-    font-size: 0.85rem;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
-/* --- VISTA PREVIA DE IMAGEN Y BADGE --- */
+/* Vista previa e imagen */
 .preview-box {
     position: relative;
-    width: 100%;
-    height: 150px;
-    border-radius: 8px;
+    margin-bottom: 20px;
+    border-radius: 10px;
     overflow: hidden;
-    margin-bottom: 15px;
-    border: 1px solid #333;
 }
 
     .preview-box img {
         width: 100%;
-        height: 100%;
+        height: 200px;
         object-fit: cover;
+        display: block;
+        border-radius: 10px;
     }
 
 .badge {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: #800e24;
+    background-color: #722F37;
     color: #fff;
-    padding: 4px 10px;
-    font-size: 0.75rem;
     font-weight: bold;
+    font-size: 12px;
+    padding: 5px 10px;
     border-radius: 20px;
 }
 
-/* --- FORMULARIO E INPUTS --- */
+/* Entradas de texto / Formulario */
 .input-group {
-    margin-bottom: 12px;
     text-align: left;
+    margin-bottom: 15px;
 }
 
     .input-group label {
         display: block;
-        font-size: 0.85rem;
-        color: #bbb;
-        margin-bottom: 4px;
+        font-size: 13px;
+        margin-bottom: 5px;
+        color: #ddd;
     }
 
     .input-group input {
         width: 100%;
-        padding: 10px;
-        border-radius: 6px;
+        padding: 10px 14px;
+        border-radius: 8px;
         border: 1px solid #444;
-        background-color: #262626;
+        background-color: #333;
         color: #fff;
-        font-size: 1rem;
-        box-sizing: border-box;
+        font-size: 15px;
+        outline: none;
+        transition: border-color 0.3s;
     }
 
         .input-group input:focus {
-            outline: none;
-            border-color: #800e24;
+            border-color: #722F37;
         }
 
-/* --- BOTÓN PRINCIPAL CLARET --- */
-button {
+/* ==========================================
+   DISEÑO Y ANIMACIÓN DEL BOTÓN
+   ========================================== */
+#btnCalcular {
     width: 100%;
-    background-color: #800e24;
-    color: white;
+    background: linear-gradient(135deg, #722F37, #b21323);
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 14px 24px;
     border: none;
-    padding: 12px;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    margin-top: 5px;
-    transition: background-color 0.2s ease;
+    box-shadow: 0 4px 12px rgba(114, 47, 55, 0.4);
+    transition: all 0.3s ease;
+    outline: none;
+    margin-top: 10px;
 }
 
-    button:hover {
-        background-color: #a0122d;
+    /* Animación cuando pasas el cursor */
+    #btnCalcular:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 22px rgba(178, 19, 35, 0.6);
+        background: linear-gradient(135deg, #853640, #d91b2c);
     }
 
-/* --- RESULTADOS Y ALERTAS --- */
+    /* Animación cuando haces clic */
+    #btnCalcular:active {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(114, 47, 55, 0.3);
+    }
+
+/* Caja de Resultados */
 .resultado-box {
     margin-top: 20px;
     padding: 15px;
+    background-color: #1e1e1e;
     border-radius: 8px;
-    transition: all 0.3s ease;
+    border-left: 4px solid #722F37;
 }
 
-    .resultado-box.hidden {
-        display: none;
-    }
-
-.excelente {
-    background-color: rgba(40, 167, 69, 0.2);
-    border: 1px solid #28a745;
-    color: #2ecc71;
+.hidden {
+    display: none;
 }
 
-.aprobado {
-    background-color: rgba(255, 193, 7, 0.2);
-    border: 1px solid #ffc107;
-    color: #f1c40f;
-}
-
-.reforzar {
-    background-color: rgba(128, 14, 36, 0.3);
-    border: 1px solid #800e24;
-    color: #ff6b81;
-}
-
-/* --- SECCIÓN REDES SOCIALES --- */
+/* Redes Sociales */
 .social-links {
-    margin-top: 20px;
+    margin-top: 25px;
     border-top: 1px solid #333;
-    padding-top: 12px;
+    padding-top: 15px;
 }
 
     .social-links p {
-        font-size: 0.8rem;
-        color: #888;
-        margin-bottom: 6px;
+        margin-bottom: 10px;
     }
 
-    .social-links .icons {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-    }
+.icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
 
-    .social-links a {
-        color: #ff6b81;
+    .icons a {
+        color: #e63946;
         text-decoration: none;
-        font-size: 0.85rem;
-        font-weight: bold;
-        transition: color 0.2s ease;
+        font-size: 14px;
+        font-weight: 500;
+        transition: color 0.3s, transform 0.3s;
     }
 
-        .social-links a:hover {
+        .icons a:hover {
             color: #ffffff;
+            transform: scale(1.1);
         }
