@@ -194,4 +194,43 @@ p {
         .icons a:hover {
             color: #ffffff;
             transform: scale(1.15);
+
+            /* ==========================================
+   ANIMACIONES CSS PARA BOTONES DE CLARET STYLE
+   ========================================== */
+            /* Selecciona el botón del catálogo y cualquier botón de tu interfaz */
+            .btn-catalogo,
+            button,
+            .button,
+            a.button,
+            input[type="submit"] {
+                background: linear-gradient(135deg, #8b1528, #b21323) !important;
+                color: #ffffff !important;
+                font-weight: 600 !important;
+                border: none !important;
+                border-radius: 8px !important;
+                cursor: pointer !important;
+                box-shadow: 0 4px 12px rgba(178, 19, 35, 0.35) !important;
+                transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+                outline: none !important;
+            }
+                /* Animación al pasar el mouse (se eleva y resplandece en tono vino) */
+                .btn-catalogo:hover,
+                button:hover,
+                .button:hover,
+                a.button:hover,
+                input[type="submit"]:hover {
+                    transform: translateY(-4px) scale(1.02) !important;
+                    box-shadow: 0 8px 25px rgba(217, 27, 44, 0.6) !important;
+                    background: linear-gradient(135deg, #a3182e, #d91b2c) !important;
+                }
+                /* Animación de pulsación al hacer clic */
+                .btn-catalogo:active,
+                button:active,
+                .button:active,
+                a.button:active,
+                input[type="submit"]:active {
+                    transform: translateY(-1px) scale(0.98) !important;
+                    box-shadow: 0 4px 10px rgba(178, 19, 35, 0.3) !important;
+                }
         }
