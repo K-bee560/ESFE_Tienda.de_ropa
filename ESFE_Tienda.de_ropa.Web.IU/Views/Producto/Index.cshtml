@@ -1,916 +1,258 @@
 ﻿@{
-    ViewData["Title"] = "Catálogo y Gestión Claret Style";
+    ViewData["Title"] = "Catálogo de Productos - Claret Style";
 }
 
-<!-- CDN de Chart.js y jsPDF -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <style>
-    /* TARJETAS Y CONTENEDORES */
     .card-dark-custom {
         background-color: #1a1a1a;
         border: 1px solid #333;
         border-radius: 12px;
         color: #fff;
-        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        transition: transform 0.2s ease, border-color 0.2s ease;
     }
 
-    /* BOTÓN VINO CON ANIMACIÓN FLUIDA Y GRADIENTE */
+    .card-dark-custom:hover {
+        transform: translateY(-5px);
+        border-color: #800e24;
+    }
+
     .btn-vino {
-        background: linear-gradient(135deg, #800e24 0%, #b21323 100%) !important;
-        color: #ffffff !important;
+        background: linear-gradient(135deg, #800e24, #b21323) !important;
+        color: #fff !important;
         border: none !important;
         box-shadow: 0 4px 12px rgba(128, 14, 36, 0.4) !important;
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+        transition: all 0.3s ease !important;
     }
 
-        .btn-vino:hover {
-            background: linear-gradient(135deg, #a0122d 0%, #d91b2c 100%) !important;
-            color: #ffffff !important;
-            transform: translateY(-3px) scale(1.02) !important;
-            box-shadow: 0 8px 22px rgba(217, 27, 44, 0.6) !important;
-        }
-
-        .btn-vino:active {
-            transform: translateY(-1px) scale(0.98) !important;
-            box-shadow: 0 4px 10px rgba(128, 14, 36, 0.3) !important;
-        }
-
-    /* INPUTS Y SELECTS CON ESTILO OSCURO ELEGANTE */
-    .form-control-dark {
-        background-color: #121212 !important;
-        color: #ffffff !important;
-        border: 1px solid #333 !important;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
-    }
-
-        .form-control-dark:focus {
-            border-color: #800e24 !important;
-            box-shadow: 0 0 10px rgba(128, 14, 36, 0.5) !important;
-            outline: none !important;
-        }
-
-    /* CARRITO LATERAL (DRAWER) */
-    .cart-drawer {
-        position: fixed;
-        top: 0;
-        right: -420px;
-        width: 400px;
-        height: 100vh;
-        background-color: #181818;
-        border-left: 2px solid #800e24;
-        z-index: 1050;
-        transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: -8px 0 25px rgba(0, 0, 0, 0.7);
-    }
-
-        .cart-drawer.active {
-            right: 0;
-        }
-
-    .badge-cart {
-        position: absolute;
-        top: -6px;
-        right: -6px;
-        background: linear-gradient(135deg, #800e24, #d91b2c);
-        border: 2px solid #1a1a1a;
-        font-size: 0.75rem;
-    }
-
-    /* TARJETAS DE PRODUCTOS */
-    .product-card {
-        transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-        .product-card:hover {
-            transform: translateY(-6px) scale(1.01);
-            border-color: #800e24 !important;
-            box-shadow: 0 12px 30px rgba(128, 14, 36, 0.3) !important;
-        }
-
-        .product-card img {
-            transition: transform 0.5s ease;
-        }
-
-        .product-card:hover img {
-            transform: scale(1.03);
-        }
-
-    /* BANNER DE OFERTAS */
-    .banner-ofertas {
-        background: linear-gradient(90deg, #800e24 0%, #1a1a1a 100%);
-        border: 1px solid #800e24;
-        border-radius: 12px;
+    .btn-vino:hover {
+        background: linear-gradient(135deg, #a0122d, #d91b2c) !important;
+        box-shadow: 0 8px 25px rgba(217, 27, 44, 0.6) !important;
     }
 </style>
 
-<div class="container-fluid py-3">
-
-    <!-- BARRA SUPERIOR CON SELECTOR DE ROL, TELÉFONO Y BOTONES DE CONTROL -->
-    <div class="card card-dark-custom p-3 mb-4 shadow-sm">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <div>
-                <h3 class="fw-bold text-white mb-0">🛍️ Claret Style</h3>
-                <small class="text-secondary">Plataforma de E-Commerce & Control Administrativo | 📞 <b>+503 2255-8800</b></small>
-            </div>
-
-            <!-- Selector de Rol -->
-            <div class="d-flex align-items-center bg-dark p-2 rounded border border-secondary gap-3">
-                <span class="fw-bold text-secondary fs-6">Vista:</span>
-                <div class="btn-group" role="group">
-                    <button type="button" id="btnRolCliente" class="btn btn-sm btn-outline-light active" onclick="cambiarRol('CLIENTE')">
-                        🛍️ Comprador
-                    </button>
-                    <button type="button" id="btnRolAdmin" class="btn btn-sm btn-outline-warning" onclick="cambiarRol('ADMIN')">
-                        👑 Vendedor (Admin)
-                    </button>
-                </div>
-            </div>
-
-            <!-- Estado de Usuario Cliente, Carrito y Ajustes -->
-            <div class="d-flex gap-2 align-items-center">
-                <div id="contenedorUsuarioCliente" class="solo-cliente">
-                    <button class="btn btn-outline-info btn-sm fw-semibold" onclick="abrirModalAuth()">
-                        👤 Iniciar Sesión / Registrarse
-                    </button>
-                </div>
-
-                <button class="btn btn-outline-light position-relative fw-semibold px-3" onclick="toggleCart()">
-                    🛒 Carrito
-                    <span id="cartCountBadge" class="badge rounded-pill badge-cart">0</span>
-                </button>
-
-                <button class="btn btn-outline-secondary px-3" data-bs-toggle="modal" data-bs-target="#modalAjustes" title="Configuración del Sistema">
-                    ⚙️
-                </button>
-
-                <button class="btn btn-vino fw-bold solo-admin d-none px-3" data-bs-toggle="modal" data-bs-target="#modalProducto">
-                    ➕ Nuevo Producto
-                </button>
-            </div>
-        </div>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-white mb-0">🔥 Colección Destacada</h2>
+        <span class="badge bg-danger fs-6">8 Productos Disponibles</span>
     </div>
 
-    <!-- BANNER DE OFERTAS ESPECIALES (NUEVO) -->
-    <div class="banner-ofertas p-3 mb-4 text-white d-flex justify-content-between align-items-center flex-wrap solo-cliente">
-        <div>
-            <span class="badge bg-danger mb-1">🔥 Promoción de la Semana</span>
-            <h5 class="fw-bold mb-0">20% de descuento en la colección de Chaquetas y Sacos</h5>
-            <small class="text-light">Aplica en compras mayores a $50.00 usando el código: <b>CLARET20</b></small>
-        </div>
-        <button class="btn btn-sm btn-light fw-bold text-dark mt-2 mt-md-0" onclick="filtrarOfertas('Chaqueta')">Ver Ofertas 🏷️</button>
-    </div>
-
-    <!-- MÓDULO ADMINISTRATIVO: DASHBOARD DE GRÁFICOS (Solo Admin) -->
-    <div class="row g-3 mb-4 solo-admin d-none">
-        <div class="col-md-6">
-            <div class="card card-dark-custom p-3 shadow-sm">
-                <h5 class="fw-bold text-danger mb-3">📊 Inventario por Categoría</h5>
-                <div style="height: 200px;">
-                    <canvas id="chartCategorias"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card card-dark-custom p-3 shadow-sm">
-                <h5 class="fw-bold text-danger mb-3">📦 Niveles de Stock</h5>
-                <div style="height: 200px;">
-                    <canvas id="chartStock"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MÓDULO CLIENTE: SHOWCASE DE COLECCIÓN -->
-    <div class="solo-cliente mb-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="fw-bold text-white mb-0">🔥 Colección Destacada</h4>
-            <div class="w-25">
-                <input type="text" id="inputBuscarCliente" class="form-control form-control-dark" placeholder="🔍 Buscar prendas..." onkeyup="filtrarCliente()">
-            </div>
-        </div>
-        <div class="row g-4" id="contenedorTarjetasCliente">
-            <!-- Renderizado Dinámico de Productos -->
-        </div>
-    </div>
-
-    <!-- SECCIÓN DE UBICACIÓN Y CONTACTO DE LA TIENDA CON MAPA INTERACTIVO -->
-    <div class="card card-dark-custom p-4 mb-4 solo-cliente">
-        <div class="row align-items-center">
-            <div class="col-md-5 mb-3 mb-md-0">
-                <h4 class="fw-bold text-white mb-3">📍 Visita Nuestra Tienda Física</h4>
-                <p class="text-secondary mb-2"><b>Dirección:</b> Centro Comercial Galería Claret, Local 12-B, Nivel 2, San Salvador.</p>
-                <p class="text-secondary mb-2"><b>Teléfono de Atención:</b> 📞 +503 7219-5424</p>
-                <p class="text-secondary mb-2"><b>Atención por WhatsApp:</b> 💬 +503 7219-5424</p>
-                <p class="text-secondary mb-0"><b>Horarios:</b> Lunes a Sábado: 9:00 AM - 7:00 PM | Domingos: 10:00 AM - 5:00 PM</p>
-            </div>
-            <div class="col-md-7">
-                <div class="position-relative overflow-hidden rounded border border-secondary shadow-sm" style="height: 240px;">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3876.126046294717!2d-89.2366113!3d13.7003468!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f633047247738f7%3A0xb3a056a287c8d76!2sPaseo%20General%20Escal%C3%B3n%2C%20San%20Salvador!5e0!3m2!1ses!2ssv!4v1710000000000!5m2!1ses!2ssv"
-                            width="100%"
-                            height="100%"
-                            style="border:0;"
-                            allowfullscreen=""
-                            loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                    <div class="position-absolute bottom-0 start-0 w-100 p-1 bg-dark bg-opacity-75 text-center" style="pointer-events: none;">
-                        <small class="text-white fw-semibold">📍 Sucursal Escalón - San Salvador, El Salvador</small>
+    <!-- GRILLA DE 8 PRODUCTOS -->
+    <div class="row g-4 mb-5">
+        <!-- PRODUCTO 1 -->
+        <div class="col-md-3">
+            <div class="card card-dark-custom h-100 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Camisa Vinotinto" style="height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column p-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-secondary">Masculino</span>
+                        <small class="text-secondary">🎨 Vinotinto</small>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MÓDULO ADMINISTRATIVO: TABLA DE GESTIÓN (Solo Admin) -->
-    <div class="card card-dark-custom p-4 shadow-lg mb-4 solo-admin d-none">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="fw-bold mb-0">⚙️ Tabla de Control de Productos</h4>
-            <input type="text" id="inputBuscarAdmin" class="form-control form-control-dark w-25" placeholder="🔍 Filtrar tabla..." onkeyup="filtrarAdmin()">
-        </div>
-
-        <div class="table-responsive">
-            <table class="table table-dark table-hover align-middle mb-0">
-                <thead>
-                    <tr class="border-bottom border-secondary">
-                        <th>Imagen</th>
-                        <th>Producto</th>
-                        <th>Categoría</th>
-                        <th>Tallas</th>
-                        <th>Color</th>
-                        <th>Precio</th>
-                        <th>Stock</th>
-                        <th class="text-center">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="tablaProductosAdmin">
-                    <!-- Dinámico via JS -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- MÓDULO ADMINISTRATIVO: HISTORIAL KARDEX (Solo Admin) -->
-    <div class="card card-dark-custom p-4 shadow-lg solo-admin d-none">
-        <h5 class="fw-bold text-white mb-3">📜 Historial de Movimientos Auditoría (Kardex)</h5>
-        <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
-            <table class="table table-sm table-dark table-striped text-secondary mb-0">
-                <thead>
-                    <tr>
-                        <th>Fecha/Hora</th>
-                        <th>Tipo</th>
-                        <th>Detalle</th>
-                        <th>Monto</th>
-                    </tr>
-                </thead>
-                <tbody id="tablaKardex">
-                    <!-- Dinámico -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<!-- CARRITO LATERAL (POS / CHECKOUT) -->
-<div id="cartDrawer" class="cart-drawer p-3 d-flex flex-column text-white">
-    <div class="d-flex justify-content-between align-items-center pb-3 border-bottom border-secondary">
-        <h5 class="fw-bold mb-0" id="tituloCarrito">🛒 Tu Carrito de Compras</h5>
-        <button class="btn-close btn-close-white" onclick="toggleCart()"></button>
-    </div>
-
-    <div class="flex-grow-1 overflow-auto py-3" id="cartItemsContainer">
-        <!-- Ítems del carrito -->
-    </div>
-
-    <div class="pt-3 border-top border-secondary">
-        <div class="d-flex justify-content-between mb-1 text-secondary">
-            <span>Subtotal:</span>
-            <span id="posSubtotal">$0.00</span>
-        </div>
-        <div class="d-flex justify-content-between mb-1 text-secondary">
-            <span>IVA (13%):</span>
-            <span id="posIva">$0.00</span>
-        </div>
-        <div class="d-flex justify-content-between fs-5 fw-bold mb-3">
-            <span>Total:</span>
-            <span id="posTotal" class="text-danger">$0.00</span>
-        </div>
-        <button class="btn btn-vino w-100 fw-bold py-2" id="btnFinalizar" onclick="finalizarCompra()">
-            💳 Realizar Pedido / Checkout
-        </button>
-    </div>
-</div>
-
-<!-- MODAL DE AJUSTES DEL SISTEMA -->
-<div class="modal fade" id="modalAjustes" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content card-dark-custom p-3">
-            <div class="modal-header border-secondary">
-                <h5 class="modal-title fw-bold text-white">⚙️ Ajustes del Sistema</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label text-secondary small">Moneda del Sistema</label>
-                    <select id="settingMoneda" class="form-select form-control-dark">
-                        <option value="USD">USD ($) - Dólar Estadounidense</option>
-                        <option value="EUR">EUR (€) - Euro</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-secondary small">Porcentaje de Impuesto / IVA (%)</label>
-                    <input type="number" id="settingIva" class="form-control form-control-dark" value="13">
-                </div>
-                <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" id="settingNotificaciones" checked>
-                    <label class="form-check-label text-white small" for="settingNotificaciones">Notificaciones emergentes de compras</label>
-                </div>
-            </div>
-            <div class="modal-footer border-secondary">
-                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-vino fw-bold" onclick="guardarAjustes()">Guardar Cambios</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL REGISTRO / LOGIN CLIENTE -->
-<div class="modal fade" id="modalAuthCliente" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content card-dark-custom p-3">
-            <div class="modal-header border-secondary">
-                <h5 class="modal-title fw-bold text-white" id="modalAuthTitle">🔐 Inicia Sesión para Comprar</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p class="text-secondary small mb-3">Debes registrarte o ingresar a tu cuenta para añadir prendas a tu carrito y procesar tu pedido.</p>
-                <div class="mb-3">
-                    <label class="form-label text-secondary small">Nombre Completo</label>
-                    <input type="text" id="clienteNombre" class="form-control form-control-dark" placeholder="Ej: Carlos Mendoza">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-secondary small">Correo Electrónico</label>
-                    <input type="email" id="clienteCorreo" class="form-control form-control-dark" placeholder="ejemplo@correo.com">
-                </div>
-            </div>
-            <div class="modal-footer border-secondary">
-                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-vino fw-bold" onclick="registrarCliente()">Continuar / Ingresar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL SEGURIDAD: LOGIN ADMIN -->
-<div class="modal fade" id="modalPasswordAdmin" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content card-dark-custom text-center p-3">
-            <div class="modal-header border-0 pb-0 justify-content-center">
-                <h5 class="modal-title fw-bold text-warning">🔒 Acceso Restringido</h5>
-            </div>
-            <div class="modal-body">
-                <p class="text-secondary small mb-3">Ingresa la clave de administrador para acceder al panel de ventas y stock.</p>
-                <div class="mb-3">
-                    <input type="password" id="inputAdminPin" class="form-control form-control-dark text-center fw-bold fs-5" placeholder="••••" maxlength="10">
-                </div>
-                <div id="alertPasswordError" class="alert alert-danger p-2 small d-none" role="alert">
-                    ❌ Clave incorrecta
-                </div>
-            </div>
-            <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-light btn-sm" onclick="cancelarAccesoAdmin()">Cancelar</button>
-                <button type="button" class="btn btn-vino btn-sm fw-bold" onclick="validarPinAdmin()">Ingresar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL ADMINISTRADOR: AÑADIR PRODUCTO -->
-<div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content card-dark-custom">
-            <div class="modal-header border-secondary">
-                <h5 class="modal-title fw-bold text-white">➕ Agregar Nuevo Producto</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label text-secondary small">Nombre del Producto</label>
-                    <input type="text" id="prodNombre" class="form-control form-control-dark" placeholder="Ej: Chaqueta Velvet Claret">
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label text-secondary small">Categoría</label>
-                        <select id="prodCategoria" class="form-select form-control-dark">
-                            <option value="Masculino">Masculino</option>
-                            <option value="Femenino">Femenino</option>
-                            <option value="Accesorios">Accesorios</option>
+                    <h6 class="fw-bold text-white mb-2">Camisa Slim Vinotinto</h6>
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <span class="text-warning fw-bold">$35.00</span>
+                        <span class="badge bg-success">12 dispon.</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small mb-1">Seleccionar Talla:</label>
+                        <select class="form-select form-select-sm bg-dark text-white border-secondary">
+                            <option>S</option>
+                            <option selected>M</option>
+                            <option>L</option>
                         </select>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label text-secondary small">Color</label>
-                        <input type="text" id="prodColor" class="form-control form-control-dark" placeholder="Ej: Vinotinto, Negro">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label text-secondary small">Tallas Disponibles</label>
-                        <input type="text" id="prodTallas" class="form-control form-control-dark" placeholder="Ej: S, M, L, XL">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label text-secondary small">Precio ($)</label>
-                        <input type="number" id="prodPrecio" class="form-control form-control-dark" value="25.00" step="0.01">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label text-secondary small">Stock</label>
-                        <input type="number" id="prodStock" class="form-control form-control-dark" value="10">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-secondary small">URL de la Imagen</label>
-                    <input type="text" id="prodImgUrl" class="form-control form-control-dark" placeholder="URL de la imagen" oninput="actualizarPrevisualizacion(this.value)">
-                </div>
-                <div class="text-center p-2 border border-secondary rounded">
-                    <small class="text-secondary d-block mb-1">Previsualización:</small>
-                    <img id="imgPreview" src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=300" style="max-height: 120px; object-fit: cover; border-radius: 8px;">
+                    <button class="btn btn-vino btn-sm w-100 mt-auto fw-bold" onclick="alert('Producto agregado al carrito')">🛒 Agregar al Carrito</button>
                 </div>
             </div>
-            <div class="modal-footer border-secondary">
-                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-vino fw-bold" onclick="guardarProducto()">Guardar en Inventario</button>
+        </div>
+
+        <!-- PRODUCTO 2 -->
+        <div class="col-md-3">
+            <div class="card card-dark-custom h-100 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Vestido Gala" style="height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column p-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-secondary">Femenino</span>
+                        <small class="text-secondary">🎨 Rojo</small>
+                    </div>
+                    <h6 class="fw-bold text-white mb-2">Vestido Gala Claret</h6>
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <span class="text-warning fw-bold">$89.99</span>
+                        <span class="badge bg-success">4 dispon.</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small mb-1">Seleccionar Talla:</label>
+                        <select class="form-select form-select-sm bg-dark text-white border-secondary">
+                            <option>XS</option>
+                            <option selected>S</option>
+                            <option>M</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-vino btn-sm w-100 mt-auto fw-bold" onclick="alert('Producto agregado al carrito')">🛒 Agregar al Carrito</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 3 -->
+        <div class="col-md-3">
+            <div class="card card-dark-custom h-100 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Jeans Mezclilla" style="height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column p-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-secondary">Masculino</span>
+                        <small class="text-secondary">🎨 Azul Oscuro</small>
+                    </div>
+                    <h6 class="fw-bold text-white mb-2">Jeans Mezclilla Oscura</h6>
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <span class="text-warning fw-bold">$45.50</span>
+                        <span class="badge bg-success">20 dispon.</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small mb-1">Seleccionar Talla:</label>
+                        <select class="form-select form-select-sm bg-dark text-white border-secondary">
+                            <option>28</option>
+                            <option selected>30</option>
+                            <option>32</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-vino btn-sm w-100 mt-auto fw-bold" onclick="alert('Producto agregado al carrito')">🛒 Agregar al Carrito</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 4 -->
+        <div class="col-md-3">
+            <div class="card card-dark-custom h-100 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Chaqueta Cuero" style="height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column p-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-secondary">Abrigos</span>
+                        <small class="text-secondary">🎨 Negro</small>
+                    </div>
+                    <h6 class="fw-bold text-white mb-2">Chaqueta Cuero Premium</h6>
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <span class="text-warning fw-bold">$120.00</span>
+                        <span class="badge bg-success">3 dispon.</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small mb-1">Seleccionar Talla:</label>
+                        <select class="form-select form-select-sm bg-dark text-white border-secondary">
+                            <option>S</option>
+                            <option selected>M</option>
+                            <option>L</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-vino btn-sm w-100 mt-auto fw-bold" onclick="alert('Producto agregado al carrito')">🛒 Agregar al Carrito</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 5 -->
+        <div class="col-md-3">
+            <div class="card card-dark-custom h-100 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Sudadera Urban" style="height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column p-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-secondary">Unisex</span>
+                        <small class="text-secondary">🎨 Gris Jaspe</small>
+                    </div>
+                    <h6 class="fw-bold text-white mb-2">Sudadera Urban Hoodie</h6>
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <span class="text-warning fw-bold">$42.00</span>
+                        <span class="badge bg-success">15 dispon.</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small mb-1">Seleccionar Talla:</label>
+                        <select class="form-select form-select-sm bg-dark text-white border-secondary">
+                            <option>S</option>
+                            <option selected>M</option>
+                            <option>L</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-vino btn-sm w-100 mt-auto fw-bold" onclick="alert('Producto agregado al carrito')">🛒 Agregar al Carrito</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 6 -->
+        <div class="col-md-3">
+            <div class="card card-dark-custom h-100 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1564257631407-4deb1f99d992?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Blusa Seda" style="height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column p-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-secondary">Femenino</span>
+                        <small class="text-secondary">🎨 Blanco Perla</small>
+                    </div>
+                    <h6 class="fw-bold text-white mb-2">Blusa Satinada Satin</h6>
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <span class="text-warning fw-bold">$29.99</span>
+                        <span class="badge bg-success">8 dispon.</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small mb-1">Seleccionar Talla:</label>
+                        <select class="form-select form-select-sm bg-dark text-white border-secondary">
+                            <option>XS</option>
+                            <option selected>S</option>
+                            <option>M</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-vino btn-sm w-100 mt-auto fw-bold" onclick="alert('Producto agregado al carrito')">🛒 Agregar al Carrito</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 7 -->
+        <div class="col-md-3">
+            <div class="card card-dark-custom h-100 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Blazer Formal" style="height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column p-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-secondary">Masculino</span>
+                        <small class="text-secondary">🎨 Azul Marino</small>
+                    </div>
+                    <h6 class="fw-bold text-white mb-2">Blazer Ejecutivo Premium</h6>
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <span class="text-warning fw-bold">$95.00</span>
+                        <span class="badge bg-success">6 dispon.</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small mb-1">Seleccionar Talla:</label>
+                        <select class="form-select form-select-sm bg-dark text-white border-secondary">
+                            <option>38R</option>
+                            <option selected>40R</option>
+                            <option>42R</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-vino btn-sm w-100 mt-auto fw-bold" onclick="alert('Producto agregado al carrito')">🛒 Agregar al Carrito</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRODUCTO 8 -->
+        <div class="col-md-3">
+            <div class="card card-dark-custom h-100 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Camiseta Oversize Streetwear" style="height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column p-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-secondary">Unisex</span>
+                        <small class="text-secondary">🎨 Blanco Cotton</small>
+                    </div>
+                    <h6 class="fw-bold text-white mb-2">Camiseta Oversize Streetwear</h6>
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <span class="text-warning fw-bold">$25.00</span>
+                        <span class="badge bg-success">18 dispon.</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small mb-1">Seleccionar Talla:</label>
+                        <select class="form-select form-select-sm bg-dark text-white border-secondary">
+                            <option>S</option>
+                            <option selected>M</option>
+                            <option>L</option>
+                            <option>XL</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-vino btn-sm w-100 mt-auto fw-bold" onclick="alert('Producto agregado al carrito')">🛒 Agregar al Carrito</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    let rolActual = 'CLIENTE';
-    const ADMIN_PIN = "1234";
-
-    let clienteSesion = null;
-    let productoPendienteId = null;
-    let porcentajeIva = 0.13;
-
-    let productos = [
-        { id: 1, nombre: "Camisa Slim Vinotinto", categoria: "Masculino", precio: 35.00, stock: 12, color: "Vinotinto", tallas: ["S", "M", "L"], img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300" },
-        { id: 2, nombre: "Vestido Gala Claret", categoria: "Femenino", precio: 89.99, stock: 4, color: "Negro", tallas: ["S", "M"], img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300" },
-        { id: 3, nombre: "Jeans Mezclilla Oscura", categoria: "Masculino", precio: 45.50, stock: 20, color: "Azul Oscuro", tallas: ["30", "32", "34"], img: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=300" },
-        { id: 4, nombre: "Chaqueta Cuero Premium", categoria: "Accesorios", precio: 120.00, stock: 3, color: "Marrón", tallas: ["M", "L", "XL"], img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300" }
-    ];
-
-    let carrito = [];
-    let kardex = [];
-    let chartCatInstance = null;
-    let chartStockInstance = null;
-
-    document.addEventListener("DOMContentLoaded", () => {
-        renderTodo();
-        registrarKardex("Sistema", "Inicio del sistema de catálogo", 0);
-    });
-
-    function guardarAjustes() {
-        const valIva = parseFloat(document.getElementById("settingIva").value);
-        if (!isNaN(valIva)) {
-            porcentajeIva = valIva / 100;
-        }
-        actualizarCarrito();
-        const modalEl = document.getElementById('modalAjustes');
-        bootstrap.Modal.getInstance(modalEl).hide();
-        alert("⚙️ Ajustes guardados correctamente.");
-    }
-
-    function abrirModalAuth(idProducto = null) {
-        productoPendienteId = idProducto;
-        const modal = new bootstrap.Modal(document.getElementById('modalAuthCliente'));
-        modal.show();
-    }
-
-    function registrarCliente() {
-        const nombre = document.getElementById("clienteNombre").value.trim();
-        const correo = document.getElementById("clienteCorreo").value.trim();
-
-        if (!nombre || !correo) {
-            alert("Por favor completa tu nombre y correo electrónico.");
-            return;
-        }
-
-        clienteSesion = { nombre, correo };
-
-        document.getElementById("contenedorUsuarioCliente").innerHTML = `
-            <div class="d-flex align-items-center gap-2 bg-dark p-1 px-2 rounded border border-secondary">
-                <span class="fs-7 text-white">👋 Hola, <b>${nombre}</b></span>
-                <button class="btn btn-sm btn-link text-danger p-0 text-decoration-none" onclick="cerrarSesionCliente()">Salir</button>
-            </div>
-        `;
-
-        const modalEl = document.getElementById('modalAuthCliente');
-        bootstrap.Modal.getInstance(modalEl).hide();
-
-        if (productoPendienteId) {
-            agregarAlCarrito(productoPendienteId);
-            productoPendienteId = null;
-        }
-    }
-
-    function cerrarSesionCliente() {
-        clienteSesion = null;
-        document.getElementById("contenedorUsuarioCliente").innerHTML = `
-            <button class="btn btn-outline-info btn-sm fw-semibold" onclick="abrirModalAuth()">
-                👤 Iniciar Sesión / Registrarse
-            </button>
-        `;
-        carrito = [];
-        actualizarCarrito();
-    }
-
-    function cambiarRol(nuevoRol) {
-        if (nuevoRol === 'ADMIN' && rolActual !== 'ADMIN') {
-            document.getElementById("inputAdminPin").value = "";
-            document.getElementById("alertPasswordError").classList.add("d-none");
-
-            const modalAuth = new bootstrap.Modal(document.getElementById('modalPasswordAdmin'));
-            modalAuth.show();
-            return;
-        }
-        aplicarCambioRol(nuevoRol);
-    }
-
-    function validarPinAdmin() {
-        const pinIngresado = document.getElementById("inputAdminPin").value;
-        if (pinIngresado === ADMIN_PIN) {
-            const modalEl = document.getElementById('modalPasswordAdmin');
-            bootstrap.Modal.getInstance(modalEl).hide();
-            aplicarCambioRol('ADMIN');
-        } else {
-            document.getElementById("alertPasswordError").classList.remove("d-none");
-            document.getElementById("inputAdminPin").value = "";
-            document.getElementById("inputAdminPin").focus();
-        }
-    }
-
-    function cancelarAccesoAdmin() {
-        const modalEl = document.getElementById('modalPasswordAdmin');
-        bootstrap.Modal.getInstance(modalEl).hide();
-        document.getElementById('btnRolCliente').classList.add('active', 'btn-outline-light');
-        document.getElementById('btnRolAdmin').classList.remove('active');
-    }
-
-    function aplicarCambioRol(nuevoRol) {
-        rolActual = nuevoRol;
-
-        if (nuevoRol === 'CLIENTE') {
-            document.getElementById('btnRolCliente').classList.add('active', 'btn-outline-light');
-            document.getElementById('btnRolAdmin').classList.remove('active');
-
-            document.querySelectorAll('.solo-admin').forEach(el => el.classList.add('d-none'));
-            document.querySelectorAll('.solo-cliente').forEach(el => el.classList.remove('d-none'));
-            document.getElementById('tituloCarrito').innerText = "🛒 Tu Carrito de Compras";
-            document.getElementById('btnFinalizar').innerText = "💳 Realizar Pedido / Checkout";
-        } else {
-            document.getElementById('btnRolAdmin').classList.add('active');
-            document.getElementById('btnRolCliente').classList.remove('active');
-
-            document.querySelectorAll('.solo-cliente').forEach(el => el.classList.add('d-none'));
-            document.querySelectorAll('.solo-admin').forEach(el => el.classList.remove('d-none'));
-            document.getElementById('tituloCarrito').innerText = "🛒 Punto de Venta (POS)";
-            document.getElementById('btnFinalizar').innerText = "💳 Procesar Venta y Generar Ticket";
-
-            renderCharts();
-        }
-    }
-
-    function renderTodo() {
-        renderClienteTarjetas();
-        renderAdminTabla();
-    }
-
-    function renderClienteTarjetas(lista = productos) {
-        const contenedor = document.getElementById("contenedorTarjetasCliente");
-        contenedor.innerHTML = "";
-
-        lista.forEach(p => {
-            const agotar = p.stock === 0 ? '<span class="badge bg-danger">Agotado</span>' : `<span class="badge bg-success">${p.stock} dispon.</span>`;
-            const opcionesTallas = p.tallas.map(t => `<option value="${t}">${t}</option>`).join('');
-
-            contenedor.innerHTML += `
-                <div class="col-md-3">
-                    <div class="card card-dark-custom product-card h-100 shadow overflow-hidden">
-                        <div style="overflow: hidden;">
-                            <img src="${p.img}" class="card-img-top" style="height: 200px; object-fit: cover;">
-                        </div>
-                        <div class="card-body d-flex flex-column justify-content-between">
-                            <div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span class="badge bg-secondary">${p.categoria}</span>
-                                    <small class="text-secondary">🎨 ${p.color}</small>
-                                </div>
-                                <h5 class="fw-bold text-white mb-1">${p.nombre}</h5>
-                                <div class="d-flex justify-content-between align-items-center my-2">
-                                    <span class="fs-5 fw-bold text-warning">$${p.precio.toFixed(2)}</span>
-                                    ${agotar}
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label text-secondary fs-7 mb-1">Seleccionar Talla:</label>
-                                    <select id="selectTalla-${p.id}" class="form-select form-select-sm form-control-dark">
-                                        ${opcionesTallas}
-                                    </select>
-                                </div>
-                            </div>
-                            <button class="btn btn-vino w-100 fw-bold mt-2" onclick="intentarAgregarAlCarrito(${p.id})" ${p.stock === 0 ? 'disabled' : ''}>
-                                🛒 Agregar al Carrito
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-    }
-
-    function intentarAgregarAlCarrito(id) {
-        if (rolActual === 'CLIENTE' && !clienteSesion) {
-            abrirModalAuth(id);
-        } else {
-            agregarAlCarrito(id);
-        }
-    }
-
-    function agregarAlCarrito(id) {
-        const p = productos.find(x => x.id === id);
-        if (p.stock <= 0) {
-            alert("⚠️ Sin Stock disponible.");
-            return;
-        }
-
-        const selectTalla = document.getElementById(`selectTalla-${p.id}`);
-        const tallaSeleccionada = selectTalla ? selectTalla.value : p.tallas[0];
-
-        const item = carrito.find(x => x.id === id && x.tallaSeleccionada === tallaSeleccionada);
-
-        if (item) {
-            if (item.cantidad < p.stock) item.cantidad++;
-            else alert("Llegaste al límite del stock disponible.");
-        } else {
-            carrito.push({ ...p, cantidad: 1, tallaSeleccionada });
-        }
-        actualizarCarrito();
-    }
-
-    function renderAdminTabla(lista = productos) {
-        const tbody = document.getElementById("tablaProductosAdmin");
-        tbody.innerHTML = "";
-
-        lista.forEach(p => {
-            const lowStockAlert = p.stock <= 5 ? '<span class="badge bg-danger ms-2">¡Poco stock!</span>' : '';
-            const tallasBadge = p.tallas.map(t => `<span class="badge bg-dark border border-secondary">${t}</span>`).join(' ');
-
-            tbody.innerHTML += `
-                <tr>
-                    <td><img src="${p.img}" style="width: 45px; height: 45px; object-fit: cover; border-radius: 8px;"></td>
-                    <td class="fw-semibold">${p.nombre} ${lowStockAlert}</td>
-                    <td><span class="badge bg-secondary">${p.categoria}</span></td>
-                    <td>${tallasBadge}</td>
-                    <td><span class="text-info">${p.color}</span></td>
-                    <td class="text-warning fw-bold">$${p.precio.toFixed(2)}</td>
-                    <td>${p.stock} uds.</td>
-                    <td class="text-center">
-                        <button class="btn btn-sm btn-outline-danger" onclick="eliminarProducto(${p.id})">🗑️ Eliminar</button>
-                    </td>
-                </tr>
-            `;
-        });
-    }
-
-    function guardarProducto() {
-        const nombre = document.getElementById("prodNombre").value;
-        const categoria = document.getElementById("prodCategoria").value;
-        const color = document.getElementById("prodColor").value || "Único";
-        const tallasInput = document.getElementById("prodTallas").value || "Única";
-        const precio = parseFloat(document.getElementById("prodPrecio").value);
-        const stock = parseInt(document.getElementById("prodStock").value);
-        const img = document.getElementById("imgPreview").src;
-
-        if (!nombre || isNaN(precio) || isNaN(stock)) {
-            alert("Por favor completa los campos correctamente.");
-            return;
-        }
-
-        const tallas = tallasInput.split(',').map(t => t.trim().toUpperCase());
-        const nuevo = { id: Date.now(), nombre, categoria, precio, stock, color, tallas, img };
-        productos.push(nuevo);
-
-        renderTodo();
-        if (rolActual === 'ADMIN') renderCharts();
-        registrarKardex("Ingreso", `Nuevo producto: ${nombre} (${color}) (+${stock} uds)`, precio * stock);
-
-        document.getElementById("prodNombre").value = "";
-        document.getElementById("prodColor").value = "";
-        document.getElementById("prodTallas").value = "";
-        const modalEl = document.getElementById('modalProducto');
-        bootstrap.Modal.getInstance(modalEl).hide();
-    }
-
-    function eliminarProducto(id) {
-        if(confirm("¿Seguro que deseas eliminar este producto?")) {
-            const p = productos.find(x => x.id === id);
-            productos = productos.filter(x => x.id !== id);
-            renderTodo();
-            if (rolActual === 'ADMIN') renderCharts();
-            registrarKardex("Baja", `Producto eliminado: ${p.nombre}`, 0);
-        }
-    }
-
-    function toggleCart() {
-        document.getElementById("cartDrawer").classList.toggle("active");
-    }
-
-    function actualizarCarrito() {
-        const container = document.getElementById("cartItemsContainer");
-        container.innerHTML = "";
-        let subtotal = 0;
-        let totalItems = 0;
-
-        carrito.forEach((item, index) => {
-            const itemSub = item.precio * item.cantidad;
-            subtotal += itemSub;
-            totalItems += item.cantidad;
-
-            container.innerHTML += `
-                <div class="d-flex justify-content-between align-items-center mb-3 bg-dark p-2 rounded border border-secondary">
-                    <div>
-                        <h6 class="mb-0 fw-bold">${item.nombre}</h6>
-                        <small class="text-secondary">Talla: <b class="text-white">${item.tallaSeleccionada}</b> | Color: <b class="text-info">${item.color}</b></small><br>
-                        <small class="text-secondary">$${item.precio.toFixed(2)} x ${item.cantidad}</small>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="fw-bold text-success">$${itemSub.toFixed(2)}</span>
-                        <button class="btn btn-sm btn-outline-danger" onclick="quitarDelCarrito(${index})">✕</button>
-                    </div>
-                </div>
-            `;
-        });
-
-        const iva = subtotal * porcentajeIva;
-        const total = subtotal + iva;
-
-        document.getElementById("cartCountBadge").innerText = totalItems;
-        document.getElementById("posSubtotal").innerText = `$${subtotal.toFixed(2)}`;
-        document.getElementById("posIva").innerText = `$${iva.toFixed(2)}`;
-        document.getElementById("posTotal").innerText = `$${total.toFixed(2)}`;
-    }
-
-    function quitarDelCarrito(index) {
-        carrito.splice(index, 1);
-        actualizarCarrito();
-    }
-
-    function finalizarCompra() {
-        if (carrito.length === 0) {
-            alert("El carrito está vacío.");
-            return;
-        }
-
-        carrito.forEach(item => {
-            const p = productos.find(x => x.id === item.id);
-            if (p) p.stock -= item.cantidad;
-        });
-
-        const subtotal = carrito.reduce((acc, i) => acc + (i.precio * i.cantidad), 0);
-        const total = subtotal * (1 + porcentajeIva);
-
-        const compradorInfo = clienteSesion ? clienteSesion.nombre : "Venta General POS";
-
-        registrarKardex("Venta", `Pedido por ${compradorInfo} (${carrito.length} ítems)`, total);
-        generarFacturaPDF(total);
-
-        carrito = [];
-        actualizarCarrito();
-        renderTodo();
-        if (rolActual === 'ADMIN') renderCharts();
-        toggleCart();
-
-        alert(`🎉 ¡Gracias por tu compra ${compradorInfo}! Tu ticket ha sido generado correctamente.`);
-    }
-
-    function generarFacturaPDF(total) {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        const clienteNombre = clienteSesion ? clienteSesion.nombre : "Cliente Mostrador / Venta POS";
-        const clienteCorreo = clienteSesion ? clienteSesion.correo : "Sin correo registrado";
-
-        doc.setFillColor(128, 14, 36);
-        doc.rect(0, 0, 210, 30, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(18);
-        doc.text("CLARET STYLE - COMPROBANTE DE COMPRA", 15, 20);
-
-        doc.setTextColor(0, 0, 0);
-        doc.setFontSize(10);
-        doc.text(`Cliente: ${clienteNombre}`, 15, 40);
-        doc.text(`Correo: ${clienteCorreo}`, 15, 46);
-        doc.text(`Fecha: ${new Date().toLocaleString()}`, 15, 52);
-        doc.text(`Ticket No: #CS-${Math.floor(Math.random() * 90000 + 10000)}`, 15, 58);
-        doc.text(`Soporte/Dudas: +503 7219-5424 | Galería Claret, Local 12-B`, 15, 64);
-
-        let y = 74;
-        doc.setFontSize(11);
-        doc.text("Producto", 15, y);
-        doc.text("Talla/Color", 85, y);
-        doc.text("Cant.", 125, y);
-        doc.text("Precio U.", 145, y);
-        doc.text("Total", 175, y);
-        doc.line(15, y + 2, 195, y + 2);
-
-        y += 10;
-        carrito.forEach(item => {
-            doc.text(item.nombre.substring(0, 22), 15, y);
-            doc.text(`${item.tallaSeleccionada} / ${item.color.substring(0, 8)}`, 85, y);
-            doc.text(`${item.cantidad}`, 125, y);
-            doc.text(`$${item.precio.toFixed(2)}`, 145, y);
-            doc.text(`$${(item.precio * item.cantidad).toFixed(2)}`, 175, y);
-            y += 8;
-        });
-
-        doc.line(15, y + 2, 195, y + 2);
-        doc.setFontSize(14);
-        doc.text(`TOTAL PAGADO: $${total.toFixed(2)}`, 110, y + 15);
-
-        doc.save(`Comprobante_ClaretStyle_${Date.now()}.pdf`);
-    }
-
-    function renderCharts() {
-        const catCounts = {};
-        productos.forEach(p => catCounts[p.categoria] = (catCounts[p.categoria] || 0) + 1);
-
-        if (chartCatInstance) chartCatInstance.destroy();
-        const ctxCat = document.getElementById('chartCategorias').getContext('2d');
-        chartCatInstance = new Chart(ctxCat, {
-            type: 'doughnut',
-            data: {
-                labels: Object.keys(catCounts),
-                datasets: [{
-                    data: Object.values(catCounts),
-                    backgroundColor: ['#800e24', '#2a9d8f', '#e76f51']
-                }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#fff' } } } }
-        });
-
-        if (chartStockInstance) chartStockInstance.destroy();
-        const ctxStock = document.getElementById('chartStock').getContext('2d');
-        chartStockInstance = new Chart(ctxStock, {
-            type: 'bar',
-            data: {
-                labels: productos.map(p => p.nombre.substring(0, 10) + '...'),
-                datasets: [{
-                    label: 'Unidades',
-                    data: productos.map(p => p.stock),
-                    backgroundColor: '#800e24'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: { x: { ticks: { color: '#fff' } }, y: { ticks: { color: '#fff' } } },
-                plugins: { legend: { labels: { color: '#fff' } } }
-            }
-        });
-    }
-
-    function registrarKardex(tipo, detalle, monto) {
-        kardex.unshift({ fecha: new Date().toLocaleTimeString(), tipo, detalle, monto });
-        const tbody = document.getElementById("tablaKardex");
-        tbody.innerHTML = "";
-        kardex.forEach(k => {
-            tbody.innerHTML += `
-                <tr>
-                    <td>${k.fecha}</td>
-                    <td><span class="badge ${k.tipo === 'Venta' ? 'bg-success' : 'bg-info'}">${k.tipo}</span></td>
-                    <td>${k.detalle}</td>
-                    <td class="fw-bold">$${k.monto.toFixed(2)}</td>
-                </tr>
-            `;
-        });
-    }
-
-    function actualizarPrevisualizacion(url) {
-        document.getElementById("imgPreview").src = url || "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=300";
-    }
-
-    function filtrarCliente() {
-        const text = document.getElementById("inputBuscarCliente").value.toLowerCase();
-        renderClienteTarjetas(productos.filter(p => p.nombre.toLowerCase().includes(text)));
-    }
-
-    function filtrarOfertas(filtro) {
-        document.getElementById("inputBuscarCliente").value = filtro;
-        filtrarCliente();
-    }
-
-    function filtrarAdmin() {
-        const text = document.getElementById("inputBuscarAdmin").value.toLowerCase();
-        renderAdminTabla(productos.filter(p => p.nombre.toLowerCase().includes(text)));
-    }
-</script>
