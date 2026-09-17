@@ -1,5 +1,4 @@
 ﻿@{
- @{
     ViewData["Title"] = "Catálogo y Gestión Claret Style";
 }
 
@@ -380,7 +379,7 @@
                 </div>
             </div>
             <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
-                <button type="button" class="btn type-outline-light btn-sm" onclick="cancelarAccesoAdmin()">Cancelar</button>
+                <button type="button" class="btn btn-outline-light btn-sm" onclick="cancelarAccesoAdmin()">Cancelar</button>
                 <button type="button" class="btn btn-vino btn-sm fw-bold" onclick="validarPinAdmin()">Ingresar</button>
             </div>
         </div>
@@ -434,7 +433,7 @@
                 </div>
                 <div class="text-center p-2 border border-secondary rounded">
                     <small class="text-secondary d-block mb-1">Previsualización:</small>
-                    <img id="imgPreview" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23121212'/><path d='M90 60 L120 40 L180 40 L210 60 L190 80 L170 70 L170 160 L130 160 L130 70 L110 80 Z' fill='%23ffffff'/></svg>" style="max-height: 120px; object-fit: cover; border-radius: 8px;">
+                    <img id="imgPreview" src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=300" style="max-height: 120px; object-fit: cover; border-radius: 8px;">
                 </div>
             </div>
             <div class="modal-footer border-secondary">
@@ -453,9 +452,6 @@
     let productoPendienteId = null;
     let porcentajeIva = 0.13;
 
-    // SVG EMBEDDED PARA EVITAR DESCARGAS FALLIDAS O PÁGINAS CAÍDAS
-    const svgCamisetaDefault = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23121212'/><path d='M90 60 L120 40 L180 40 L210 60 L190 80 L170 70 L170 160 L130 160 L130 70 L110 80 Z' fill='%23ffffff' stroke='%23800e24' stroke-width='3'/><text x='50%' y='85%' dominant-baseline='middle' text-anchor='middle' fill='%23888888' font-family='sans-serif' font-size='12'>CAMISETA OVERSIZE</text></svg>";
-
     let productos = [
         { id: 1, nombre: "Camisa Slim Vinotinto", categoria: "Masculino", precio: 35.00, stock: 12, color: "Vinotinto", tallas: ["S", "M", "L"], img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300" },
         { id: 2, nombre: "Vestido Gala Claret", categoria: "Femenino", precio: 89.99, stock: 4, color: "Negro", tallas: ["S", "M"], img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300" },
@@ -464,7 +460,7 @@
         { id: 5, nombre: "Sudadera Urban Hoodie", categoria: "Masculino", precio: 42.00, stock: 15, color: "Gris Jaspe", tallas: ["S", "M", "L", "XL"], img: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=600&q=80" },
         { id: 6, nombre: "Blusa Satinada Satin", categoria: "Femenino", precio: 29.99, stock: 8, color: "Blanco Perla", tallas: ["S", "M", "L"], img: "https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?auto=format&fit=crop&w=600&q=80" },
         { id: 7, nombre: "Blazer Ejecutivo Premium", categoria: "Masculino", precio: 95.00, stock: 6, color: "Azul Marino", tallas: ["38R", "40R", "42R"], img: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=600&q=80" },
-        { id: 8, nombre: "Camiseta Oversize Streetwear", categoria: "Accesorios", precio: 25.00, stock: 18, color: "Blanco Cotton", tallas: ["S", "M", "L", "XL"], img: svgCamisetaDefault }
+        { id: 8, nombre: "Gafas de Sol Urban Black", categoria: "Accesorios", precio: 18.50, stock: 25, color: "Negro Mate", tallas: ["Única"], img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=300" }
     ];
 
     let carrito = [];
@@ -605,10 +601,7 @@
                 <div class="col-md-3">
                     <div class="card card-dark-custom product-card h-100 shadow overflow-hidden">
                         <div style="overflow: hidden;">
-                            <img src="${p.img}" 
-                                 onerror="this.onerror=null; this.src='${svgCamisetaDefault}';" 
-                                 class="card-img-top" 
-                                 style="height: 200px; object-fit: cover;">
+                            <img src="${p.img}" class="card-img-top" style="height: 200px; object-fit: cover;">
                         </div>
                         <div class="card-body d-flex flex-column justify-content-between">
                             <div>
@@ -678,7 +671,7 @@
 
             tbody.innerHTML += `
                 <tr>
-                    <td><img src="${p.img}" onerror="this.onerror=null; this.src='${svgCamisetaDefault}';" style="width: 45px; height: 45px; object-fit: cover; border-radius: 8px;"></td>
+                    <td><img src="${p.img}" style="width: 45px; height: 45px; object-fit: cover; border-radius: 8px;"></td>
                     <td class="fw-semibold">${p.nombre} ${lowStockAlert}</td>
                     <td><span class="badge bg-secondary">${p.categoria}</span></td>
                     <td>${tallasBadge}</td>
@@ -701,7 +694,7 @@
         const precio = parseFloat(document.getElementById("prodPrecio").value);
         const stock = parseInt(document.getElementById("prodStock").value);
         const imgInput = document.getElementById("prodImgUrl").value;
-        const img = imgInput ? imgInput : svgCamisetaDefault;
+        const img = imgInput ? imgInput : "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=300";
 
         if (!nombre || isNaN(precio) || isNaN(stock)) {
             alert("Por favor completa los campos correctamente.");
@@ -909,7 +902,7 @@
     }
 
     function actualizarPrevisualizacion(url) {
-        document.getElementById("imgPreview").src = url || svgCamisetaDefault;
+        document.getElementById("imgPreview").src = url || "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=300";
     }
 
     function filtrarCliente() {
@@ -927,3 +920,5 @@
         renderAdminTabla(productos.filter(p => p.nombre.toLowerCase().includes(text)));
     }
 </script>
+
+       
