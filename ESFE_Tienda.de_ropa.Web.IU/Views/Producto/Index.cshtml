@@ -433,7 +433,7 @@
                 </div>
                 <div class="text-center p-2 border border-secondary rounded">
                     <small class="text-secondary d-block mb-1">Previsualización:</small>
-                    <img id="imgPreview" src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=300" style="max-height: 120px; object-fit: cover; border-radius: 8px;">
+                    <img id="imgPreview" src="https://upload.wikimedia.org/wikipedia/commons/2/24/Blue_Tshirt.jpg" style="max-height: 120px; object-fit: cover; border-radius: 8px;">
                 </div>
             </div>
             <div class="modal-footer border-secondary">
@@ -452,7 +452,7 @@
     let productoPendienteId = null;
     let porcentajeIva = 0.13;
 
-    // ARREGLO ACTUALIZADO CON 8 PRODUCTOS
+    // ENLACE DIRECTO Y SEGURO DE WIKIMEDIA PARA EVITAR EXPIRACIÓN DE UN SPLASH
     let productos = [
         { id: 1, nombre: "Camisa Slim Vinotinto", categoria: "Masculino", precio: 35.00, stock: 12, color: "Vinotinto", tallas: ["S", "M", "L"], img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300" },
         { id: 2, nombre: "Vestido Gala Claret", categoria: "Femenino", precio: 89.99, stock: 4, color: "Negro", tallas: ["S", "M"], img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300" },
@@ -461,7 +461,7 @@
         { id: 5, nombre: "Sudadera Urban Hoodie", categoria: "Masculino", precio: 42.00, stock: 15, color: "Gris Jaspe", tallas: ["S", "M", "L", "XL"], img: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=600&q=80" },
         { id: 6, nombre: "Blusa Satinada Satin", categoria: "Femenino", precio: 29.99, stock: 8, color: "Blanco Perla", tallas: ["S", "M", "L"], img: "https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?auto=format&fit=crop&w=600&q=80" },
         { id: 7, nombre: "Blazer Ejecutivo Premium", categoria: "Masculino", precio: 95.00, stock: 6, color: "Azul Marino", tallas: ["38R", "40R", "42R"], img: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=600&q=80" },
-        { id: 8, nombre: "Camiseta Oversize Streetwear", categoria: "Accesorios", precio: 25.00, stock: 18, color: "Blanco Cotton", tallas: ["S", "M", "L", "XL"], img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=600&q=80" }
+        { id: 8, nombre: "Camiseta Oversize Streetwear", categoria: "Accesorios", precio: 25.00, stock: 18, color: "Blanco Cotton", tallas: ["S", "M", "L", "XL"], img: "https://upload.wikimedia.org/wikipedia/commons/2/24/Blue_Tshirt.jpg" }
     ];
 
     let carrito = [];
@@ -602,7 +602,10 @@
                 <div class="col-md-3">
                     <div class="card card-dark-custom product-card h-100 shadow overflow-hidden">
                         <div style="overflow: hidden;">
-                            <img src="${p.img}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                            <img src="${p.img}" 
+                                 onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200/222222/ffffff?text=Camiseta+Oversize';" 
+                                 class="card-img-top" 
+                                 style="height: 200px; object-fit: cover;">
                         </div>
                         <div class="card-body d-flex flex-column justify-content-between">
                             <div>
@@ -672,7 +675,7 @@
 
             tbody.innerHTML += `
                 <tr>
-                    <td><img src="${p.img}" style="width: 45px; height: 45px; object-fit: cover; border-radius: 8px;"></td>
+                    <td><img src="${p.img}" onerror="this.onerror=null; this.src='https://via.placeholder.com/50';" style="width: 45px; height: 45px; object-fit: cover; border-radius: 8px;"></td>
                     <td class="fw-semibold">${p.nombre} ${lowStockAlert}</td>
                     <td><span class="badge bg-secondary">${p.categoria}</span></td>
                     <td>${tallasBadge}</td>
@@ -901,7 +904,7 @@
     }
 
     function actualizarPrevisualizacion(url) {
-        document.getElementById("imgPreview").src = url || "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=300";
+        document.getElementById("imgPreview").src = url || "https://upload.wikimedia.org/wikipedia/commons/2/24/Blue_Tshirt.jpg";
     }
 
     function filtrarCliente() {
