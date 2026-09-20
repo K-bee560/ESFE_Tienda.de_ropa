@@ -25,17 +25,17 @@
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
     }
 
-        .btn-vino:hover {
-            background: linear-gradient(135deg, #a0122d 0%, #d91b2c 100%) !important;
-            color: #ffffff !important;
-            transform: translateY(-3px) scale(1.02) !important;
-            box-shadow: 0 8px 22px rgba(217, 27, 44, 0.6) !important;
-        }
+    .btn-vino:hover {
+        background: linear-gradient(135deg, #a0122d 0%, #d91b2c 100%) !important;
+        color: #ffffff !important;
+        transform: translateY(-3px) scale(1.02) !important;
+        box-shadow: 0 8px 22px rgba(217, 27, 44, 0.6) !important;
+    }
 
-        .btn-vino:active {
-            transform: translateY(-1px) scale(0.98) !important;
-            box-shadow: 0 4px 10px rgba(128, 14, 36, 0.3) !important;
-        }
+    .btn-vino:active {
+        transform: translateY(-1px) scale(0.98) !important;
+        box-shadow: 0 4px 10px rgba(128, 14, 36, 0.3) !important;
+    }
 
     /* INPUTS Y SELECTS CON ESTILO OSCURO ELEGANTE */
     .form-control-dark {
@@ -45,11 +45,11 @@
         transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
     }
 
-        .form-control-dark:focus {
-            border-color: #800e24 !important;
-            box-shadow: 0 0 10px rgba(128, 14, 36, 0.5) !important;
-            outline: none !important;
-        }
+    .form-control-dark:focus {
+        border-color: #800e24 !important;
+        box-shadow: 0 0 10px rgba(128, 14, 36, 0.5) !important;
+        outline: none !important;
+    }
 
     /* CARRITO LATERAL (DRAWER) */
     .cart-drawer {
@@ -65,9 +65,9 @@
         box-shadow: -8px 0 25px rgba(0, 0, 0, 0.7);
     }
 
-        .cart-drawer.active {
-            right: 0;
-        }
+    .cart-drawer.active {
+        right: 0;
+    }
 
     .badge-cart {
         position: absolute;
@@ -83,19 +83,19 @@
         transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
-        .product-card:hover {
-            transform: translateY(-6px) scale(1.01);
-            border-color: #800e24 !important;
-            box-shadow: 0 12px 30px rgba(128, 14, 36, 0.3) !important;
-        }
+    .product-card:hover {
+        transform: translateY(-6px) scale(1.01);
+        border-color: #800e24 !important;
+        box-shadow: 0 12px 30px rgba(128, 14, 36, 0.3) !important;
+    }
 
-        .product-card img {
-            transition: transform 0.5s ease;
-        }
+    .product-card img {
+        transition: transform 0.5s ease;
+    }
 
-        .product-card:hover img {
-            transform: scale(1.03);
-        }
+    .product-card:hover img {
+        transform: scale(1.03);
+    }
 
     /* BANNER DE OFERTAS */
     .banner-ofertas {
@@ -103,9 +103,66 @@
         border: 1px solid #800e24;
         border-radius: 12px;
     }
+
+    /* FILTROS POR CATEGORÍA ESTILO CHIPS */
+    .filter-chip {
+        background-color: #121212;
+        border: 1px solid #333;
+        color: #a1a1aa;
+        padding: 7px 16px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: all 0.25s ease;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .filter-chip:hover {
+        border-color: #800e24;
+        color: #ffffff;
+        transform: translateY(-2px);
+    }
+
+    .filter-chip.active {
+        background: linear-gradient(135deg, #800e24 0%, #b21323 100%);
+        border-color: transparent;
+        color: #ffffff;
+        box-shadow: 0 4px 15px rgba(178, 19, 35, 0.4);
+    }
+
+    /* CONTENEDOR DE TOAST NOTIFICATIONS */
+    .toast-container-custom {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        z-index: 9999;
+    }
+
+    .toast-dark {
+        background: rgba(24, 24, 27, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(178, 19, 35, 0.5);
+        border-radius: 14px;
+        color: #ffffff;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
 </style>
 
 <div class="container-fluid py-3">
+
+    <!-- CONTENEDOR FLOTANTE PARA NOTIFICACIONES TOAST -->
+    <div class="toast-container-custom">
+        <div id="appToast" class="toast toast-dark hide align-items-center p-2" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex align-items-center">
+                <div class="toast-body d-flex align-items-center gap-2" id="toastMessage">
+                    <i class="bi bi-check-circle-fill text-danger fs-5"></i>
+                    <span>Acción realizada con éxito.</span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
 
     <!-- BARRA SUPERIOR CON SELECTOR DE ROL, TELÉFONO Y BOTONES DE CONTROL -->
     <div class="card card-dark-custom p-3 mb-4 shadow-sm">
@@ -184,12 +241,30 @@
 
     <!-- MÓDULO CLIENTE: SHOWCASE DE COLECCIÓN -->
     <div class="solo-cliente mb-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
             <h4 class="fw-bold text-white mb-0">🔥 Colección Destacada</h4>
-            <div class="w-25">
+            <div class="w-25 style-search-box">
                 <input type="text" id="inputBuscarCliente" class="form-control form-control-dark" placeholder="🔍 Buscar prendas..." onkeyup="filtrarCliente()">
             </div>
         </div>
+
+        <!-- BARRA DE FILTROS POR CATEGORÍA -->
+        <div class="d-flex align-items-center flex-wrap gap-2 mb-4 p-3 rounded-4 bg-dark bg-opacity-50 border border-secondary border-opacity-25">
+            <span class="fw-bold text-secondary fs-6 me-2">Categorías:</span>
+            <div class="filter-chip active" id="chip-todos" onclick="filtrarPorCategoriaChip('todos', this)">
+                ✨ Todos (<span id="cnt-todos">0</span>)
+            </div>
+            <div class="filter-chip" id="chip-masculino" onclick="filtrarPorCategoriaChip('Masculino', this)">
+                👔 Masculino (<span id="cnt-masculino">0</span>)
+            </div>
+            <div class="filter-chip" id="chip-femenino" onclick="filtrarPorCategoriaChip('Femenino', this)">
+                👗 Femenino (<span id="cnt-femenino">0</span>)
+            </div>
+            <div class="filter-chip" id="chip-accesorios" onclick="filtrarPorCategoriaChip('Accesorios', this)">
+                🕶️ Accesorios (<span id="cnt-accesorios">0</span>)
+            </div>
+        </div>
+
         <div class="row g-4" id="contenedorTarjetasCliente">
             <!-- Renderizado Dinámico de Productos -->
         </div>
@@ -451,6 +526,7 @@
     let clienteSesion = null;
     let productoPendienteId = null;
     let porcentajeIva = 0.13;
+    let categoriaFiltroActual = 'todos';
 
     let productos = [
         { id: 1, nombre: "Camisa Slim Vinotinto", categoria: "Masculino", precio: 35.00, stock: 12, color: "Vinotinto", tallas: ["S", "M", "L"], img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300" },
@@ -473,6 +549,30 @@
         registrarKardex("Sistema", "Inicio del sistema de catálogo", 0);
     });
 
+    // FUNCIÓN PARA MOSTRAR NOTIFICACIONES TOAST FLOTANTES
+    function mostrarToast(mensaje) {
+        const toastEl = document.getElementById('appToast');
+        const toastMsg = document.getElementById('toastMessage');
+        toastMsg.innerHTML = `<i class="bi bi-check-circle-fill text-danger fs-5"></i> <span>${mensaje}</span>`;
+        const toast = new bootstrap.Toast(toastEl, { delay: 2800 });
+        toast.show();
+    }
+
+    // FILTRADO DINÁMICO POR CHIPS
+    function filtrarPorCategoriaChip(cat, elemento) {
+        categoriaFiltroActual = cat;
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        elemento.classList.add('active');
+        filtrarCliente();
+    }
+
+    function actualizarContadoresChips() {
+        document.getElementById("cnt-todos").innerText = productos.length;
+        document.getElementById("cnt-masculino").innerText = productos.filter(p => p.categoria === 'Masculino').length;
+        document.getElementById("cnt-femenino").innerText = productos.filter(p => p.categoria === 'Femenino').length;
+        document.getElementById("cnt-accesorios").innerText = productos.filter(p => p.categoria === 'Accesorios').length;
+    }
+
     function guardarAjustes() {
         const valIva = parseFloat(document.getElementById("settingIva").value);
         if (!isNaN(valIva)) {
@@ -481,7 +581,7 @@
         actualizarCarrito();
         const modalEl = document.getElementById('modalAjustes');
         bootstrap.Modal.getInstance(modalEl).hide();
-        alert("⚙️ Ajustes guardados correctamente.");
+        mostrarToast("⚙️ Ajustes guardados correctamente.");
     }
 
     function abrirModalAuth(idProducto = null) {
@@ -510,6 +610,7 @@
 
         const modalEl = document.getElementById('modalAuthCliente');
         bootstrap.Modal.getInstance(modalEl).hide();
+        mostrarToast(`👋 ¡Bienvenido de nuevo, <b>${nombre}</b>!`);
 
         if (productoPendienteId) {
             agregarAlCarrito(productoPendienteId);
@@ -526,6 +627,7 @@
         `;
         carrito = [];
         actualizarCarrito();
+        mostrarToast("Sesión cerrada correctamente.");
     }
 
     function cambiarRol(nuevoRol) {
@@ -546,6 +648,7 @@
             const modalEl = document.getElementById('modalPasswordAdmin');
             bootstrap.Modal.getInstance(modalEl).hide();
             aplicarCambioRol('ADMIN');
+            mostrarToast("👑 Modo Vendedor (Admin) activado.");
         } else {
             document.getElementById("alertPasswordError").classList.remove("d-none");
             document.getElementById("inputAdminPin").value = "";
@@ -585,13 +688,19 @@
     }
 
     function renderTodo() {
-        renderClienteTarjetas();
+        filtrarCliente();
         renderAdminTabla();
+        actualizarContadoresChips();
     }
 
     function renderClienteTarjetas(lista = productos) {
         const contenedor = document.getElementById("contenedorTarjetasCliente");
         contenedor.innerHTML = "";
+
+        if (lista.length === 0) {
+            contenedor.innerHTML = `<div class="col-12 text-center text-secondary py-5"><h5>No se encontraron productos en esta categoría.</h5></div>`;
+            return;
+        }
 
         lista.forEach(p => {
             const agotar = p.stock === 0 ? '<span class="badge bg-danger">Agotado</span>' : `<span class="badge bg-success">${p.stock} dispon.</span>`;
@@ -653,10 +762,16 @@
         const item = carrito.find(x => x.id === id && x.tallaSeleccionada === tallaSeleccionada);
 
         if (item) {
-            if (item.cantidad < p.stock) item.cantidad++;
-            else alert("Llegaste al límite del stock disponible.");
+            if (item.cantidad < p.stock) {
+                item.cantidad++;
+                mostrarToast(`¡<b>${p.nombre}</b> actualizado en tu carrito!`);
+            } else {
+                alert("Llegaste al límite del stock disponible.");
+                return;
+            }
         } else {
             carrito.push({ ...p, cantidad: 1, tallaSeleccionada });
+            mostrarToast(`¡<b>${p.nombre}</b> añadido al carrito!`);
         }
         actualizarCarrito();
     }
@@ -715,6 +830,7 @@
         document.getElementById("prodImgUrl").value = "";
         const modalEl = document.getElementById('modalProducto');
         bootstrap.Modal.getInstance(modalEl).hide();
+        mostrarToast(`✨ Producto <b>${nombre}</b> guardado en inventario.`);
     }
 
     function eliminarProducto(id) {
@@ -724,6 +840,7 @@
             renderTodo();
             if (rolActual === 'ADMIN') renderCharts();
             registrarKardex("Baja", `Producto eliminado: ${p.nombre}`, 0);
+            mostrarToast(`🗑️ Producto eliminado del catálogo.`);
         }
     }
 
@@ -796,7 +913,7 @@
         if (rolActual === 'ADMIN') renderCharts();
         toggleCart();
 
-        alert(`🎉 ¡Gracias por tu compra ${compradorInfo}! Tu ticket ha sido generado correctamente.`);
+        mostrarToast(`🎉 ¡Pedido procesado exitosamente, ${compradorInfo}!`);
     }
 
     function generarFacturaPDF(total) {
@@ -888,6 +1005,7 @@
     function registrarKardex(tipo, detalle, monto) {
         kardex.unshift({ fecha: new Date().toLocaleTimeString(), tipo, detalle, monto });
         const tbody = document.getElementById("tablaKardex");
+        if (!tbody) return;
         tbody.innerHTML = "";
         kardex.forEach(k => {
             tbody.innerHTML += `
@@ -907,7 +1025,14 @@
 
     function filtrarCliente() {
         const text = document.getElementById("inputBuscarCliente").value.toLowerCase();
-        renderClienteTarjetas(productos.filter(p => p.nombre.toLowerCase().includes(text)));
+        
+        let resultado = productos.filter(p => p.nombre.toLowerCase().includes(text));
+
+        if (categoriaFiltroActual !== 'todos') {
+            resultado = resultado.filter(p => p.categoria === categoriaFiltroActual);
+        }
+
+        renderClienteTarjetas(resultado);
     }
 
     function filtrarOfertas(filtro) {
@@ -920,6 +1045,7 @@
         renderAdminTabla(productos.filter(p => p.nombre.toLowerCase().includes(text)));
     }
 </script>
+
 
 
        
