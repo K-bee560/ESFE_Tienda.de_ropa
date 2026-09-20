@@ -1,94 +1,82 @@
 ﻿@{
-    ViewData["Title"] = "Página Principal - Claret Style";
+    ViewData["Title"] = "Inicio";
 }
 
 <style>
-    .hero-section {
-        background: linear-gradient(135deg, #2b0008 0%, #121212 100%);
-        border: 1px solid #333;
-        border-radius: 16px;
-        padding: 60px 20px;
-    }
-
-    .card-dark-custom {
+    /* Tarjetas interactivas de la Home */
+    .feature-card {
         background-color: #1a1a1a;
         border: 1px solid #333;
         border-radius: 12px;
         color: #fff;
-        transition: transform 0.2s ease, border-color 0.2s ease;
+        text-decoration: none;
+        display: block;
+        transition: all 0.3s ease;
     }
 
-    .card-dark-custom:hover {
+    .feature-card:hover {
         transform: translateY(-5px);
         border-color: #800e24;
+        box-shadow: 0 10px 25px rgba(128, 14, 36, 0.4);
+        color: #fff;
     }
 
-    /* ==========================================
-       NUEVA ANIMACIÓN Y DISEÑO PARA EL BOTÓN VINO
-       ========================================== */
-    .btn-vino {
-        background: linear-gradient(135deg, #800e24, #b21323) !important;
-        color: #fff !important;
-        border: none !important;
-        box-shadow: 0 4px 12px rgba(128, 14, 36, 0.4) !important;
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-        display: inline-block;
+    .btn-main-cat {
+        background: linear-gradient(135deg, #800e24 0%, #b21323 100%);
+        color: #fff;
+        border: none;
+        box-shadow: 0 4px 12px rgba(128, 14, 36, 0.4);
+        transition: all 0.3s ease;
     }
 
-    /* Efecto al pasar el mouse (se eleva, escala y emite brillo) */
-    .btn-vino:hover {
-        background: linear-gradient(135deg, #a0122d, #d91b2c) !important;
-        color: #fff !important;
-        transform: translateY(-4px) scale(1.03) !important;
-        box-shadow: 0 8px 25px rgba(217, 27, 44, 0.6) !important;
-    }
-
-    /* Efecto al hacer clic */
-    .btn-vino:active {
-        transform: translateY(-1px) scale(0.98) !important;
-        box-shadow: 0 4px 10px rgba(128, 14, 36, 0.3) !important;
+    .btn-main-cat:hover {
+        background: linear-gradient(135deg, #a0122d 0%, #d91b2c 100%);
+        color: #fff;
+        transform: scale(1.03);
     }
 </style>
 
 <div class="container py-4">
-    <!-- BANNER PRINCIPAL -->
-    <div class="hero-section text-center text-white mb-5 shadow-lg">
-        <h1 class="display-4 fw-bold mb-3">Bienvenido a <span style="color: #e63946;">Claret Style</span></h1>
-        <p class="lead text-secondary max-w-2xl mx-auto mb-4" style="max-width: 600px;">
+    <!-- BANNER PRINCIPAL DE BIENVENIDA -->
+    <div class="card card-dark-custom text-center p-5 mb-5 shadow-lg" style="background: linear-gradient(180deg, #1f1f1f 0%, #121212 100%); border: 1px solid #333; border-radius: 16px;">
+        <h1 class="display-4 fw-bold text-white mb-3">Bienvenido a <span style="color: #d91b2c;">Claret Style</span></h1>
+        <p class="lead text-secondary mb-4 mx-auto" style="max-width: 600px;">
             Sistema de gestión de inventario y catálogo exclusivo para ropa urbana, formal y accesorios.
         </p>
-        <a href="/Account/Login" class="btn btn-vino btn-lg fw-bold px-4 py-2 shadow">
-            👔 Ver Catálogo de Productos
-        </a>
+        <div>
+            <!-- Direcciona a la carpeta Producto -->
+            <a asp-controller="Producto" asp-action="Index" class="btn btn-main-cat btn-lg px-4 py-2 fw-bold rounded-pill">
+                👖 Ver Catálogo de Productos
+            </a>
+        </div>
     </div>
 
-    <!-- TARJETAS DE ACCESO -->
+    <!-- TARJETAS FUNCIONALES -->
     <div class="row g-4">
+        <!-- 1. COLECCIÓN EXCLUSIVA -->
         <div class="col-md-4">
-            <a href="/Account/Login" class="text-decoration-none">
-                <div class="card card-dark-custom p-4 text-center h-100">
-                    <div class="fs-1 mb-3">🛍️</div>
-                    <h5 class="fw-bold text-white mb-2">Colección Exclusiva</h5>
-                    <p class="text-secondary small mb-0">Diseños modernos organizados por categorías y prendas disponibles.</p>
-                </div>
+            <a asp-controller="Producto" asp-action="Index" class="feature-card p-4 text-center h-100">
+                <div class="fs-1 mb-2">🛍️</div>
+                <h5 class="fw-bold text-white mb-2">Colección Exclusiva</h5>
+                <p class="text-secondary small mb-0">Diseños modernos organizados por categorías, tallas y carrito de compras.</p>
             </a>
         </div>
+
+        <!-- 2. GESTIÓN DE STOCK -->
         <div class="col-md-4">
-            <a href="/Account/Login" class="text-decoration-none">
-                <div class="card card-dark-custom p-4 text-center h-100">
-                    <div class="fs-1 mb-3">⚡</div>
-                    <h5 class="fw-bold text-white mb-2">Gestión de Stock</h5>
-                    <p class="text-secondary small mb-0">Módulo de administración de inventarios, precios y tallas.</p>
-                </div>
+            <a asp-controller="Producto" asp-action="Index" class="feature-card p-4 text-center h-100">
+                <div class="fs-1 mb-2">⚡</div>
+                <h5 class="fw-bold text-white mb-2">Gestión de Stock</h5>
+                <p class="text-secondary small mb-0">Módulo de administración de inventarios, auditoría Kardex y métricas.</p>
             </a>
         </div>
+
+        <!-- 3. INICIAR SESIÓN -->
         <div class="col-md-4">
-            <a href="/Account/Login" class="text-decoration-none">
-                <div class="card card-dark-custom p-4 text-center h-100">
-                    <div class="fs-1 mb-3">🔐</div>
-                    <h5 class="fw-bold text-white mb-2">Iniciar Sesión</h5>
-                    <p class="text-secondary small mb-0">Acceso de seguridad para administradores y personal de tienda.</p>
-                </div>
+            <a asp-controller="Account" asp-action="Login" class="feature-card p-4 text-center h-100">
+                <div class="fs-1 mb-2">🔐</div>
+                <h5 class="fw-bold text-white mb-2">Iniciar Sesión</h5>
+                <p class="text-secondary small mb-0">Acceso de seguridad para administradores, vendedores y clientes.</p>
             </a>
         </div>
     </div>
