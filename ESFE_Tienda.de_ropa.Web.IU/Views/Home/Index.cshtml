@@ -39,14 +39,13 @@
         box-shadow: 0 8px 30px rgba(217, 27, 44, 0.6);
     }
 
-    /* TARJETAS INTERACTIVAS (GLASS) */
+    /* TARJETAS INTERACTIVAS */
     .card-feature-modern {
         background: rgba(24, 24, 27, 0.7);
         backdrop-filter: blur(10px);
         border: 1px solid #27272a;
         border-radius: 16px;
         transition: all 0.3s ease;
-        cursor: pointer;
         text-decoration: none !important;
         display: block;
     }
@@ -74,7 +73,7 @@
         background-color: #18181b;
         border: 1px solid #27272a;
         border-radius: 12px;
-        padding: 12px 20px;
+        padding: 14px 20px;
         color: #e4e4e7;
         transition: all 0.2s ease;
         text-decoration: none !important;
@@ -84,25 +83,6 @@
         border-color: #800e24;
         background-color: #27272a;
         color: #fff;
-    }
-
-    /* MODAL ESTILO OSCURO */
-    .modal-dark-custom {
-        background-color: #18181b;
-        border: 1px solid #27272a;
-        border-radius: 16px;
-        color: #fff;
-    }
-
-    .form-dark-input {
-        background-color: #09090b !important;
-        border: 1px solid #27272a !important;
-        color: #ffffff !important;
-    }
-
-    .form-dark-input:focus {
-        border-color: #800e24 !important;
-        box-shadow: 0 0 10px rgba(128, 14, 36, 0.4) !important;
     }
 </style>
 
@@ -119,15 +99,13 @@
                     Estilo Elegante & <span style="color: #e63946;">Urbano</span>
                 </h1>
                 <p class="lead text-secondary mb-4">
-                    Plataforma integral de gestión de inventario y tienda virtual de prendas exclusivas para Claret Style.
+                    Plataforma integral de gestión de inventario y catálogo exclusivo de prendas para Claret Style.
                 </p>
                 <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-start">
-                    <a asp-controller="Producto" asp-action="Index" class="btn btn-glow btn-lg px-4 py-3 fw-bold d-flex align-items-center gap-2">
-                        <i class="bi bi-bag-fill"></i> Ver Catálogo Completo
+                    <!-- ÚNICO BOTÓN PRINCIPAL -->
+                    <a asp-controller="Producto" asp-action="Index" class="btn btn-glow btn-lg px-4 py-3 fw-bold d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-bag-fill"></i> Ver Catálogo de Productos
                     </a>
-                    <button class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill fw-semibold" onclick="abrirModalAcceso()">
-                        <i class="bi bi-person-circle"></i> Mi Cuenta
-                    </button>
                 </div>
             </div>
 
@@ -193,10 +171,10 @@
         </div>
     </div>
 
-    <!-- TARJETAS FUNCIONALES REFORMULADAS -->
+    <!-- TARJETAS FUNCIONALES PRINCIPALES (RESTRICCIÓN A 2 COLUMNAS) -->
     <div class="row g-4">
         <!-- 1. COLECCIÓN EXCLUSIVA -->
-        <div class="col-md-4">
+        <div class="col-md-6">
             <a asp-controller="Producto" asp-action="Index" class="card-feature-modern p-4 h-100">
                 <div class="icon-box mb-3 text-danger">
                     <i class="bi bi-shop"></i>
@@ -209,97 +187,16 @@
         </div>
 
         <!-- 2. GESTIÓN DE STOCK -->
-        <div class="col-md-4">
+        <div class="col-md-6">
             <a asp-controller="Producto" asp-action="Index" class="card-feature-modern p-4 h-100">
                 <div class="icon-box mb-3 text-warning">
                     <i class="bi bi-speedometer2"></i>
                 </div>
                 <h5 class="fw-bold text-white mb-2">Gestión de Stock</h5>
                 <p class="text-secondary small mb-0">
-                    Módulo de administración para control de inventarios, auditoría Kardex en tiempo real y gráficos.
+                    Módulo de administración para control de inventarios, auditoría Kardex en tiempo real y gráficos de ventas.
                 </p>
             </a>
         </div>
-
-        <!-- 3. ACCESO RÁPIDO / LOGIN -->
-        <div class="col-md-4">
-            <div class="card-feature-modern p-4 h-100" onclick="abrirModalAcceso()">
-                <div class="icon-box mb-3 text-info">
-                    <i class="bi bi-shield-lock-fill"></i>
-                </div>
-                <h5 class="fw-bold text-white mb-2">Iniciar Sesión</h5>
-                <p class="text-secondary small mb-0">
-                    Acceso de seguridad para administradores, personal de ventas y clientes registrados.
-                </p>
-            </div>
-        </div>
     </div>
 </div>
-
-<!-- MODAL INTERACTIVO DE AUTENTICACIÓN / LOGIN -->
-<div class="modal fade" id="modalAcceso" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content modal-dark-custom p-3">
-            <div class="modal-header border-secondary border-opacity-25 pb-2">
-                <h5 class="modal-title fw-bold text-white d-flex align-items-center gap-2">
-                    🔑 Acceso al Sistema
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body pt-3">
-                
-                <!-- TABS PARA ALTERNAR TIPO DE USUARIO -->
-                <ul class="nav nav-pills nav-justified mb-3 p-1 bg-dark rounded-3 border border-secondary border-opacity-25" id="pills-tab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active text-white fw-bold btn-sm rounded-2" id="pills-cliente-tab" data-bs-toggle="pill" data-bs-target="#pills-cliente" type="button" role="tab">
-                            🛍️ Cliente / Comprador
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link text-white fw-bold btn-sm rounded-2" id="pills-admin-tab" data-bs-toggle="pill" data-bs-target="#pills-admin" type="button" role="tab">
-                            👑 Administrador
-                        </button>
-                    </li>
-                </ul>
-
-                <div class="tab-content" id="pills-tabContent">
-                    <!-- CONTENIDO CLIENTE -->
-                    <div class="tab-pane fade show active" id="pills-cliente" role="tabpanel">
-                        <p class="text-secondary small mb-3">Ingresa tus datos para realizar pedidos y guardar tu historial de compras.</p>
-                        <div class="mb-3">
-                            <label class="form-label text-secondary small">Correo Electrónico</label>
-                            <input type="email" id="homeClienteEmail" class="form-control form-dark-input" placeholder="usuario@correo.com">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-secondary small">Contraseña</label>
-                            <input type="password" id="homeClientePass" class="form-control form-dark-input" placeholder="••••••••">
-                        </div>
-                        <a asp-controller="Producto" asp-action="Index" class="btn btn-glow w-100 fw-bold py-2">
-                            Ingresar a Comprar
-                        </a>
-                    </div>
-
-                    <!-- CONTENIDO ADMIN -->
-                    <div class="tab-pane fade" id="pills-admin" role="tabpanel">
-                        <p class="text-secondary small mb-3">Ingresa el PIN de seguridad asignado para administrar el inventario.</p>
-                        <div class="mb-3">
-                            <label class="form-label text-secondary small">PIN de Administrador</label>
-                            <input type="password" id="homeAdminPin" class="form-control form-dark-input text-center fw-bold fs-5" placeholder="••••" maxlength="10">
-                        </div>
-                        <a asp-controller="Producto" asp-action="Index" class="btn btn-warning w-100 fw-bold py-2 text-dark">
-                            Ingresar a Panel Admin
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    function abrirModalAcceso() {
-        const modal = new bootstrap.Modal(document.getElementById('modalAcceso'));
-        modal.show();
-    }
-</script>
