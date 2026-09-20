@@ -11,131 +11,177 @@
     <link rel="stylesheet" href="~/ESFE_Tienda_de_ropa.Web.UI.styles.css" asp-append-version="true" />
 
     <style>
-        /* Navbar con degradado vino y sombra */
-        .navbar-claret {
-            background: linear-gradient(135deg, #800e24 0%, #5c0919 100%) !important;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        /* NAVBAR ESTILO GLASSMORPHISM MODERNO */
+        .navbar-claret-custom {
+            background: rgba(18, 18, 20, 0.85) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        /* Marca / Logo animado */
-        .brand-hover {
+        /* BRAND / LOGO CON GLOW */
+        .brand-logo {
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             transition: transform 0.3s ease;
         }
 
-        .brand-hover:hover {
-            transform: scale(1.05);
+        .brand-container:hover .brand-logo {
+            transform: scale(1.03);
         }
 
-        /* Animación para enlaces del menú */
-        .nav-link-custom {
-            position: relative;
-            color: rgba(255, 255, 255, 0.85) !important;
-            font-weight: 500;
-            transition: color 0.3s ease, transform 0.2s ease;
-            padding-bottom: 4px;
+        .brand-badge {
+            background: linear-gradient(135deg, #800e24 0%, #b21323 100%);
+            padding: 6px 12px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(178, 19, 35, 0.4);
         }
 
-        .nav-link-custom:hover {
+        /* ENLACES DE NAVEGACIÓN MODERNOS */
+        .nav-link-modern {
+            color: #a1a1aa !important;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 8px 16px !important;
+            border-radius: 10px;
+            transition: all 0.25s ease;
+        }
+
+        .nav-link-modern:hover {
             color: #ffffff !important;
-            transform: translateY(-2px);
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
-        .nav-link-custom::after {
-            content: '';
-            position: absolute;
-            width: 0%;
-            height: 2px;
-            bottom: 0;
-            left: 50%;
-            background-color: #e63946;
+        .nav-link-modern.active {
+            color: #ffffff !important;
+            background: rgba(128, 14, 36, 0.25);
+            border: 1px solid rgba(178, 19, 35, 0.4);
+        }
+
+        /* PERFIL / BADGE DE USUARIO */
+        .user-profile-card {
+            background: rgba(24, 24, 27, 0.8);
+            border: 1px solid #27272a;
+            padding: 5px 14px 5px 6px;
+            border-radius: 30px;
             transition: all 0.3s ease;
-            transform: translateX(-50%);
         }
 
-        .nav-link-custom:hover::after {
-            width: 80%;
+        .user-profile-card:hover {
+            border-color: #800e24;
+            box-shadow: 0 0 12px rgba(128, 14, 36, 0.3);
         }
 
-        /* Avatar de usuario animado */
-        .user-avatar-badge {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
+        .avatar-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #800e24 0%, #e63946 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
         }
 
-        .user-avatar-badge:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 10px rgba(230, 57, 70, 0.6);
+        /* FOOTER ESTILIZADO */
+        .footer-custom {
+            background-color: #09090b;
+            border-top: 1px solid #27272a;
         }
 
-        /* Footer General */
         .social-link {
-            color: #e63946;
+            color: #a1a1aa;
             text-decoration: none;
-            transition: color 0.3s ease, transform 0.2s ease;
-            display: inline-block;
+            transition: all 0.2s ease;
         }
 
         .social-link:hover {
-            color: #fff;
+            color: #e63946;
             transform: translateY(-2px);
         }
     </style>
 </head>
-<body class="bg-dark text-light d-flex flex-column min-vh-100">
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark navbar-claret border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand text-white fw-bold d-flex align-items-center gap-2 brand-hover" asp-area="" asp-controller="Home" asp-action="Index">
-                    🛍️ Claret Style
+<body class="bg-dark text-light d-flex flex-column min-vh-100" style="background-color: #0d0d0f !important;">
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-md navbar-dark navbar-claret-custom py-2">
+            <div class="container-fluid px-4">
+                
+                <!-- BRAND / LOGO -->
+                <a class="navbar-brand d-flex align-items-center gap-2 brand-container me-4" asp-area="" asp-controller="Home" asp-action="Index">
+                    <div class="brand-badge text-white">
+                        <i class="bi bi-bag-heart-fill"></i>
+                    </div>
+                    <span class="brand-logo fs-4">Claret Style</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+
+                <!-- BOTÓN MÓVIL -->
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1 ms-3">
+
+                <!-- CONTENIDO NAVEGACIÓN -->
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0 gap-1">
                         <li class="nav-item">
-                            <a class="nav-link nav-link-custom px-3" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                            <a class="nav-link nav-link-modern d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door"></i> Inicio
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link nav-link-custom px-3" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a>
+                            <a class="nav-link nav-link-modern d-flex align-items-center gap-2" asp-area="" asp-controller="Producto" asp-action="Index">
+                                <i class="bi bi-grid-3x3-gap"></i> Productos
+                            </a>
                         </li>
                     </ul>
 
-                    <!-- Usuario Admin Claret con animación de pulso -->
-                    <div class="d-flex align-items-center text-white user-avatar-badge px-2 py-1 rounded-pill">
-                        <div class="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center me-2 fw-bold shadow-sm" style="width: 32px; height: 32px; font-size: 0.8rem;">
-                            AD
+                    <!-- USUARIO ADMIN BADGE -->
+                    <div class="d-flex align-items-center mt-3 mt-md-0">
+                        <div class="user-profile-card d-flex align-items-center gap-2">
+                            <div class="avatar-circle">
+                                AD
+                            </div>
+                            <div class="d-flex flex-column leading-none">
+                                <span class="fw-bold text-white small">Admin Claret</span>
+                                <small class="text-secondary" style="font-size: 0.68rem;">Administrador</small>
+                            </div>
                         </div>
-                        <span class="fw-semibold small">Admin Claret</span>
                     </div>
                 </div>
+
             </div>
         </nav>
     </header>
 
+    <!-- CONTENIDO PRINCIPAL -->
     <div class="container flex-grow-1">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <!-- Pie de página integrado -->
-    <footer class="border-top footer text-muted bg-dark text-center py-3">
-        <div class="container text-secondary">
-            &copy; 2026 - <strong class="text-white">Claret Style</strong> | Sistema de Gestión de Inventarios
-            <div class="mt-2">
-                <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" class="social-link fw-bold mx-2">
-                    <i class="bi bi-instagram me-1"></i>Instagram
+    <!-- FOOTER MODERNO -->
+    <footer class="footer-custom py-4 mt-auto">
+        <div class="container text-center text-secondary small">
+            <div class="mb-2">
+                &copy; 2026 <strong class="text-white">Claret Style</strong> | Plataforma de E-Commerce & Control de Inventarios
+            </div>
+            <div class="d-flex justify-content-center gap-4 mt-2">
+                <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" class="social-link fw-semibold d-flex align-items-center gap-1">
+                    <i class="bi bi-instagram text-danger"></i> Instagram
                 </a>
-                <span class="text-secondary">•</span>
-                <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" class="social-link fw-bold mx-2">
-                    <i class="bi bi-tiktok me-1"></i>TikTok
+                <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" class="social-link fw-semibold d-flex align-items-center gap-1">
+                    <i class="bi bi-tiktok text-danger"></i> TikTok
                 </a>
-                <span class="text-secondary">•</span>
-                <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" class="social-link fw-bold mx-2">
-                    <i class="bi bi-facebook me-1"></i>Facebook
+                <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" class="social-link fw-semibold d-flex align-items-center gap-1">
+                    <i class="bi bi-facebook text-danger"></i> Facebook
                 </a>
             </div>
         </div>
@@ -147,5 +193,3 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
-
