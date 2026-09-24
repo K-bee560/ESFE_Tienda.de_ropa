@@ -14,8 +14,18 @@ namespace ESFE_Tienda.de_ropa.DAL
     public class BDComun
     {
         //public const string _stringCnn = EDWIN\SQLEXPRESS;Initial Catalog=BDDesarrollo;Integrated Security=True";
-        public const string _stringCnn = @"Server=M20-CIII;Database=ESFE_TiendaRopa;Integrated Security=True;TrustServerCertificate=True;";
-
+        public const string _stringCnn = @"Server=M20-CIII;Database=ESFE_TiendaRopa;private static string cadenaConexion =
+""Server=EjemploUser.mssql.somee.com;"" +
+""Database=EjemploUser;"" +
+""User Id=Nata2025_SQLLogin_1;"" +
+""Password=SQL10258;"" +
+""TrustServerCertificate=True;"";";
+        private static string cadenaConexion =
+"Server=EjemploUser.mssql.somee.com;" +
+"Database=EjemploUser;" +
+"User Id=Nata2025_SQLLogin_1;" +
+"Password=SQL10258;" +
+"TrustServerCertificate=True;";
 
         /// <summary>
         /// Metodo para obtener base de datos.
