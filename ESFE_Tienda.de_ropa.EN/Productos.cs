@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+// using directives removed because were not used
 
-namespace ESFE_Tienda_de_ropa.EN
+namespace ESFE_Tienda.de_ropa.EN
 {
     /// <summary>
     /// Clase Entidad que representa la estructura de un Producto en la base de datos.
