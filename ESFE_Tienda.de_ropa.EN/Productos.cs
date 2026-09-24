@@ -1,5 +1,4 @@
-﻿using System;
-// using directives removed because were not used
+﻿// using directives removed because were not used
 
 namespace ESFE_Tienda.de_ropa.EN
 {
